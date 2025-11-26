@@ -12,9 +12,14 @@
     "main": {
       "type": "hello-world",
       "settings": {}
+    },
+    "tailwind_demo": {
+      "type": "tailwind-demo",
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "tailwind_demo"
   ]
 }

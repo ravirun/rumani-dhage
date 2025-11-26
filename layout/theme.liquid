@@ -23,6 +23,9 @@
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 
+    {% # UI Library - Tailwind CSS %}
+    <script src="https://cdn.tailwindcss.com"></script>
+
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
@@ -31,9 +34,7 @@
 
   <body>
     {% sections 'header-group' %}
-
     {{ content_for_layout }}
-
     {% sections 'footer-group' %}
   </body>
 </html>

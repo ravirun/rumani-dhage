@@ -1,0 +1,145 @@
+{% comment %}
+  Tailwind CSS Demo Component
+  Showcases various Tailwind CSS utility classes and components
+{% endcomment %}
+
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-16 px-4">
+  <div class="max-w-7xl mx-auto">
+    {% comment %} Hero Section {% endcomment %}
+    <div class="text-center mb-16">
+      <h1 class="text-5xl font-bold text-gray-900 mb-4">
+        Tailwind CSS Demo
+      </h1>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+        A beautiful showcase of Tailwind CSS utility classes integrated with your Shopify theme
+      </p>
+    </div>
+
+    {% comment %} Cards Grid {% endcomment %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+      {% comment %} Card 1 {% endcomment %}
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <div class="h-48 bg-gradient-to-r from-purple-500 to-pink-500"></div>
+        <div class="p-6">
+          <h3 class="text-2xl font-semibold text-gray-800 mb-2">Beautiful Cards</h3>
+          <p class="text-gray-600 mb-4">
+            Create stunning card layouts with Tailwind's utility classes. Perfect for product displays and feature highlights.
+          </p>
+          <button class="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200">
+            Learn More
+          </button>
+        </div>
+      </div>
+
+      {% comment %} Card 2 {% endcomment %}
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <div class="h-48 bg-gradient-to-r from-blue-500 to-cyan-500"></div>
+        <div class="p-6">
+          <h3 class="text-2xl font-semibold text-gray-800 mb-2">Responsive Design</h3>
+          <p class="text-gray-600 mb-4">
+            Build responsive layouts that work seamlessly across all devices using Tailwind's mobile-first approach.
+          </p>
+          <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200">
+            Explore
+          </button>
+        </div>
+      </div>
+
+      {% comment %} Card 3 {% endcomment %}
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <div class="h-48 bg-gradient-to-r from-green-500 to-emerald-500"></div>
+        <div class="p-6">
+          <h3 class="text-2xl font-semibold text-gray-800 mb-2">Fast Development</h3>
+          <p class="text-gray-600 mb-4">
+            Speed up your development process with utility-first CSS. Write less code and build faster.
+          </p>
+          <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200">
+            Get Started
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {% comment %} Feature Section {% endcomment %}
+    <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12 mb-16">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-4xl font-bold text-gray-900 mb-6">
+            Powerful & Flexible
+          </h2>
+          <p class="text-lg text-gray-600 mb-6">
+            Tailwind CSS provides low-level utility classes that let you build completely custom designs without ever leaving your HTML.
+          </p>
+          <ul class="space-y-4">
+            <li class="flex items-start">
+              <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">Utility-first CSS framework</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">Fully responsive by default</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="text-gray-700">Highly customizable</span>
+            </li>
+          </ul>
+        </div>
+        <div class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl p-8 text-white">
+          <div class="text-center">
+            <div class="text-6xl font-bold mb-4">100%</div>
+            <div class="text-2xl mb-2">Customizable</div>
+            <p class="text-indigo-100">
+              Build exactly what you need with Tailwind's utility classes
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% comment %} Button Showcase {% endcomment %}
+    <div class="text-center">
+      <h2 class="text-3xl font-bold text-gray-900 mb-8">Button Variants</h2>
+      <div class="flex flex-wrap justify-center gap-4">
+        <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+          Primary Button
+        </button>
+        <button class="bg-white hover:bg-gray-50 text-indigo-600 font-semibold py-3 px-6 rounded-lg border-2 border-indigo-600 shadow-md hover:shadow-lg transition-all duration-200">
+          Secondary Button
+        </button>
+        <button class="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+          Gradient Button
+        </button>
+        <button class="bg-gray-800 hover:bg-gray-900 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+          Dark Button
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Tailwind CSS Demo",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Tailwind CSS Demo"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tailwind CSS Demo"
+    }
+  ]
+}
+{% endschema %}
+
