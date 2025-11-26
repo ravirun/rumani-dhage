@@ -12,11 +12,11 @@
     {% endcomment %}
     {% unless settings.type_primary_font.system? %}
       {% assign primary_font_url = settings.type_primary_font | font_url %}
-      {% if primary_font_url != blank %}
+      {% if primary_font_url != blank and primary_font_url contains 'http' %}
         <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
 
         {% comment %} Preload the base font variant for initial page render {% endcomment %}
-        {{ primary_font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+        <link rel="preload" href="{{ primary_font_url }}" as="font" type="font/woff2" crossorigin="anonymous">
       {% endif %}
     {% endunless %}
 
