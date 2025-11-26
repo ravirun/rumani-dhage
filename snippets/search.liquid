@@ -1,0 +1,34 @@
+{% comment %} search input and search button aside {% endcomment %}
+
+<div class="search">
+    <input type="text" name="search" placeholder="Search">
+    <button type="submit">
+        {% render 'lucide-icon', icon_name: 'search', size: 24, class: 'search-icon' %}
+    </button>
+</div>
+
+{% stylesheet %}
+.search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+.search input {
+    width: 300px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--color-border);
+}
+.search button {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--color-border);
+}
+.search-icon {
+    width: 2rem;
+    height: 2rem;
+    color: currentColor;
+}
+{% endstylesheet %}

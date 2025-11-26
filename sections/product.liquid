@@ -18,7 +18,7 @@
 </div>
 
 <div class="product-form">
-  {% form 'product', product %}
+  {% form 'product', product, class: 'product-form__form' %}
     {% assign current_variant = product.selected_or_first_available_variant %}
 
     <select name="id">
@@ -36,10 +36,45 @@
 
     <input type="text" name="quantity" min="1" value="1">
 
-    <input type="submit" value="Add to cart">
+    <button type="submit" class="product-form__submit">
+      {% render 'lucide-icon', icon_name: 'shopping-cart', size: 18, class: 'add-to-cart-icon' %}
+      Add to cart
+    </button>
     {{ form | payment_button }}
   {% endform %}
 </div>
+
+{% javascript %}
+  // Open cart drawer after adding product to cart
+  (function() {
+    const productForm = document.querySelector('.product-form__form');
+    if (productForm) {
+      productForm.addEventListener('submit', function(e) {
+        // Let the form submit normally, then open cart drawer
+        setTimeout(function() {
+          if (typeof openCartDrawer === 'function') {
+            openCartDrawer();
+          }
+          // Trigger cart update event
+          document.dispatchEvent(new CustomEvent('cart:updated'));
+        }, 500);
+      });
+    }
+  })();
+{% endjavascript %}
+
+{% stylesheet %}
+  .add-to-cart-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+  }
+  button[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

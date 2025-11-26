@@ -1,0 +1,24 @@
+{% comment %}
+  Renders a Lucide icon
+  
+  Accepts:
+  - icon_name: {String} The name of the Lucide icon (e.g., 'user', 'shopping-cart', 'menu')
+  - class: {String} Optional CSS classes to add to the icon
+  - size: {Number} Optional size in pixels (default: 24)
+  - stroke_width: {Number} Optional stroke width (default: 2)
+  
+  Usage:
+  {% render 'lucide-icon', icon_name: 'user', class: 'icon-class', size: 20 %}
+{% endcomment %}
+
+{% assign icon_size = size | default: 24 %}
+{% assign stroke = stroke_width | default: 2 %}
+{% assign icon_class = class | default: '' %}
+
+<i 
+  data-lucide="{{ icon_name }}" 
+  class="lucide-icon {{ icon_class }}"
+  style="width: {{ icon_size }}px; height: {{ icon_size }}px;"
+  data-stroke-width="{{ stroke }}"
+></i>
+
