@@ -9,6 +9,10 @@
     {% endfor %}
   </div>
 
+  <div class="header__search">
+    {% render 'search', placeholder: section.settings.search_placeholder %}
+  </div>
+
   <div class="header__icons">
     {% if shop.customer_accounts_enabled %}
       {{ 'icon-account.svg' | inline_asset_content | link_to: routes.account_url }}
@@ -50,6 +54,24 @@
     display: flex;
     gap: 1rem;
   }
+  header .header__search {
+    flex: 1;
+    max-width: 600px;
+    margin: 0 2rem;
+  }
+  @media (max-width: 768px) {
+    header {
+      flex-wrap: wrap;
+      height: auto;
+      padding: 1rem 0;
+    }
+    header .header__search {
+      order: 3;
+      width: 100%;
+      margin: 1rem 0 0;
+      max-width: 100%;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -60,6 +82,12 @@
       "type": "link_list",
       "id": "menu",
       "label": "t:labels.menu"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder text",
+      "default": "All Category | Search name color type"
     }
   ]
 }
