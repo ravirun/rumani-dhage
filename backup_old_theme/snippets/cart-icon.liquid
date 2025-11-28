@@ -1,0 +1,8 @@
+<a href="{{ routes.cart_url }}" class="cart-icon">
+  {% if cart.item_count > 0 %}
+    <sup>{{ cart.item_count }}</sup>
+  {% endif %}
+
+  {{ 'icon-cart.svg' | inline_asset_content }}
+</a>
+
