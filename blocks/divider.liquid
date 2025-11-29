@@ -1,7 +1,11 @@
-{% comment %}
-  Divider Block
-  Theme block version of the Divider component
-{% endcomment %}
+{% doc %}
+  Renders a visual divider component to create clear separation between elements.
+
+  Supports horizontal and vertical orientations with configurable spacing and styling.
+
+  @example
+  {% content_for 'block', type: 'divider', id: 'section-divider' %}
+{% enddoc %}
 
 <div {{ block.shopify_attributes }} class="block-divider">
   {% render 'component-structure-divider',

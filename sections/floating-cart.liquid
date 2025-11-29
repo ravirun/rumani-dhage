@@ -1,21 +1,21 @@
-{% comment %} Floating cart bar - shows when cart has items, but not on cart or checkout pages {% endcomment %}
-<div class="floating-cart" id="floating-cart" style="{% if cart.item_count == 0 or request.page_type == 'cart' %}display: none;{% endif %}">
+{%- comment -%} Floating cart bar - shows when cart has items, but not on cart or checkout pages {%- endcomment -%}
+<div class="floating-cart" id="floating-cart" style="{%- if cart.item_count == 0 or request.page_type == 'cart' -%}display: none;{%- endif -%}">
   <div class="floating-cart__icon-wrapper">
-    <i data-lucide="shopping-cart"></i>
+    <i data-lucide="shopping-cart" aria-hidden="true"></i>
   </div>
   
   <div class="floating-cart__info">
     <div class="floating-cart__quantity" id="floating-cart-quantity">
-      {{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}
+      {{ cart.item_count }} {%- if cart.item_count == 1 -%}item{%- else -%}items{%- endif -%}
     </div>
     <div class="floating-cart__total" id="floating-cart-total">
       {{ cart.total_price | money }}
     </div>
   </div>
   
-  <button type="button" class="floating-cart__button" data-open-cart-drawer>
+  <button type="button" class="floating-cart__button" data-open-cart-drawer aria-label="View shopping cart">
     View Cart
-    <i data-lucide="arrow-right"></i>
+    <i data-lucide="arrow-right" aria-hidden="true"></i>
   </button>
 </div>
 
@@ -110,11 +110,16 @@
     stroke-width: 2;
   }
 
-  @media screen and (max-width: 749px) {
+  /* Mobile-first: adjust position on mobile */
+  .floating-cart {
+    bottom: 6rem;
+    width: 90%;
+    max-width: 90%;
+  }
+
+  @media screen and (min-width: 750px) {
     .floating-cart {
-      bottom: 6rem;
-      width: 90%;
-      max-width: 90%;
+      bottom: 2rem;
     }
   }
 {% endstylesheet %}

@@ -1,48 +1,48 @@
-{% comment %} Mobile-only bottom navigation section with Home, Categories, New Products, and Cart {% endcomment %}
+{%- comment -%} Mobile-only bottom navigation section with Home, Categories, New Products, and Cart {%- endcomment -%}
 
-{% comment %} Load Lucide Icons from local assets {% endcomment %}
+{%- comment -%} Load Lucide Icons from local assets {%- endcomment -%}
 <script src="{{ 'lucide.js' | asset_url }}" defer></script>
 
 <div class="bottom-navigation" id="bottom-navigation">
-  <a href="{{ routes.root_url }}" class="bottom-nav__item" data-nav="home">
-    <i data-lucide="home"></i>
+  <a href="{{ routes.root_url }}" class="bottom-nav__item" data-nav="home" aria-label="Home">
+    <i data-lucide="home" aria-hidden="true"></i>
     <span>Home</span>
   </a>
 
   <button type="button" class="bottom-nav__item" data-nav="categories" aria-label="Categories">
-    <i data-lucide="grid-3x3"></i>
+    <i data-lucide="grid-3x3" aria-hidden="true"></i>
     <span>Categories</span>
   </button>
 
   <button type="button" class="bottom-nav__item" data-nav="new-products" aria-label="New Products">
-    <i data-lucide="sparkles"></i>
+    <i data-lucide="sparkles" aria-hidden="true"></i>
     <span>New</span>
   </button>
 
-  <button type="button" class="bottom-nav__item" data-nav="cart" data-open-cart-drawer>
+  <button type="button" class="bottom-nav__item" data-nav="cart" data-open-cart-drawer aria-label="Shopping cart">
     <div class="bottom-nav__cart-wrapper">
-      <i data-lucide="shopping-cart"></i>
-      <span class="bottom-nav__badge" id="bottom-nav-cart-badge" style="{% if cart.item_count == 0 %}display: none;{% endif %}">{{ cart.item_count }}</span>
+      <i data-lucide="shopping-cart" aria-hidden="true"></i>
+      <span class="bottom-nav__badge" id="bottom-nav-cart-badge" style="{%- if cart.item_count == 0 -%}display: none;{%- endif -%}" aria-label="{{ cart.item_count }} items in cart">{{ cart.item_count }}</span>
     </div>
     <span>Cart</span>
   </button>
 </div>
 
-{% comment %} Categories Modal {% endcomment %}
+{%- comment -%} Categories Modal {%- endcomment -%}
 <div class="bottom-modal" id="categories-modal" role="dialog" aria-modal="true" aria-labelledby="categories-modal-title">
   <div class="bottom-modal__overlay" data-modal-close="categories"></div>
   <div class="bottom-modal__content">
     <div class="bottom-modal__header">
       <h2 id="categories-modal-title" class="bottom-modal__title">Categories</h2>
       <button type="button" class="bottom-modal__close" data-modal-close="categories" aria-label="Close categories">
-        <i data-lucide="x"></i>
+        <i data-lucide="x" aria-hidden="true"></i>
       </button>
     </div>
     <div class="bottom-modal__body">
       <div class="categories-list">
-        {% for collection in collections %}
+        {%- for collection in collections limit: 50 -%}
           <a href="{{ collection.url }}" class="category-item">
-            {% if collection.featured_image %}
+            {%- if collection.featured_image -%}
               <div class="category-item__image">
                 <img
                   src="{{ collection.featured_image | image_url: width: 200 }}"
@@ -52,37 +52,39 @@
                   height="200"
                 >
               </div>
-            {% endif %}
+            {%- endif -%}
             <div class="category-item__content">
               <h3 class="category-item__title">{{ collection.title }}</h3>
-              {% if collection.description != blank %}
+              {%- if collection.description != blank -%}
                 <p class="category-item__description">{{ collection.description | strip_html | truncatewords: 15 }}</p>
-              {% endif %}
+              {%- endif -%}
             </div>
-            <i data-lucide="chevron-right" class="category-item__arrow"></i>
+            <i data-lucide="chevron-right" class="category-item__arrow" aria-hidden="true"></i>
           </a>
-        {% endfor %}
+        {%- endfor -%}
       </div>
     </div>
   </div>
 </div>
 
-{% comment %} New Products Modal {% endcomment %}
+{%- comment -%} New Products Modal {%- endcomment -%}
 <div class="bottom-modal" id="new-products-modal" role="dialog" aria-modal="true" aria-labelledby="new-products-modal-title">
   <div class="bottom-modal__overlay" data-modal-close="new-products"></div>
   <div class="bottom-modal__content">
     <div class="bottom-modal__header">
       <h2 id="new-products-modal-title" class="bottom-modal__title">New Products</h2>
       <button type="button" class="bottom-modal__close" data-modal-close="new-products" aria-label="Close new products">
-        <i data-lucide="x"></i>
+        <i data-lucide="x" aria-hidden="true"></i>
       </button>
     </div>
     <div class="bottom-modal__body">
       <div class="products-list">
-        {% assign new_products = collections.all.products | sort: 'created_at' | reverse %}
-        {% for product in new_products limit: 20 %}
+        {%- liquid
+          assign new_products = collections.all.products | sort: 'created_at' | reverse
+        -%}
+        {%- for product in new_products limit: 20 -%}
           <a href="{{ product.url }}" class="product-item">
-            {% if product.featured_image %}
+            {%- if product.featured_image -%}
               <div class="product-item__image">
                 <img
                   src="{{ product.featured_image | image_url: width: 200 }}"
@@ -92,14 +94,14 @@
                   height="200"
                 >
               </div>
-            {% endif %}
+            {%- endif -%}
             <div class="product-item__content">
               <h3 class="product-item__title">{{ product.title }}</h3>
               <p class="product-item__price">{{ product.price | money }}</p>
             </div>
-            <i data-lucide="chevron-right" class="product-item__arrow"></i>
+            <i data-lucide="chevron-right" class="product-item__arrow" aria-hidden="true"></i>
           </a>
-        {% endfor %}
+        {%- endfor -%}
       </div>
     </div>
   </div>
@@ -119,11 +121,16 @@
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   }
 
-  @media screen and (max-width: 749px) {
+  /* Mobile-first: show navigation on mobile, hide on larger screens */
+  .bottom-navigation {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 750px) {
     .bottom-navigation {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
+      display: none;
     }
   }
 
@@ -132,7 +139,9 @@
     flex-direction: column;
     align-items: center;
     gap: 0.25rem;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
+    min-height: 44px;
+    min-width: 44px;
     background: none;
     border: none;
     text-decoration: none;
@@ -254,7 +263,9 @@
   .bottom-modal__close {
     background: none;
     border: none;
-    padding: 0.5rem;
+    padding: 0.75rem;
+    min-height: 44px;
+    min-width: 44px;
     cursor: pointer;
     color: rgba(var(--color-foreground), 0.7);
     display: flex;
@@ -436,9 +447,54 @@
     const newProductsModal = document.getElementById('new-products-modal');
     const body = document.body;
 
+    // Store trigger elements for focus return
+    const triggerElements = new Map();
+
+    // Focus trap implementation
+    function trapFocus(container) {
+      const focusableElements = container.querySelectorAll(
+        'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      
+      if (focusableElements.length === 0) return;
+      
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      function handleTrapKeydown(e) {
+        if (e.key !== 'Tab') return;
+
+        if (e.shiftKey) {
+          // Shift + Tab
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          // Tab
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+
+      container.addEventListener('keydown', handleTrapKeydown);
+      
+      // Return cleanup function
+      return () => {
+        container.removeEventListener('keydown', handleTrapKeydown);
+      };
+    }
+
     // Open modal function
-    function openModal(modal) {
+    function openModal(modal, trigger) {
       if (!modal) return;
+      
+      // Store trigger element for focus return
+      if (trigger) {
+        triggerElements.set(modal, trigger);
+      }
       
       body.classList.add('modal-open');
       modal.classList.add('active');
@@ -453,6 +509,15 @@
       body.style.position = 'fixed';
       body.style.top = `-${scrollY}px`;
       body.style.width = '100%';
+      
+      // Trap focus within modal
+      trapFocus(modal);
+      
+      // Focus the close button for keyboard navigation
+      const closeBtn = modal.querySelector('.bottom-modal__close');
+      if (closeBtn) {
+        closeBtn.focus();
+      }
     }
 
     // Close modal function
@@ -470,6 +535,13 @@
       }
       
       modal.classList.remove('active');
+      
+      // Return focus to trigger element
+      const trigger = triggerElements.get(modal);
+      if (trigger && typeof trigger.focus === 'function') {
+        trigger.focus();
+      }
+      triggerElements.delete(modal);
     }
 
     // Event listeners for navigation items
@@ -482,10 +554,10 @@
 
         if (navType === 'categories') {
           e.preventDefault();
-          openModal(categoriesModal);
+          openModal(categoriesModal, navItem);
         } else if (navType === 'new-products') {
           e.preventDefault();
-          openModal(newProductsModal);
+          openModal(newProductsModal, navItem);
         } else if (navType === 'cart') {
           e.preventDefault();
           if (typeof window.openCartDrawer === 'function') {

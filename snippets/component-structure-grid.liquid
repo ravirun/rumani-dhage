@@ -49,17 +49,21 @@
   .ds-grid--align-end { align-items: end; }
   .ds-grid--align-stretch { align-items: stretch; }
   
-  .ds-grid--columns-1 { grid-template-columns: repeat(1, 1fr); }
-  .ds-grid--columns-2 { grid-template-columns: repeat(2, 1fr); }
-  .ds-grid--columns-3 { grid-template-columns: repeat(3, 1fr); }
-  .ds-grid--columns-4 { grid-template-columns: repeat(4, 1fr); }
-  .ds-grid--columns-5 { grid-template-columns: repeat(5, 1fr); }
-  .ds-grid--columns-6 { grid-template-columns: repeat(6, 1fr); }
+  /* Desktop columns defined in media query below */
   
-  @media screen and (max-width: 749px) {
-    .ds-grid--columns-mobile-1 { grid-template-columns: repeat(1, 1fr); }
-    .ds-grid--columns-mobile-2 { grid-template-columns: repeat(2, 1fr); }
-    .ds-grid--columns-mobile-3 { grid-template-columns: repeat(3, 1fr); }
+  /* Mobile-first: mobile columns apply by default */
+  .ds-grid--columns-mobile-1 { grid-template-columns: repeat(1, 1fr); }
+  .ds-grid--columns-mobile-2 { grid-template-columns: repeat(2, 1fr); }
+  .ds-grid--columns-mobile-3 { grid-template-columns: repeat(3, 1fr); }
+  
+  @media screen and (min-width: 750px) {
+    /* Desktop columns override mobile on larger screens */
+    .ds-grid--columns-1 { grid-template-columns: repeat(1, 1fr); }
+    .ds-grid--columns-2 { grid-template-columns: repeat(2, 1fr); }
+    .ds-grid--columns-3 { grid-template-columns: repeat(3, 1fr); }
+    .ds-grid--columns-4 { grid-template-columns: repeat(4, 1fr); }
+    .ds-grid--columns-5 { grid-template-columns: repeat(5, 1fr); }
+    .ds-grid--columns-6 { grid-template-columns: repeat(6, 1fr); }
   }
 {% endstylesheet %}
 

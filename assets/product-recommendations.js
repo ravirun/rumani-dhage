@@ -48,15 +48,32 @@ class ProductRecommendations {
     try {
       this.showLoading();
 
+      // Validate product handle
+      if (!this.options.productHandle) {
+        throw new Error('Product handle is required');
+      }
+
       // Fetch product data
       const productUrl = `${this.getBaseUrl()}products/${this.options.productHandle}.js`;
       const productResponse = await fetch(productUrl);
       
       if (!productResponse.ok) {
-        throw new Error('Failed to fetch product');
+        let errorMessage = 'Failed to fetch product';
+        try {
+          const errorData = await productResponse.json();
+          errorMessage = errorData.message || errorData.description || errorMessage;
+        } catch (e) {
+          errorMessage = `HTTP ${productResponse.status}: ${productResponse.statusText}`;
+        }
+        throw new Error(errorMessage);
       }
 
       const product = await productResponse.json();
+      
+      // Validate product data
+      if (!product || !product.id) {
+        throw new Error('Invalid product data received');
+      }
 
       // Get recommendations (using product type or tags)
       const recommendations = await this.getRecommendedProducts(product);
@@ -65,7 +82,13 @@ class ProductRecommendations {
       this.render();
     } catch (error) {
       console.error('Error loading recommendations:', error);
-      this.showError();
+      
+      // Show user-friendly error message
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        this.showError('Network error. Please check your connection.');
+      } else {
+        this.showError();
+      }
     }
   }
 
@@ -77,44 +100,56 @@ class ProductRecommendations {
     // Try to get products from the same collection
     if (product.collections && product.collections.length > 0) {
       const collectionHandle = product.collections[0].handle;
-      const collectionUrl = `${this.getBaseUrl()}collections/${collectionHandle}/products.js?limit=${this.options.limit + 5}`;
-      
-      try {
-        const response = await fetch(collectionUrl);
-        if (response.ok) {
-          const collectionProducts = await response.json();
-          for (const p of collectionProducts) {
-            if (!seenIds.has(p.id) && products.length < this.options.limit) {
-              products.push(p);
-              seenIds.add(p.id);
+      if (collectionHandle) {
+        const collectionUrl = `${this.getBaseUrl()}collections/${collectionHandle}/products.js?limit=${this.options.limit + 5}`;
+        
+        try {
+          const response = await fetch(collectionUrl);
+          if (response.ok) {
+            const collectionProducts = await response.json();
+            
+            // Validate response is an array
+            if (Array.isArray(collectionProducts)) {
+              for (const p of collectionProducts) {
+                if (p && p.id && !seenIds.has(p.id) && products.length < this.options.limit) {
+                  products.push(p);
+                  seenIds.add(p.id);
+                }
+              }
             }
+          } else {
+            console.warn(`Failed to fetch collection products: HTTP ${response.status}`);
           }
+        } catch (error) {
+          console.warn('Error fetching collection products:', error);
         }
-      } catch (error) {
-        console.warn('Error fetching collection products:', error);
       }
     }
 
     // If we need more, get products with similar tags
     if (products.length < this.options.limit && product.tags && product.tags.length > 0) {
       const tag = product.tags[0];
-      const searchUrl = `${this.getBaseUrl()}search?q=${encodeURIComponent(`tag:${tag}`)}&type=product&limit=${this.options.limit}`;
-      
-      try {
-        const response = await fetch(searchUrl);
-        if (response.ok) {
-          const data = await response.json();
-          if (data.results) {
-            for (const p of data.results) {
-              if (!seenIds.has(p.id) && products.length < this.options.limit) {
-                products.push(p);
-                seenIds.add(p.id);
+      if (tag) {
+        const searchUrl = `${this.getBaseUrl()}search?q=${encodeURIComponent(`tag:${tag}`)}&type=product&limit=${this.options.limit}`;
+        
+        try {
+          const response = await fetch(searchUrl);
+          if (response.ok) {
+            const data = await response.json();
+            if (data && data.results && Array.isArray(data.results)) {
+              for (const p of data.results) {
+                if (p && p.id && !seenIds.has(p.id) && products.length < this.options.limit) {
+                  products.push(p);
+                  seenIds.add(p.id);
+                }
               }
             }
+          } else {
+            console.warn(`Failed to fetch tagged products: HTTP ${response.status}`);
           }
+        } catch (error) {
+          console.warn('Error fetching tagged products:', error);
         }
-      } catch (error) {
-        console.warn('Error fetching tagged products:', error);
       }
     }
 

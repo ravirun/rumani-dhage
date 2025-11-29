@@ -81,18 +81,42 @@ class SearchAutocomplete {
       if (this.options.showProducts) resources.push('product');
       if (this.options.showCollections) resources.push('collection');
 
+      if (resources.length === 0) {
+        this.showNoResults();
+        return;
+      }
+
       const url = `${this.getBaseUrl()}search/suggest.json?q=${encodeURIComponent(query)}&resources[type]=${resources.join(',')}&resources[limit]=${this.options.maxResults}`;
       
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        let errorMessage = `HTTP error! status: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorData.description || errorMessage;
+        } catch (e) {
+          // Use default error message
+        }
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
+      
+      // Validate response structure
+      if (!data || typeof data !== 'object') {
+        throw new Error('Invalid response format');
+      }
+      
       this.displayResults(data, query);
     } catch (error) {
       console.error('Error fetching search suggestions:', error);
-      this.showError();
+      
+      // Show user-friendly error message
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        this.showError('Network error. Please check your connection.');
+      } else {
+        this.showError();
+      }
     }
   }
 

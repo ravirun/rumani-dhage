@@ -1,20 +1,21 @@
-{% comment %} Load Lucide Icons for menu icons {% endcomment %}
+{%- comment -%} Load Lucide Icons for menu icons {%- endcomment -%}
 <script src="{{ 'lucide.js' | asset_url }}" defer></script>
 
 <header>
   <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
+    {{- shop.name | link_to: routes.root_url -}}
   </h2>
 
   <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
+    {%- for link in section.settings.menu.links -%}
+      {{- link.title | link_to: link.url -}}
+    {%- endfor -%}
   </div>
 
   <div class="header__icons">
-    {% comment %} Search Input {% endcomment %}
+    {%- comment -%} Search Input {%- endcomment -%}
     <form action="{{ routes.search_url }}" method="get" class="header__search" role="search">
+      <label for="header-search-input" class="visually-hidden">Search products</label>
       <input
         type="search"
         name="q"
@@ -22,64 +23,64 @@
         class="header__search-input"
         id="header-search-input"
         autocomplete="off"
-        aria-label="Search"
+        aria-label="Search products"
       >
       <button type="submit" class="header__search-submit" aria-label="Submit search">
-        <i data-lucide="search"></i>
+        <i data-lucide="search" aria-hidden="true"></i>
       </button>
     </form>
 
-    {% if shop.customer_accounts_enabled %}
-      {{ 'icon-account.svg' | inline_asset_content | link_to: routes.account_url }}
-    {% endif %}
+    {%- if shop.customer_accounts_enabled -%}
+      {{- 'icon-account.svg' | inline_asset_content | link_to: routes.account_url -}}
+    {%- endif -%}
 
-    {% comment %} Menu Icon - opens slide-out menu {% endcomment %}
+    {%- comment -%} Menu Icon - opens slide-out menu {%- endcomment -%}
     <button type="button" class="header__menu-icon" aria-label="Open menu" data-menu-toggle>
-      <i data-lucide="menu"></i>
+      <i data-lucide="menu" aria-hidden="true"></i>
     </button>
   </div>
 </header>
 
-{% comment %} Slide-out Menu Drawer {% endcomment %}
+{%- comment -%} Slide-out Menu Drawer {%- endcomment -%}
 <div class="menu-drawer" id="menu-drawer" role="dialog" aria-modal="true" aria-labelledby="menu-drawer-title">
   <div class="menu-drawer__overlay" data-menu-close></div>
   <div class="menu-drawer__content">
     <div class="menu-drawer__header">
       <h2 id="menu-drawer-title" class="menu-drawer__title">{{ shop.name }}</h2>
       <button type="button" class="menu-drawer__close" data-menu-close aria-label="Close menu">
-        <i data-lucide="x"></i>
+        <i data-lucide="x" aria-hidden="true"></i>
       </button>
     </div>
     <nav class="menu-drawer__nav" role="navigation">
-      {% if section.settings.menu and section.settings.menu.links.size > 0 %}
+      {%- if section.settings.menu and section.settings.menu.links.size > 0 -%}
         <ul class="menu-drawer__list">
-          {% for link in section.settings.menu.links %}
+          {%- for link in section.settings.menu.links -%}
             <li class="menu-drawer__item">
               <a href="{{ link.url }}" class="menu-drawer__link">
                 {{ link.title }}
-                {% if link.links.size > 0 %}
-                  <i data-lucide="chevron-right" class="menu-drawer__chevron"></i>
-                {% endif %}
+                {%- if link.links.size > 0 -%}
+                  <i data-lucide="chevron-right" class="menu-drawer__chevron" aria-hidden="true"></i>
+                {%- endif -%}
               </a>
-              {% if link.links.size > 0 %}
+              {%- if link.links.size > 0 -%}
                 <ul class="menu-drawer__sublist">
-                  {% for child_link in link.links %}
+                  {%- for child_link in link.links -%}
                     <li class="menu-drawer__subitem">
                       <a href="{{ child_link.url }}" class="menu-drawer__sublink">
                         {{ child_link.title }}
                       </a>
                     </li>
-                  {% endfor %}
+                  {%- endfor -%}
                 </ul>
-              {% endif %}
+              {%- endif -%}
             </li>
-          {% endfor %}
+          {%- endfor -%}
         </ul>
-      {% else %}
+      {%- else -%}
         <div class="menu-drawer__empty">
           <p>No menu items available. Please configure a menu in theme settings.</p>
         </div>
-      {% endif %}
+      {%- endif -%}
     </nav>
   </div>
 </div>
@@ -118,9 +119,14 @@
     gap: 1.5rem;
   }
 
-  @media screen and (max-width: 749px) {
+  /* Mobile-first: hide menu on mobile, show on larger screens */
+  .header__menu {
+    display: none;
+  }
+
+  @media screen and (min-width: 750px) {
     .header__menu {
-      display: none;
+      display: flex;
     }
   }
 
@@ -180,16 +186,23 @@
     height: 1.25rem;
   }
 
-  @media screen and (max-width: 749px) {
+  /* Mobile-first: hide search on mobile, show on larger screens */
+  .header__search {
+    display: none;
+  }
+
+  @media screen and (min-width: 750px) {
     .header__search {
-      display: none;
+      display: flex;
     }
   }
 
   .header__menu-icon {
     background: none;
     border: none;
-    padding: 0.5rem;
+    padding: 0.75rem;
+    min-height: 44px;
+    min-width: 44px;
     cursor: pointer;
     color: var(--color-foreground);
     display: flex;

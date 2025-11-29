@@ -1,7 +1,11 @@
-{% comment %}
-  Button Block
-  Theme block version of the Button component
-{% endcomment %}
+{% doc %}
+  Renders a button component that can trigger actions or navigate to URLs.
+
+  Supports multiple variants (primary, secondary, outline, ghost), sizes, and optional icons.
+
+  @example
+  {% content_for 'block', type: 'button', id: 'cta-button' %}
+{% enddoc %}
 
 <div {{ block.shopify_attributes }} class="block-button">
   {% render 'component-actions-button',

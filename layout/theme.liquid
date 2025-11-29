@@ -40,8 +40,11 @@
   </head>
 
   <body style="position: relative;">
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
     {% sections 'header-group' %}
-      {{ content_for_layout }}
+      <main id="main-content">
+        {{ content_for_layout }}
+      </main>
     {% sections 'footer-group' %}
     {% section 'floating-cart' %}
     {% section 'bottomNavigation' %}

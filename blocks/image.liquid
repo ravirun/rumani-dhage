@@ -1,11 +1,15 @@
-{% comment %}
-  Image Block
-  Theme block version of the Image component
-{% endcomment %}
+{% doc %}
+  Renders an image component with responsive sizing and aspect ratio control.
+
+  Supports various aspect ratios, object fit modes, and border radius options.
+
+  @example
+  {% content_for 'block', type: 'image', id: 'hero-image' %}
+{% enddoc %}
 
 <div {{ block.shopify_attributes }} class="block-image">
-  {% if block.settings.image != blank %}
-    {% render 'component-media-image',
+  {%- if block.settings.image != blank -%}
+    {%- render 'component-media-image',
       image: block.settings.image,
       alt: block.settings.alt,
       width: block.settings.width,
@@ -15,8 +19,8 @@
       radius: block.settings.radius,
       lazy: block.settings.lazy,
       class: block.settings.class
-    %}
-  {% endif %}
+    -%}
+  {%- endif -%}
 </div>
 
 {% schema %}

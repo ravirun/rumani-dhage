@@ -81,6 +81,56 @@ Components for typography and text display.
 
 ## Usage Examples
 
+### Using Components as Theme Blocks
+
+Theme blocks can be added to sections that accept blocks using `{% content_for 'blocks' %}`. Blocks are referenced by their simple name (without the `block-` prefix).
+
+**In Templates:**
+```liquid
+{% comment %} Static block with default settings {% endcomment %}
+{% content_for 'block', type: 'button', id: 'cta-button' %}
+
+{% comment %} Static block with custom settings {% endcomment %}
+{% content_for 'block', type: 'button', id: 'custom-button', settings: {
+  text: 'Buy Now',
+  variant: 'primary',
+  size: 'large'
+} %}
+
+{% comment %} Dynamic blocks area {% endcomment %}
+<div class="content-area">
+  {% content_for 'blocks' %}
+</div>
+```
+
+**In Sections:**
+```liquid
+{% schema %}
+{
+  "name": "Custom Section",
+  "blocks": [
+    { "type": "@theme" }  // Accept all theme blocks
+  ]
+}
+{% endschema %}
+
+<div class="section-content">
+  {% content_for 'blocks' %}
+</div>
+```
+
+**Available Theme Blocks:**
+- `button` - Button component
+- `banner` - Banner component
+- `text-field` - Text input field
+- `image` - Image component
+- `modal` - Modal dialog
+- `divider` - Visual divider
+- `grid` - Grid layout
+- `stack` - Stack layout
+- `text` - Text content
+- `group` - Group container for nested blocks
+
 ### Using Components as Snippets
 
 ```liquid
@@ -130,20 +180,54 @@ Components for typography and text display.
 
 ### Using Components as Theme Blocks
 
-Components are available as blocks in the Theme Editor. Add them to sections through the theme customizer:
+Components are available as blocks in the Theme Editor. Blocks use simple names (e.g., `button`, `grid`, `banner`) and can be added to sections that accept blocks.
 
-1. Go to Theme Customizer
-2. Select a section
-3. Click "Add block"
-4. Choose from available component blocks:
-   - Button
-   - Stack
-   - Divider
-   - Grid
-   - Banner
-   - Modal
-   - Text Field
-   - Image
+**Available Theme Blocks:**
+- `button` - Button component with variants, sizes, and icons
+- `banner` - Banner component for important messages
+- `text-field` - Text input field with validation
+- `image` - Responsive image with aspect ratio control
+- `modal` - Modal dialog overlay
+- `divider` - Visual separator
+- `grid` - Grid layout system
+- `stack` - Stack layout (horizontal/vertical)
+- `text` - Text content block
+- `group` - Group container for nested blocks
+
+**Adding Blocks to Sections:**
+
+Sections that accept blocks use `{% content_for 'blocks' %}` in their template and define blocks in their schema:
+
+```liquid
+{% schema %}
+{
+  "name": "Custom Section",
+  "blocks": [
+    { "type": "@theme" }  // Accept all theme blocks
+  ]
+}
+{% endschema %}
+
+<div class="section-content">
+  {% content_for 'blocks' %}
+</div>
+```
+
+**Using Blocks in Templates:**
+
+You can reference blocks statically in templates:
+
+```liquid
+{% comment %} Static block with default settings {% endcomment %}
+{% content_for 'block', type: 'button', id: 'cta-button' %}
+
+{% comment %} Static block with custom settings {% endcomment %}
+{% content_for 'block', type: 'button', id: 'custom-button', settings: {
+  text: 'Buy Now',
+  variant: 'primary',
+  size: 'large'
+} %}
+```
 
 Each block has customizable settings in the Theme Editor sidebar.
 

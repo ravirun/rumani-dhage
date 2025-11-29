@@ -4,11 +4,11 @@
 {% endcomment %}
 
 <div class="product-recommendations" id="product-recommendations-{{ section.id }}" data-limit="{{ section.settings.limit | default: 4 }}">
-  {% if section.settings.title != blank %}
+  {%- if section.settings.title != blank -%}
     <h2 class="product-recommendations__heading">
       {{ section.settings.title }}
     </h2>
-  {% endif %}
+  {%- endif -%}
   
   <div class="product-recommendations__container" data-recommendations-container></div>
 </div>
@@ -133,10 +133,16 @@
     cursor: not-allowed;
   }
 
-  @media screen and (max-width: 749px) {
+  /* Mobile-first: 2 columns on mobile */
+  .product-recommendations__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+  }
+
+  @media screen and (min-width: 750px) {
     .product-recommendations__grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--spacing-md);
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: var(--spacing-lg);
     }
   }
 {% endstylesheet %}

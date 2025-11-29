@@ -6,23 +6,25 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/article
 {% endcomment %}
 
-{% if article.image %}
-  {{ article.image | image_url: width: 1000 | image_tag }}
-{% endif %}
+{%- if article.image -%}
+  {{- article.image | image_url: width: 1000 | image_tag -}}
+{%- endif -%}
 
 <h1>{{ article.title }}</h1>
 
-{% assign date = article.published_at | time_tag: format: 'date' %}
+{%- liquid
+  assign date = article.published_at | time_tag: format: 'date'
+-%}
 <p>{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
 
 {{ article.content }}
 
-{% if blog.comments_enabled? %}
+{%- if blog.comments_enabled? -%}
   <h2>{{ 'blog.article_comments' | t }}</h2>
 
   <div id="comments">
-    {% paginate article.comments by 10 %}
-      {% for comment in article.comments %}
+    {%- paginate article.comments by 10 -%}
+      {%- for comment in article.comments -%}
         <div>
           <p>{{ comment.author }}</p>
           <p>
@@ -30,13 +32,13 @@
           </p>
           <p>{{ comment.content }}</p>
         </div>
-      {% endfor %}
+      {%- endfor -%}
 
-      {{ paginate | default_pagination: anchor: 'comments' }}
-    {% endpaginate %}
+      {{- paginate | default_pagination: anchor: 'comments' -}}
+    {%- endpaginate -%}
   </div>
 
-  {% form 'new_comment', article %}
+  {%- form 'new_comment', article -%}
     <h2>{{ 'blog.comment_form_title' | t }}</h2>
 
     {{ form.errors | default_errors }}
@@ -56,13 +58,18 @@
       <textarea name="comment[body]" id="body" required>{{ form.body }}</textarea>
     </div>
 
-    <input type="submit" value="{{ 'blog.comment_form_submit' | t }}">
-  {% endform %}
-{% endif %}
+    <input type="submit" value="{{ 'blog.comment_form_submit' | t }}" aria-label="Submit comment">
+  {%- endform -%}
+{%- endif -%}
 
 {% schema %}
 {
   "name": "t:general.article",
-  "settings": []
+  "settings": [],
+  "presets": [
+    {
+      "name": "t:general.article"
+    }
+  ]
 }
 {% endschema %}

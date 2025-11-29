@@ -113,7 +113,9 @@
   .ajax-cart-drawer__close {
     background: none;
     border: none;
-    padding: 0.5rem;
+    padding: 0.75rem;
+    min-height: 44px;
+    min-width: 44px;
     cursor: pointer;
     color: var(--color-foreground);
     opacity: 0.7;
@@ -363,9 +365,14 @@
     to { transform: rotate(360deg); }
   }
 
-  @media screen and (max-width: 749px) {
+  /* Mobile-first: full width on mobile */
+  .ajax-cart-drawer {
+    max-width: 100%;
+  }
+
+  @media screen and (min-width: 750px) {
     .ajax-cart-drawer {
-      max-width: 100%;
+      max-width: 28rem;
     }
   }
 
@@ -405,7 +412,7 @@
       if (!cart || !cart.items || cart.items.length === 0) {
         body.innerHTML = `
           <div class="ajax-cart-drawer__empty">
-            <i data-lucide="shopping-cart" class="ajax-cart-drawer__empty-icon"></i>
+            <i data-lucide="shopping-cart" class="ajax-cart-drawer__empty-icon" aria-hidden="true"></i>
             <p>Your cart is empty</p>
           </div>
         `;
@@ -443,25 +450,27 @@
                     class="ajax-cart-drawer__quantity-btn"
                     data-cart-decrease="${line}"
                     ${item.quantity <= 1 ? 'disabled' : ''}
-                    aria-label="Decrease quantity"
+                    aria-label="Decrease quantity for ${item.product_title || 'item'}"
                   >
-                    <i data-lucide="minus"></i>
+                    <i data-lucide="minus" aria-hidden="true"></i>
                   </button>
+                  <label for="cart-quantity-${line}" class="visually-hidden">Quantity for ${item.product_title || 'item'}</label>
                   <input 
                     type="number"
                     class="ajax-cart-drawer__quantity-input"
+                    id="cart-quantity-${line}"
                     value="${item.quantity}"
                     min="1"
                     data-cart-quantity="${line}"
-                    aria-label="Quantity"
+                    aria-label="Quantity for ${item.product_title || 'item'}"
                   >
                   <button 
                     type="button"
                     class="ajax-cart-drawer__quantity-btn"
                     data-cart-increase="${line}"
-                    aria-label="Increase quantity"
+                    aria-label="Increase quantity for ${item.product_title || 'item'}"
                   >
-                    <i data-lucide="plus"></i>
+                    <i data-lucide="plus" aria-hidden="true"></i>
                   </button>
                 </div>
               </div>
@@ -470,9 +479,9 @@
               type="button"
               class="ajax-cart-drawer__item-remove"
               data-cart-remove="${line}"
-              aria-label="Remove item"
+              aria-label="Remove ${item.product_title || 'item'} from cart"
             >
-              <i data-lucide="trash-2"></i>
+              <i data-lucide="trash-2" aria-hidden="true"></i>
             </button>
           </div>
         `;
@@ -532,10 +541,30 @@
       });
     }
 
+    // Store the element that triggered the drawer open (for focus return)
+    let triggerElement = null;
+
     // Open drawer
-    function openDrawer() {
+    function openDrawer(event) {
+      // Store the element that triggered the open (if available)
+      if (event && event.target) {
+        triggerElement = event.target;
+      } else {
+        // Try to find the button that opened the drawer
+        triggerElement = document.querySelector('[data-open-cart-drawer]');
+      }
+      
       drawer.classList.add('ajax-cart-drawer--open');
       document.body.classList.add('ajax-cart-drawer-open');
+      
+      // Trap focus within the drawer
+      trapFocus(drawer);
+      
+      // Focus the close button for keyboard navigation
+      const closeBtn = drawer.querySelector('[data-cart-drawer-close]');
+      if (closeBtn) {
+        closeBtn.focus();
+      }
       
       // Fetch latest cart
       window.AjaxCart.getCart();
@@ -545,6 +574,40 @@
     function closeDrawer() {
       drawer.classList.remove('ajax-cart-drawer--open');
       document.body.classList.remove('ajax-cart-drawer-open');
+      
+      // Return focus to the trigger element
+      if (triggerElement && typeof triggerElement.focus === 'function') {
+        triggerElement.focus();
+      }
+      triggerElement = null;
+    }
+
+    // Focus trap implementation
+    function trapFocus(container) {
+      const focusableElements = container.querySelectorAll(
+        'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      container.addEventListener('keydown', function handleTrapKeydown(e) {
+        if (e.key !== 'Tab') return;
+
+        if (e.shiftKey) {
+          // Shift + Tab
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          // Tab
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      });
     }
 
     // Close button listeners
@@ -569,7 +632,16 @@
       window.closeCartDrawer = closeDrawer;
 
       // Listen for open events
-      document.addEventListener('cart:open', openDrawer);
+      document.addEventListener('cart:open', function(event) {
+        openDrawer(event);
+      });
+      
+      // Close on escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && drawer.classList.contains('ajax-cart-drawer--open')) {
+          closeDrawer();
+        }
+      });
     }
 
     // Initialize when DOM is ready

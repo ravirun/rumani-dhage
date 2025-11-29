@@ -1,7 +1,11 @@
-{% comment %}
-  Modal Block
-  Theme block version of the Modal component
-{% endcomment %}
+{% doc %}
+  Renders a modal dialog component that displays content in an overlay.
+
+  Includes optional trigger button and supports various sizes and close behaviors.
+
+  @example
+  {% content_for 'block', type: 'modal', id: 'info-modal' %}
+{% enddoc %}
 
 <div {{ block.shopify_attributes }} class="block-modal">
   {% liquid

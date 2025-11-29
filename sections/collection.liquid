@@ -8,28 +8,28 @@
 <h1>{{ collection.title }}</h1>
 
 <div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
+  {%- paginate collection.products by 20 -%}
+    {%- for product in collection.products -%}
       <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
+        {%- if product.featured_image -%}
+          {%- render 'image',
             class: 'collection-product__image',
             image: product.featured_image,
             url: product.url,
             width: 400,
             height: 400,
             crop: 'center'
-          %}
-        {% endif %}
+          -%}
+        {%- endif -%}
         <div class="collection-product__content">
           <p>{{ product.title | escape | link_to: product.url }}</p>
           <p>{{ product.price | money }}</p>
         </div>
       </div>
-    {% endfor %}
+    {%- endfor -%}
 
-    {{ paginate | default_pagination }}
-  {% endpaginate %}
+    {{- paginate | default_pagination -}}
+  {%- endpaginate -%}
 </div>
 
 {% stylesheet %}
@@ -42,6 +42,11 @@
 {% schema %}
 {
   "name": "t:general.collection",
-  "settings": []
+  "settings": [],
+  "presets": [
+    {
+      "name": "t:general.collection"
+    }
+  ]
 }
 {% endschema %}

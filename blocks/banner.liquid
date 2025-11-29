@@ -1,7 +1,11 @@
-{% comment %}
-  Banner Block
-  Theme block version of the Banner component
-{% endcomment %}
+{% doc %}
+  Renders a banner component to highlight important information or required actions.
+
+  Supports multiple variants (info, success, warning, error) and can be dismissible.
+
+  @example
+  {% content_for 'block', type: 'banner', id: 'announcement-banner' %}
+{% enddoc %}
 
 <div {{ block.shopify_attributes }} class="block-banner">
   {% render 'component-feedback-banner',

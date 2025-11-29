@@ -17,7 +17,7 @@
   {% render 'component-media-image', image: product.featured_image, alt: product.title, width: 400, aspect_ratio: 'square' %}
 {% endcomment %}
 
-{% liquid
+{%- liquid
   assign image = image | default: empty
   assign alt = alt | default: ''
   assign width = width | default: 0
@@ -37,18 +37,24 @@
   unless alt != blank
     assign alt = image.alt | default: 'Image'
   endunless
-%}
+  
+  # Ensure width and height are set to prevent layout shift
+  if width == 0
+    assign width = image.width | default: 1200
+  endif
+  if height == 0
+    assign height = image.height | default: width
+  endif
+-%}
 
 <div class="ds-image ds-image--aspect-{{ aspect_ratio }} ds-image--radius-{{ radius }} {{ class }}">
-  {% if width > 0 %}
-    {% if height > 0 %}
-      {{ image | image_url: width: width, height: height | image_tag: alt: alt, loading: lazy, class: 'ds-image__img', style: "object-fit: {{ fit }};" }}
-    {% else %}
-      {{ image | image_url: width: width | image_tag: alt: alt, loading: lazy, class: 'ds-image__img', style: "object-fit: {{ fit }};" }}
-    {% endif %}
-  {% else %}
-    {{ image | image_url: width: 1200 | image_tag: alt: alt, loading: lazy, class: 'ds-image__img', style: "object-fit: {{ fit }};" }}
-  {% endif %}
+  {%- if width > 0 and height > 0 -%}
+    {{- image | image_url: width: width, height: height | image_tag: alt: alt, loading: lazy, class: 'ds-image__img', width: width, height: height, style: "object-fit: {{ fit }};" -}}
+  {%- elsif width > 0 -%}
+    {{- image | image_url: width: width | image_tag: alt: alt, loading: lazy, class: 'ds-image__img', width: width, height: width, style: "object-fit: {{ fit }};" -}}
+  {%- else -%}
+    {{- image | image_url: width: 1200 | image_tag: alt: alt, loading: lazy, class: 'ds-image__img', width: 1200, height: 1200, style: "object-fit: {{ fit }};" -}}
+  {%- endif -%}
 </div>
 
 {% stylesheet %}
