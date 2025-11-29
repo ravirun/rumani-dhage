@@ -58,6 +58,22 @@
     "placeholder": "Search articles, pages, or products",
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
-    "results_for_html": "{{ count }} results found for {{ terms }}"
+    "results_for_html": "{{ count }} results found for {{ terms }}",
+    "no_results_title": "No results found",
+    "suggestions_title": "Try searching for:",
+    "view_all_products": "View all products",
+    "browse_collections": "Browse collections",
+    "view_blog": "View blog",
+    "filter_products": "Products",
+    "filter_articles": "Articles",
+    "filter_pages": "Pages",
+    "products": "Products",
+    "articles": "Articles",
+    "pages": "Pages",
+    "type_product": "Product",
+    "type_article": "Article",
+    "type_page": "Page",
+    "by_author": "By",
+    "popular_searches": "Popular Searches"
   }
 }

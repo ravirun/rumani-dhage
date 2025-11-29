@@ -1,0 +1,213 @@
+{%- comment -%}
+  Renders a search result card for products, articles, or pages.
+
+  @param {object} result - The search result object
+  @param {string} type - The result type: 'product', 'article', or 'page'
+{%- endcomment -%}
+
+{%- liquid
+  assign featured_image = result.featured_image | default: result.image
+  assign result_type = type | default: result.object_type
+-%}
+
+<a href="{{ result.url }}" class="search-result-card">
+  <div class="search-result-card__image-wrapper">
+    {%- if featured_image -%}
+      {%- render 'image',
+        image: featured_image,
+        alt: result.title,
+        width: 300,
+        height: 300,
+        class: 'search-result-card__image'
+      -%}
+    {%- else -%}
+      <div class="search-result-card__placeholder">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          {%- if result_type == 'product' -%}
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M9 9h6v6H9z"/>
+          {%- elsif result_type == 'article' -%}
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          {%- else -%}
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M8 8h8M8 12h8M8 16h4"/>
+          {%- endif -%}
+        </svg>
+      </div>
+    {%- endif -%}
+    <span class="search-result-card__badge search-result-card__badge--{{ result_type }}">
+      {%- if result_type == 'product' -%}
+        {{ 'search.type_product' | t | default: 'Product' }}
+      {%- elsif result_type == 'article' -%}
+        {{ 'search.type_article' | t | default: 'Article' }}
+      {%- else -%}
+        {{ 'search.type_page' | t | default: 'Page' }}
+      {%- endif -%}
+    </span>
+  </div>
+
+  <div class="search-result-card__content">
+    <h3 class="search-result-card__title">{{ result.title }}</h3>
+    
+    {%- if result_type == 'product' -%}
+      {%- if result.price -%}
+        <p class="search-result-card__price">
+          {{ result.price | money_with_currency }}
+          {%- if result.compare_at_price > result.price -%}
+            <span class="search-result-card__compare-price">{{ result.compare_at_price | money_with_currency }}</span>
+          {%- endif -%}
+        </p>
+      {%- endif -%}
+      {%- if result.vendor != blank -%}
+        <p class="search-result-card__vendor">{{ result.vendor }}</p>
+      {%- endif -%}
+    {%- elsif result_type == 'article' -%}
+      {%- if result.excerpt != blank -%}
+        <p class="search-result-card__excerpt">{{ result.excerpt | strip_html | truncatewords: 20 }}</p>
+      {%- endif -%}
+      {%- if result.author != blank -%}
+        <p class="search-result-card__meta">
+          {{ 'search.by_author' | t | default: 'By' }} {{ result.author }}
+        </p>
+      {%- endif -%}
+    {%- else -%}
+      {%- if result.content != blank -%}
+        <p class="search-result-card__excerpt">{{ result.content | strip_html | truncatewords: 20 }}</p>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</a>
+
+{% stylesheet %}
+  .search-result-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--card-border-radius);
+    overflow: hidden;
+    transition: var(--transition);
+    height: 100%;
+  }
+
+  .search-result-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+    border-color: var(--color-primary);
+  }
+
+  .search-result-card__image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--color-secondary);
+  }
+
+  .search-result-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .search-result-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: color-mix(in srgb, var(--color-foreground) 30%, transparent);
+  }
+
+  .search-result-card__badge {
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--button-border-radius);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-primary--weight);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-foreground);
+    box-shadow: var(--shadow);
+  }
+
+  .search-result-card__badge--product {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .search-result-card__badge--article {
+    color: var(--color-success);
+    border-color: var(--color-success);
+  }
+
+  .search-result-card__badge--page {
+    color: color-mix(in srgb, var(--color-foreground) 70%, transparent);
+  }
+
+  .search-result-card__content {
+    padding: var(--spacing-md);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .search-result-card__title {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-primary--weight);
+    color: var(--color-foreground);
+    margin: 0 0 var(--spacing-sm) 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .search-result-card__price {
+    font-size: var(--font-size-base);
+    font-weight: calc(var(--font-primary--weight) + 200);
+    color: var(--color-primary);
+    margin: var(--spacing-xs) 0 0 0;
+  }
+
+  .search-result-card__compare-price {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-primary--weight);
+    color: color-mix(in srgb, var(--color-foreground) 60%, transparent);
+    text-decoration: line-through;
+    margin-left: var(--spacing-xs);
+  }
+
+  .search-result-card__vendor {
+    font-size: var(--font-size-sm);
+    color: color-mix(in srgb, var(--color-foreground) 70%, transparent);
+    margin: var(--spacing-xs) 0 0 0;
+  }
+
+  .search-result-card__excerpt {
+    font-size: var(--font-size-sm);
+    color: color-mix(in srgb, var(--color-foreground) 70%, transparent);
+    margin: var(--spacing-xs) 0 0 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+  }
+
+  .search-result-card__meta {
+    font-size: var(--font-size-xs);
+    color: color-mix(in srgb, var(--color-foreground) 60%, transparent);
+    margin: var(--spacing-xs) 0 0 0;
+  }
+{% endstylesheet %}
+
