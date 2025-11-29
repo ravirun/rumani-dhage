@@ -1,0 +1,546 @@
+{% comment %} Mobile-only bottom navigation section with Home, Categories, New Products, and Cart {% endcomment %}
+
+{% comment %} Load Lucide Icons from CDN {% endcomment %}
+<script src="https://unpkg.com/lucide@latest" defer></script>
+
+<div class="bottom-navigation" id="bottom-navigation">
+  <a href="{{ routes.root_url }}" class="bottom-nav__item" data-nav="home">
+    <i data-lucide="home"></i>
+    <span>Home</span>
+  </a>
+
+  <button type="button" class="bottom-nav__item" data-nav="categories" aria-label="Categories">
+    <i data-lucide="grid-3x3"></i>
+    <span>Categories</span>
+  </button>
+
+  <button type="button" class="bottom-nav__item" data-nav="new-products" aria-label="New Products">
+    <i data-lucide="sparkles"></i>
+    <span>New</span>
+  </button>
+
+  <a href="{{ routes.cart_url }}" class="bottom-nav__item" data-nav="cart">
+    <div class="bottom-nav__cart-wrapper">
+      <i data-lucide="shopping-cart"></i>
+      {% if cart.item_count > 0 %}
+        <span class="bottom-nav__badge">{{ cart.item_count }}</span>
+      {% endif %}
+    </div>
+    <span>Cart</span>
+  </a>
+</div>
+
+{% comment %} Categories Modal {% endcomment %}
+<div class="bottom-modal" id="categories-modal" role="dialog" aria-modal="true" aria-labelledby="categories-modal-title">
+  <div class="bottom-modal__overlay" data-modal-close="categories"></div>
+  <div class="bottom-modal__content">
+    <div class="bottom-modal__header">
+      <h2 id="categories-modal-title" class="bottom-modal__title">Categories</h2>
+      <button type="button" class="bottom-modal__close" data-modal-close="categories" aria-label="Close categories">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <div class="bottom-modal__body">
+      <div class="categories-list">
+        {% for collection in collections %}
+          <a href="{{ collection.url }}" class="category-item">
+            {% if collection.featured_image %}
+              <div class="category-item__image">
+                <img
+                  src="{{ collection.featured_image | image_url: width: 200 }}"
+                  alt="{{ collection.title | escape }}"
+                  loading="lazy"
+                  width="200"
+                  height="200"
+                >
+              </div>
+            {% endif %}
+            <div class="category-item__content">
+              <h3 class="category-item__title">{{ collection.title }}</h3>
+              {% if collection.description != blank %}
+                <p class="category-item__description">{{ collection.description | strip_html | truncatewords: 15 }}</p>
+              {% endif %}
+            </div>
+            <i data-lucide="chevron-right" class="category-item__arrow"></i>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %} New Products Modal {% endcomment %}
+<div class="bottom-modal" id="new-products-modal" role="dialog" aria-modal="true" aria-labelledby="new-products-modal-title">
+  <div class="bottom-modal__overlay" data-modal-close="new-products"></div>
+  <div class="bottom-modal__content">
+    <div class="bottom-modal__header">
+      <h2 id="new-products-modal-title" class="bottom-modal__title">New Products</h2>
+      <button type="button" class="bottom-modal__close" data-modal-close="new-products" aria-label="Close new products">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <div class="bottom-modal__body">
+      <div class="products-list">
+        {% assign new_products = collections.all.products | sort: 'created_at' | reverse %}
+        {% for product in new_products limit: 20 %}
+          <a href="{{ product.url }}" class="product-item">
+            {% if product.featured_image %}
+              <div class="product-item__image">
+                <img
+                  src="{{ product.featured_image | image_url: width: 200 }}"
+                  alt="{{ product.title | escape }}"
+                  loading="lazy"
+                  width="200"
+                  height="200"
+                >
+              </div>
+            {% endif %}
+            <div class="product-item__content">
+              <h3 class="product-item__title">{{ product.title }}</h3>
+              <p class="product-item__price">{{ product.price | money }}</p>
+            </div>
+            <i data-lucide="chevron-right" class="product-item__arrow"></i>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .bottom-navigation {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgb(var(--color-background));
+    border-top: 1px solid rgba(var(--color-foreground), 0.1);
+    padding: 0.5rem 0;
+    z-index: 100;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  @media screen and (max-width: 749px) {
+    .bottom-navigation {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+  }
+
+  .bottom-nav__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 1rem;
+    background: none;
+    border: none;
+    text-decoration: none;
+    color: rgba(var(--color-foreground), 0.7);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    position: relative;
+  }
+
+  .bottom-nav__item:hover,
+  .bottom-nav__item:focus {
+    color: rgba(var(--color-foreground), 1);
+    outline: none;
+  }
+
+  .bottom-nav__item i {
+    width: 1.5rem;
+    height: 1.5rem;
+    stroke-width: 1.5;
+  }
+
+  .bottom-nav__item span {
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
+
+  .bottom-nav__cart-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bottom-nav__badge {
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    background: rgb(var(--color-button));
+    color: rgb(var(--color-button-text));
+    border-radius: 50%;
+    width: 1.25rem;
+    height: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  /* Modal Styles */
+  .bottom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: flex-end;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+  }
+
+  .bottom-modal.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .bottom-modal__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+  }
+
+  .bottom-modal__content {
+    position: relative;
+    width: 100%;
+    max-height: 80vh;
+    background: rgb(var(--color-background));
+    border-radius: 1.5rem 1.5rem 0 0;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .bottom-modal.active .bottom-modal__content {
+    transform: translateY(0);
+  }
+
+  .bottom-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+    flex-shrink: 0;
+  }
+
+  .bottom-modal__title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: rgba(var(--color-foreground), 1);
+  }
+
+  .bottom-modal__close {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: rgba(var(--color-foreground), 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+  }
+
+  .bottom-modal__close:hover,
+  .bottom-modal__close:focus {
+    color: rgba(var(--color-foreground), 1);
+    outline: none;
+  }
+
+  .bottom-modal__close i {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .bottom-modal__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Categories List */
+  .categories-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .category-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(var(--color-foreground), 0.03);
+    border-radius: 0.75rem;
+    text-decoration: none;
+    color: rgba(var(--color-foreground), 1);
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .category-item:hover,
+  .category-item:focus {
+    background: rgba(var(--color-foreground), 0.06);
+    transform: translateX(4px);
+    outline: none;
+  }
+
+  .category-item__image {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: rgba(var(--color-foreground), 0.05);
+  }
+
+  .category-item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .category-item__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .category-item__title {
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .category-item__description {
+    margin: 0;
+    font-size: 0.875rem;
+    color: rgba(var(--color-foreground), 0.6);
+    line-height: 1.4;
+  }
+
+  .category-item__arrow {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: rgba(var(--color-foreground), 0.4);
+    flex-shrink: 0;
+  }
+
+  /* Products List */
+  .products-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .product-item {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: rgba(var(--color-foreground), 1);
+    background: rgba(var(--color-foreground), 0.03);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .product-item:hover,
+  .product-item:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    outline: none;
+  }
+
+  .product-item__image {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: rgba(var(--color-foreground), 0.05);
+  }
+
+  .product-item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-item__content {
+    padding: 0.75rem;
+  }
+
+  .product-item__title {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .product-item__price {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgba(var(--color-button), 1);
+  }
+
+  .product-item__arrow {
+    display: none;
+  }
+
+  /* Prevent body scroll when modal is open */
+  body.modal-open {
+    overflow: hidden;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    // Initialize Lucide icons
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    } else {
+      // Wait for Lucide to load
+      document.addEventListener('DOMContentLoaded', function() {
+        if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
+        }
+      });
+    }
+
+    const bottomNav = document.getElementById('bottom-navigation');
+    const categoriesModal = document.getElementById('categories-modal');
+    const newProductsModal = document.getElementById('new-products-modal');
+    const body = document.body;
+
+    // Open modal function
+    function openModal(modal) {
+      if (!modal) return;
+      
+      body.classList.add('modal-open');
+      modal.classList.add('active');
+      
+      // Re-initialize icons in modal
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+      
+      // Prevent scroll on body
+      const scrollY = window.scrollY;
+      body.style.position = 'fixed';
+      body.style.top = `-${scrollY}px`;
+      body.style.width = '100%';
+    }
+
+    // Close modal function
+    function closeModal(modal) {
+      if (!modal) return;
+      
+      const scrollY = body.style.top;
+      body.classList.remove('modal-open');
+      body.style.position = '';
+      body.style.top = '';
+      body.style.width = '';
+      
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
+      
+      modal.classList.remove('active');
+    }
+
+    // Event listeners for navigation items
+    if (bottomNav) {
+      bottomNav.addEventListener('click', function(e) {
+        const navItem = e.target.closest('[data-nav]');
+        if (!navItem) return;
+
+        const navType = navItem.getAttribute('data-nav');
+
+        if (navType === 'categories') {
+          e.preventDefault();
+          openModal(categoriesModal);
+        } else if (navType === 'new-products') {
+          e.preventDefault();
+          openModal(newProductsModal);
+        }
+      });
+    }
+
+    // Event listeners for closing modals
+    function setupModalCloseListeners(modal) {
+      if (!modal) return;
+
+      const closeButtons = modal.querySelectorAll('[data-modal-close]');
+      closeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          closeModal(modal);
+        });
+      });
+
+      // Close on overlay click
+      const overlay = modal.querySelector('.bottom-modal__overlay');
+      if (overlay) {
+        overlay.addEventListener('click', function() {
+          closeModal(modal);
+        });
+      }
+
+      // Close on escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+          closeModal(modal);
+        }
+      });
+    }
+
+    setupModalCloseListeners(categoriesModal);
+    setupModalCloseListeners(newProductsModal);
+
+    // Re-initialize icons when Lucide loads
+    if (typeof window.lucide === 'undefined') {
+      window.addEventListener('load', function() {
+        if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
+        }
+      });
+    }
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Bottom Navigation",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Bottom Navigation"
+    }
+  ]
+}
+{% endschema %}
+

@@ -26,9 +26,11 @@
     {{ content_for_header }}
   </head>
 
-  <body>
+  <body style="position: relative;">
     {% sections 'header-group' %}
     {{ content_for_layout }}
     {% sections 'footer-group' %}
+    {% section 'floating-cart' %}
+    {% section 'bottomNavigation' %}
   </body>
 </html>

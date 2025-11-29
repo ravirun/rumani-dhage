@@ -1,0 +1,147 @@
+{% comment %} Floating cart bar - shows when cart has items, but not on cart or checkout pages {% endcomment %}
+{% if cart.item_count > 0 and request.page_type != 'cart' %}
+  <div class="floating-cart">
+    <div class="floating-cart__icon-wrapper">
+      <i data-lucide="shopping-cart"></i>
+    </div>
+    
+    <div class="floating-cart__info">
+      <div class="floating-cart__quantity">
+        {{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}
+      </div>
+      <div class="floating-cart__total">
+        {{ cart.total_price | money }}
+      </div>
+    </div>
+    
+    <a href="{{ routes.cart_url }}" class="floating-cart__button">
+      View Cart
+      <i data-lucide="arrow-right"></i>
+    </a>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .floating-cart {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--color-foreground);
+    border-radius: 1rem;
+    padding: 0.875rem 1.25rem;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 90%;
+  }
+
+  .floating-cart__icon-wrapper {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: color-mix(in srgb, var(--color-background) 15%, transparent);
+    border-radius: 0.625rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .floating-cart__icon-wrapper i {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-background);
+    stroke-width: 2;
+  }
+
+  .floating-cart__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .floating-cart__quantity {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-background);
+    line-height: 1.2;
+  }
+
+  .floating-cart__total {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-background);
+    line-height: 1.2;
+  }
+
+  .floating-cart__button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    background: transparent;
+    border: 1px solid color-mix(in srgb, var(--color-background) 30%, transparent);
+    border-radius: 0.5rem;
+    color: var(--color-background);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .floating-cart__button:hover,
+  .floating-cart__button:focus {
+    background: color-mix(in srgb, var(--color-background) 10%, transparent);
+    border-color: color-mix(in srgb, var(--color-background) 50%, transparent);
+    outline: none;
+  }
+
+  .floating-cart__button i {
+    width: 1rem;
+    height: 1rem;
+    color: var(--color-background);
+    stroke-width: 2;
+  }
+
+  @media screen and (max-width: 749px) {
+    .floating-cart {
+      bottom: 6rem;
+      width: 90%;
+      max-width: 90%;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    // Initialize Lucide icons for floating cart
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    } else {
+      document.addEventListener('DOMContentLoaded', function() {
+        if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
+        }
+      });
+    }
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+    "name": "Floating Cart",
+    "settings": [],
+    "presets": [
+        {
+            "name": "Floating Cart"
+        }
+    ]
+}
+{% endschema %}
