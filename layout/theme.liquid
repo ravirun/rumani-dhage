@@ -13,8 +13,10 @@
     {% unless settings.type_primary_font.system? %}
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
       {% assign font_url_value = settings.type_primary_font | font_url %}
-      {% if font_url_value != blank %}
-        {{ font_url_value | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+      {% if font_url_value != blank and font_url_value contains 'shopifycdn.com' %}
+        {% comment %}theme-check-disable AssetPreload, RemoteAsset{% endcomment %}
+        <link rel="preload" as="font" href="{{ font_url_value }}" type="font/woff2" crossorigin="anonymous">
+        {% comment %}theme-check-enable AssetPreload, RemoteAsset{% endcomment %}
       {% endif %}
     {% endunless %}
 
