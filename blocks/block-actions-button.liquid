@@ -1,0 +1,148 @@
+{% comment %}
+  Button Block
+  Theme block version of the Button component
+{% endcomment %}
+
+<div {{ block.shopify_attributes }} class="block-button">
+  {% render 'component-actions-button',
+    text: block.settings.text,
+    variant: block.settings.variant,
+    size: block.settings.size,
+    type: block.settings.type,
+    url: block.settings.url,
+    full_width: block.settings.full_width,
+    disabled: block.settings.disabled,
+    icon: block.settings.icon,
+    icon_position: block.settings.icon_position,
+    class: block.settings.class
+  %}
+</div>
+
+{% schema %}
+{
+  "name": "Button",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Button text",
+      "default": "Click me"
+    },
+    {
+      "type": "select",
+      "id": "variant",
+      "label": "Button style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "ghost",
+          "label": "Ghost"
+        }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "type",
+      "label": "Button type",
+      "options": [
+        {
+          "value": "button",
+          "label": "Button"
+        },
+        {
+          "value": "submit",
+          "label": "Submit"
+        },
+        {
+          "value": "reset",
+          "label": "Reset"
+        }
+      ],
+      "default": "button"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "Link URL",
+      "info": "If provided, button becomes a link"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "disabled",
+      "label": "Disabled",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "icon",
+      "label": "Icon name",
+      "info": "Lucide icon name (e.g., 'shopping-cart')"
+    },
+    {
+      "type": "select",
+      "id": "icon_position",
+      "label": "Icon position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "class",
+      "label": "Additional CSS classes"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Button"
+    }
+  ]
+}
+{% endschema %}
+

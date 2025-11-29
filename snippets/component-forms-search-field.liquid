@@ -1,0 +1,137 @@
+{% comment %}
+  SearchField Component
+  Let users enter search terms or find specific items using a single-line input field.
+  
+  @param {string} name - Input name attribute (required)
+  @param {string} id - Input ID attribute (optional)
+  @param {string} value - Input value (optional)
+  @param {string} placeholder - Placeholder text (optional)
+  @param {string} label - Label text (optional)
+  @param {boolean} required - Mark as required (default: false)
+  @param {boolean} disabled - Disable input (default: false)
+  @param {string} error - Error message (optional)
+  @param {string} help - Help text (optional)
+  @param {string} class - Additional CSS classes
+  @param {string} attributes - Additional HTML attributes
+  
+  @example
+  {% render 'component-forms-search-field', name: 'search', placeholder: 'Search products...' %}
+{% endcomment %}
+
+{% liquid
+  assign name = name | default: 'search'
+  assign id = id | default: name
+  assign value = value | default: ''
+  assign placeholder = placeholder | default: 'Search...'
+  assign label = label | default: ''
+  assign required = required | default: false
+  assign disabled = disabled | default: false
+  assign error = error | default: ''
+  assign help = help | default: ''
+  assign class = class | default: ''
+  assign attributes = attributes | default: ''
+%}
+
+<div class="ds-search-field {{ class }}">
+  {% if label != blank %}
+    <label for="{{ id }}" class="ds-search-field__label">
+      {{ label }}
+      {% if required %}<span class="ds-search-field__required" aria-label="required">*</span>{% endif %}
+    </label>
+  {% endif %}
+  
+  <div class="ds-search-field__wrapper">
+    <i data-lucide="search" class="ds-search-field__icon"></i>
+    <input
+      type="search"
+      id="{{ id }}"
+      name="{{ name }}"
+      value="{{ value }}"
+      placeholder="{{ placeholder }}"
+      class="ds-input ds-search-field__input {% if error != blank %}ds-search-field__input--error{% endif %}"
+      {% if required %}required{% endif %}
+      {% if disabled %}disabled{% endif %}
+      {{ attributes }}
+    >
+  </div>
+  
+  {% if error != blank %}
+    <span class="ds-search-field__error" role="alert">{{ error }}</span>
+  {% endif %}
+  
+  {% if help != blank and error == blank %}
+    <span class="ds-search-field__help">{{ help }}</span>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .ds-search-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .ds-search-field__label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-primary--weight);
+    color: var(--color-foreground);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+  
+  .ds-search-field__required {
+    color: var(--color-error);
+  }
+  
+  .ds-search-field__wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .ds-search-field__icon {
+    position: absolute;
+    left: var(--input-padding-horizontal);
+    width: 1.25rem;
+    height: 1.25rem;
+    color: color-mix(in srgb, var(--color-foreground) 50%, transparent);
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  .ds-search-field__input {
+    width: 100%;
+    padding-left: calc(var(--input-padding-horizontal) + 1.25rem + var(--spacing-sm));
+  }
+  
+  .ds-search-field__input--error {
+    border-color: var(--color-error);
+  }
+  
+  .ds-search-field__input--error:focus {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error) 20%, transparent);
+  }
+  
+  .ds-search-field__error {
+    font-size: var(--font-size-sm);
+    color: var(--color-error);
+    display: block;
+  }
+  
+  .ds-search-field__help {
+    font-size: var(--font-size-sm);
+    color: color-mix(in srgb, var(--color-foreground) 60%, transparent);
+    display: block;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  })();
+{% endjavascript %}
+

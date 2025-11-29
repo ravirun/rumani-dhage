@@ -1,0 +1,77 @@
+{% comment %}
+  Text Component
+  Displays inline text with specific visual styles or tones.
+  
+  @param {string} text - Text content (required)
+  @param {string} size - Text size: xs, sm, base, lg, xl, 2xl, 3xl (default: base)
+  @param {string} weight - Font weight: normal, medium, bold (default: normal)
+  @param {string} color - Text color: default, primary, secondary, accent, success, warning, error (default: default)
+  @param {string} align - Text alignment: left, center, right, justify (default: left)
+  @param {boolean} italic - Apply italic style (default: false)
+  @param {string} class - Additional CSS classes
+  @param {string} attributes - Additional HTML attributes
+  
+  @example
+  {% render 'component-titles-text-text', text: 'Regular text', size: 'base' %}
+  {% render 'component-titles-text-text', text: 'Important text', size: 'lg', weight: 'bold', color: 'primary' %}
+{% endcomment %}
+
+{% liquid
+  assign text = text | default: ''
+  assign size = size | default: 'base'
+  assign weight = weight | default: 'normal'
+  assign color = color | default: 'default'
+  assign align = align | default: 'left'
+  assign italic = italic | default: false
+  assign class = class | default: ''
+  assign attributes = attributes | default: ''
+  
+  unless text != blank
+    echo '<!-- Error: text parameter required for text component -->'
+    break
+  endunless
+%}
+
+<span 
+  class="ds-text ds-text--{{ size }} ds-text--weight-{{ weight }} ds-text--color-{{ color }} ds-text--align-{{ align }} {% if italic %}ds-text--italic{% endif %} {{ class }}"
+  {{ attributes }}
+>
+  {{ text }}
+</span>
+
+{% stylesheet %}
+  .ds-text {
+    font-family: var(--font-primary--family);
+    line-height: var(--line-height-body);
+  }
+  
+  .ds-text--xs { font-size: var(--font-size-xs); }
+  .ds-text--sm { font-size: var(--font-size-sm); }
+  .ds-text--base { font-size: var(--font-size-base); }
+  .ds-text--lg { font-size: var(--font-size-lg); }
+  .ds-text--xl { font-size: var(--font-size-xl); }
+  .ds-text--2xl { font-size: var(--font-size-2xl); }
+  .ds-text--3xl { font-size: var(--font-size-3xl); }
+  
+  .ds-text--weight-normal { font-weight: var(--font-primary--weight); }
+  .ds-text--weight-medium { font-weight: calc(var(--font-primary--weight) + 200); }
+  .ds-text--weight-bold { font-weight: calc(var(--font-primary--weight) + 300); }
+  
+  .ds-text--color-default { color: var(--color-foreground); }
+  .ds-text--color-primary { color: var(--color-primary); }
+  .ds-text--color-secondary { color: var(--color-secondary-text); }
+  .ds-text--color-accent { color: var(--color-accent); }
+  .ds-text--color-success { color: var(--color-success); }
+  .ds-text--color-warning { color: var(--color-warning); }
+  .ds-text--color-error { color: var(--color-error); }
+  
+  .ds-text--align-left { text-align: left; }
+  .ds-text--align-center { text-align: center; }
+  .ds-text--align-right { text-align: right; }
+  .ds-text--align-justify { text-align: justify; }
+  
+  .ds-text--italic {
+    font-style: italic;
+  }
+{% endstylesheet %}
+

@@ -1,0 +1,161 @@
+{% comment %}
+  Switch Component
+  Give users a clear way to toggle options on or off.
+  
+  @param {string} name - Switch name attribute (required)
+  @param {string} id - Switch ID attribute (optional)
+  @param {string} label - Label text (optional)
+  @param {boolean} checked - Checked state (default: false)
+  @param {boolean} required - Mark as required (default: false)
+  @param {boolean} disabled - Disable switch (default: false)
+  @param {string} value - Switch value when on (default: '1')
+  @param {string} error - Error message (optional)
+  @param {string} help - Help text (optional)
+  @param {string} class - Additional CSS classes
+  @param {string} attributes - Additional HTML attributes
+  
+  @example
+  {% render 'component-forms-switch', name: 'notifications', label: 'Enable notifications', checked: true %}
+{% endcomment %}
+
+{% liquid
+  assign name = name | default: ''
+  assign id = id | default: name
+  assign label = label | default: ''
+  assign checked = checked | default: false
+  assign required = required | default: false
+  assign disabled = disabled | default: false
+  assign value = value | default: '1'
+  assign error = error | default: ''
+  assign help = help | default: ''
+  assign class = class | default: ''
+  assign attributes = attributes | default: ''
+  
+  unless name != blank
+    echo '<!-- Error: name parameter required for switch component -->'
+    break
+  endunless
+%}
+
+<div class="ds-switch {{ class }}">
+  <label class="ds-switch__label">
+    <input
+      type="checkbox"
+      id="{{ id }}"
+      name="{{ name }}"
+      value="{{ value }}"
+      class="ds-switch__input {% if error != blank %}ds-switch__input--error{% endif %}"
+      role="switch"
+      {% if checked %}checked{% endif %}
+      {% if required %}required{% endif %}
+      {% if disabled %}disabled{% endif %}
+      {{ attributes }}
+    >
+    <span class="ds-switch__slider"></span>
+    {% if label != blank %}
+      <span class="ds-switch__label-text">
+        {{ label }}
+        {% if required %}<span class="ds-switch__required" aria-label="required">*</span>{% endif %}
+      </span>
+    {% endif %}
+  </label>
+  
+  {% if error != blank %}
+    <span class="ds-switch__error" role="alert">{{ error }}</span>
+  {% endif %}
+  
+  {% if help != blank and error == blank %}
+    <span class="ds-switch__help">{{ help }}</span>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .ds-switch {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .ds-switch__label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    color: var(--color-foreground);
+  }
+  
+  .ds-switch__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .ds-switch__slider {
+    position: relative;
+    display: inline-block;
+    width: 2.75rem;
+    height: 1.5rem;
+    background-color: var(--color-border);
+    border-radius: 9999px;
+    transition: var(--transition);
+    flex-shrink: 0;
+  }
+  
+  .ds-switch__slider::before {
+    content: '';
+    position: absolute;
+    width: 1.25rem;
+    height: 1.25rem;
+    left: 0.125rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    border-radius: 50%;
+    transition: var(--transition);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .ds-switch__input:checked + .ds-switch__slider {
+    background-color: var(--color-primary);
+  }
+  
+  .ds-switch__input:checked + .ds-switch__slider::before {
+    transform: translate(1.25rem, -50%);
+  }
+  
+  .ds-switch__input:disabled + .ds-switch__slider {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .ds-switch__input--error + .ds-switch__slider {
+    background-color: var(--color-error);
+  }
+  
+  .ds-switch__label-text {
+    flex: 1;
+    line-height: var(--line-height-body);
+  }
+  
+  .ds-switch__required {
+    color: var(--color-error);
+    margin-left: var(--spacing-xs);
+  }
+  
+  .ds-switch__error {
+    font-size: var(--font-size-sm);
+    color: var(--color-error);
+    display: block;
+    margin-left: calc(2.75rem + var(--spacing-sm));
+  }
+  
+  .ds-switch__help {
+    font-size: var(--font-size-sm);
+    color: color-mix(in srgb, var(--color-foreground) 60%, transparent);
+    display: block;
+    margin-left: calc(2.75rem + var(--spacing-sm));
+  }
+{% endstylesheet %}
+

@@ -1,0 +1,95 @@
+{% comment %}
+  Heading Component
+  Renders hierarchical titles to communicate the structure and organization of page content.
+  
+  @param {string} text - Heading text (required)
+  @param {number} level - Heading level: 1-6 (default: 2)
+  @param {string} size - Visual size override: xs, sm, base, lg, xl, 2xl, 3xl (optional)
+  @param {string} align - Text alignment: left, center, right (default: left)
+  @param {string} color - Text color: default, primary, secondary, accent (default: default)
+  @param {string} class - Additional CSS classes
+  @param {string} attributes - Additional HTML attributes
+  
+  @example
+  {% render 'component-titles-text-heading', text: 'Page Title', level: 1 %}
+  {% render 'component-titles-text-heading', text: 'Section Title', level: 2, align: 'center' %}
+{% endcomment %}
+
+{% liquid
+  assign text = text | default: ''
+  assign level = level | default: 2
+  assign size = size | default: ''
+  assign align = align | default: 'left'
+  assign color = color | default: 'default'
+  assign class = class | default: ''
+  assign attributes = attributes | default: ''
+  
+  unless text != blank
+    echo '<!-- Error: text parameter required for heading component -->'
+    break
+  endunless
+  
+  if level < 1 or level > 6
+    assign level = 2
+  endif
+  
+  assign heading_tag = 'h' | append: level
+%}
+
+<{{ heading_tag }} 
+  class="ds-heading ds-heading--level-{{ level }} {% if size != blank %}ds-heading--{{ size }}{% endif %} ds-heading--align-{{ align }} ds-heading--color-{{ color }} {{ class }}"
+  {{ attributes }}
+>
+  {{ text }}
+</{{ heading_tag }}>
+
+{% stylesheet %}
+  .ds-heading {
+    margin: 0;
+    font-family: var(--font-primary--family);
+    font-weight: var(--font-primary--weight);
+    line-height: var(--line-height-heading);
+  }
+  
+  .ds-heading--level-1 {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .ds-heading--level-2 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .ds-heading--level-3 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .ds-heading--level-4 {
+    font-size: var(--font-size-lg);
+  }
+  
+  .ds-heading--level-5 {
+    font-size: var(--font-size-base);
+  }
+  
+  .ds-heading--level-6 {
+    font-size: var(--font-size-sm);
+  }
+  
+  .ds-heading--xs { font-size: var(--font-size-xs); }
+  .ds-heading--sm { font-size: var(--font-size-sm); }
+  .ds-heading--base { font-size: var(--font-size-base); }
+  .ds-heading--lg { font-size: var(--font-size-lg); }
+  .ds-heading--xl { font-size: var(--font-size-xl); }
+  .ds-heading--2xl { font-size: var(--font-size-2xl); }
+  .ds-heading--3xl { font-size: var(--font-size-3xl); }
+  
+  .ds-heading--align-left { text-align: left; }
+  .ds-heading--align-center { text-align: center; }
+  .ds-heading--align-right { text-align: right; }
+  
+  .ds-heading--color-default { color: var(--color-foreground); }
+  .ds-heading--color-primary { color: var(--color-primary); }
+  .ds-heading--color-secondary { color: var(--color-secondary-text); }
+  .ds-heading--color-accent { color: var(--color-accent); }
+{% endstylesheet %}
+

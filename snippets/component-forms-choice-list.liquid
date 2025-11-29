@@ -1,0 +1,183 @@
+{% comment %}
+  ChoiceList Component
+  Present multiple options to users, allowing either single selections with radio buttons or multiple selections with checkboxes.
+  
+  @param {string} name - Input name attribute (required)
+  @param {string} id - Input ID attribute (optional)
+  @param {string} label - Label text (optional)
+  @param {array} options - Array of options with value and label (required)
+  @param {string|array} selected - Selected value(s) (optional)
+  @param {string} type - Selection type: radio, checkbox (default: radio)
+  @param {string} orientation - Layout: vertical, horizontal (default: vertical)
+  @param {boolean} required - Mark as required (default: false)
+  @param {boolean} disabled - Disable all inputs (default: false)
+  @param {string} error - Error message (optional)
+  @param {string} help - Help text (optional)
+  @param {string} class - Additional CSS classes
+  @param {string} attributes - Additional HTML attributes
+  
+  @example
+  {% assign options = 'Option 1|Option 2|Option 3' | split: '|' %}
+  {% render 'component-forms-choice-list', name: 'choice', label: 'Choose one', options: options, type: 'radio' %}
+{% endcomment %}
+
+{% liquid
+  assign name = name | default: ''
+  assign id = id | default: name
+  assign label = label | default: ''
+  assign options = options | default: empty
+  assign selected = selected | default: ''
+  assign type = type | default: 'radio'
+  assign orientation = orientation | default: 'vertical'
+  assign required = required | default: false
+  assign disabled = disabled | default: false
+  assign error = error | default: ''
+  assign help = help | default: ''
+  assign class = class | default: ''
+  assign attributes = attributes | default: ''
+  
+  unless name != blank
+    echo '<!-- Error: name parameter required for choice-list component -->'
+    break
+  endunless
+  
+  if type == 'checkbox'
+    assign selected_array = selected | split: ','
+  endif
+%}
+
+<div class="ds-choice-list ds-choice-list--{{ orientation }} {{ class }}">
+  {% if label != blank %}
+    <div class="ds-choice-list__label">
+      {{ label }}
+      {% if required %}<span class="ds-choice-list__required" aria-label="required">*</span>{% endif %}
+    </div>
+  {% endif %}
+  
+  {% liquid
+    if type == 'radio'
+      assign role_value = 'radiogroup'
+    else
+      assign role_value = 'group'
+    endif
+  %}
+  <div class="ds-choice-list__options" role="{{ role_value }}" {{ attributes }}>
+    {% for option in options %}
+      {% liquid
+        assign option_value = option.value | default: option
+        assign option_label = option.label | default: option
+        assign option_id = id | append: '-' | append: forloop.index
+        assign is_selected = false
+        
+        if type == 'radio'
+          if selected == option_value
+            assign is_selected = true
+          endif
+        else
+          if selected_array contains option_value
+            assign is_selected = true
+          endif
+        endif
+      %}
+      
+      <label class="ds-choice-list__option">
+        <input
+          type="{{ type }}"
+          id="{{ option_id }}"
+          name="{{ name }}"
+          value="{{ option_value }}"
+          class="ds-choice-list__input {% if error != blank %}ds-choice-list__input--error{% endif %}"
+          {% if is_selected %}checked{% endif %}
+          {% if required and type == 'radio' and forloop.first %}required{% endif %}
+          {% if disabled %}disabled{% endif %}
+        >
+        <span class="ds-choice-list__option-label">{{ option_label }}</span>
+      </label>
+    {% endfor %}
+  </div>
+  
+  {% if error != blank %}
+    <span class="ds-choice-list__error" role="alert">{{ error }}</span>
+  {% endif %}
+  
+  {% if help != blank and error == blank %}
+    <span class="ds-choice-list__help">{{ help }}</span>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .ds-choice-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .ds-choice-list__label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-primary--weight);
+    color: var(--color-foreground);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .ds-choice-list__required {
+    color: var(--color-error);
+  }
+  
+  .ds-choice-list__options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .ds-choice-list--horizontal .ds-choice-list__options {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .ds-choice-list__option {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    color: var(--color-foreground);
+  }
+  
+  .ds-choice-list__input {
+    width: 1.25rem;
+    height: 1.25rem;
+    cursor: pointer;
+    accent-color: var(--color-primary);
+    flex-shrink: 0;
+  }
+  
+  .ds-choice-list__input:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  .ds-choice-list__input--error {
+    accent-color: var(--color-error);
+  }
+  
+  .ds-choice-list__option-label {
+    flex: 1;
+    line-height: var(--line-height-body);
+  }
+  
+  .ds-choice-list__error {
+    font-size: var(--font-size-sm);
+    color: var(--color-error);
+    display: block;
+  }
+  
+  .ds-choice-list__help {
+    font-size: var(--font-size-sm);
+    color: color-mix(in srgb, var(--color-foreground) 60%, transparent);
+    display: block;
+  }
+{% endstylesheet %}
+

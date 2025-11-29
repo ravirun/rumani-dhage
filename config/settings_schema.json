@@ -42,7 +42,7 @@
         "max": 1.5,
         "step": 0.1,
         "label": "Font scale ratio",
-        "default": 1.25,
+        "default": 1.2,
         "info": "Ratio for heading sizes (1.25 = 25% increase per level)"
       },
       {
@@ -488,6 +488,139 @@
           }
         ],
         "default": "ease-out"
+      }
+    ]
+  },
+  {
+    "name": "Component Library",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Component Defaults"
+      },
+      {
+        "type": "select",
+        "id": "button_default_variant",
+        "label": "Default button variant",
+        "options": [
+          {
+            "value": "primary",
+            "label": "Primary"
+          },
+          {
+            "value": "secondary",
+            "label": "Secondary"
+          },
+          {
+            "value": "outline",
+            "label": "Outline"
+          },
+          {
+            "value": "ghost",
+            "label": "Ghost"
+          }
+        ],
+        "default": "primary"
+      },
+      {
+        "type": "select",
+        "id": "button_default_size",
+        "label": "Default button size",
+        "options": [
+          {
+            "value": "small",
+            "label": "Small"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "large",
+            "label": "Large"
+          }
+        ],
+        "default": "medium"
+      },
+      {
+        "type": "select",
+        "id": "link_default_variant",
+        "label": "Default link variant",
+        "options": [
+          {
+            "value": "default",
+            "label": "Default"
+          },
+          {
+            "value": "primary",
+            "label": "Primary"
+          },
+          {
+            "value": "secondary",
+            "label": "Secondary"
+          },
+          {
+            "value": "underline",
+            "label": "Underline"
+          }
+        ],
+        "default": "default"
+      },
+      {
+        "type": "select",
+        "id": "badge_default_variant",
+        "label": "Default badge variant",
+        "options": [
+          {
+            "value": "default",
+            "label": "Default"
+          },
+          {
+            "value": "primary",
+            "label": "Primary"
+          },
+          {
+            "value": "secondary",
+            "label": "Secondary"
+          },
+          {
+            "value": "success",
+            "label": "Success"
+          },
+          {
+            "value": "warning",
+            "label": "Warning"
+          },
+          {
+            "value": "error",
+            "label": "Error"
+          }
+        ],
+        "default": "default"
+      },
+      {
+        "type": "select",
+        "id": "banner_default_variant",
+        "label": "Default banner variant",
+        "options": [
+          {
+            "value": "info",
+            "label": "Info"
+          },
+          {
+            "value": "success",
+            "label": "Success"
+          },
+          {
+            "value": "warning",
+            "label": "Warning"
+          },
+          {
+            "value": "error",
+            "label": "Error"
+          }
+        ],
+        "default": "info"
       }
     ]
   }

@@ -1,0 +1,126 @@
+{% comment %}
+  Grid Block
+  Theme block version of the Grid component
+{% endcomment %}
+
+<div {{ block.shopify_attributes }} class="block-grid">
+  {% liquid
+    assign content = block.settings.content
+    if content == blank
+      assign content = '<p>Grid item</p>'
+    endif
+  %}
+  
+  {% render 'component-structure-grid',
+    content: content,
+    columns: block.settings.columns,
+    columns_mobile: block.settings.columns_mobile,
+    gap: block.settings.gap,
+    align: block.settings.align,
+    class: block.settings.class
+  %}
+</div>
+
+{% schema %}
+{
+  "name": "Grid",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Grid content",
+      "default": "<p>Grid item</p>",
+      "info": "HTML content for grid items"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Number of columns",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Number of columns (mobile)",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "select",
+      "id": "gap",
+      "label": "Gap",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "xs",
+          "label": "Extra Small"
+        },
+        {
+          "value": "sm",
+          "label": "Small"
+        },
+        {
+          "value": "md",
+          "label": "Medium"
+        },
+        {
+          "value": "lg",
+          "label": "Large"
+        },
+        {
+          "value": "xl",
+          "label": "Extra Large"
+        },
+        {
+          "value": "2xl",
+          "label": "2X Large"
+        }
+      ],
+      "default": "md"
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "End"
+        },
+        {
+          "value": "stretch",
+          "label": "Stretch"
+        }
+      ],
+      "default": "stretch"
+    },
+    {
+      "type": "text",
+      "id": "class",
+      "label": "Additional CSS classes"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Grid"
+    }
+  ]
+}
+{% endschema %}
+

@@ -1,0 +1,117 @@
+{% comment %}
+  Table Component
+  Display data clearly in rows and columns, helping users view, analyze, and compare information.
+  
+  @param {array} headers - Array of header labels (required)
+  @param {array} rows - Array of row data arrays (required)
+  @param {boolean} striped - Apply striped rows (default: false)
+  @param {boolean} bordered - Show borders (default: true)
+  @param {boolean} hover - Highlight on hover (default: true)
+  @param {string} class - Additional CSS classes
+  @param {string} attributes - Additional HTML attributes
+  
+  @example
+  {% assign headers = 'Name|Price|Stock' | split: '|' %}
+  {% assign rows = 'Product 1|$10|In Stock' | split: '|' %}
+  {% render 'component-structure-table', headers: headers, rows: rows %}
+{% endcomment %}
+
+{% liquid
+  assign headers = headers | default: empty
+  assign rows = rows | default: empty
+  assign striped = striped | default: false
+  assign bordered = bordered | default: true
+  assign hover = hover | default: true
+  assign class = class | default: ''
+  assign attributes = attributes | default: ''
+  
+  unless headers != empty
+    echo '<!-- Error: headers parameter required for table component -->'
+    break
+  endunless
+%}
+
+<div class="ds-table-wrapper {{ class }}">
+  <table 
+    class="ds-table {% if striped %}ds-table--striped{% endif %} {% if bordered %}ds-table--bordered{% endif %} {% if hover %}ds-table--hover{% endif %}"
+    {{ attributes }}
+  >
+    <thead>
+      <tr>
+        {% for header in headers %}
+          <th class="ds-table__header">{{ header }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+        <tr class="ds-table__row">
+          {% if row.first != blank %}
+            {% for cell in row %}
+              <td class="ds-table__cell">{{ cell }}</td>
+            {% endfor %}
+          {% else %}
+            {% assign row_items = row | split: '|' %}
+            {% for cell in row_items %}
+              <td class="ds-table__cell">{{ cell }}</td>
+            {% endfor %}
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% stylesheet %}
+  .ds-table-wrapper {
+    overflow-x: auto;
+    width: 100%;
+  }
+  
+  .ds-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-base);
+    font-family: var(--font-primary--family);
+  }
+  
+  .ds-table--bordered {
+    border: 1px solid var(--color-border);
+  }
+  
+  .ds-table__header {
+    background-color: var(--color-secondary);
+    color: var(--color-secondary-text);
+    font-weight: calc(var(--font-primary--weight) + 200);
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-align: left;
+    border-bottom: 2px solid var(--color-border);
+  }
+  
+  .ds-table--bordered .ds-table__header {
+    border: 1px solid var(--color-border);
+  }
+  
+  .ds-table__cell {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 1px solid var(--color-divider);
+    color: var(--color-foreground);
+  }
+  
+  .ds-table--bordered .ds-table__cell {
+    border: 1px solid var(--color-border);
+  }
+  
+  .ds-table--striped .ds-table__row:nth-child(even) {
+    background-color: color-mix(in srgb, var(--color-foreground) 2%, transparent);
+  }
+  
+  .ds-table--hover .ds-table__row:hover {
+    background-color: color-mix(in srgb, var(--color-foreground) 5%, transparent);
+  }
+  
+  .ds-table__row:last-child .ds-table__cell {
+    border-bottom: none;
+  }
+{% endstylesheet %}
+

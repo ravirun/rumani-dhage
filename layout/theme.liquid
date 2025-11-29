@@ -17,7 +17,7 @@
         {% comment %}theme-check-disable AssetPreload, RemoteAsset{% endcomment %}
         <link rel="preload" as="font" href="{{ font_url_value }}" type="font/woff2" crossorigin="anonymous">
         {% comment %}theme-check-enable AssetPreload, RemoteAsset{% endcomment %}
-      {% endif %}
+    {% endif %}
     {% endunless %}
 
     {% # Load and preload the critical CSS %}
@@ -34,7 +34,7 @@
 
   <body style="position: relative;">
     {% sections 'header-group' %}
-    {{ content_for_layout }}
+      {{ content_for_layout }}
     {% sections 'footer-group' %}
     {% section 'floating-cart' %}
     {% section 'bottomNavigation' %}

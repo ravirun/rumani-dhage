@@ -1,0 +1,129 @@
+{% comment %}
+  Spinner Component
+  Displays an animated indicator showing users that content or actions are loading.
+  
+  @param {string} size - Spinner size: xs, sm, md, lg, xl (default: md)
+  @param {string} color - Spinner color: default, primary, secondary, accent (default: primary)
+  @param {string} label - Accessibility label (default: 'Loading')
+  @param {string} class - Additional CSS classes
+  @param {string} attributes - Additional HTML attributes
+  
+  @example
+  {% render 'component-feedback-spinner', size: 'lg', color: 'primary', label: 'Loading products...' %}
+{% endcomment %}
+
+{% liquid
+  assign size = size | default: 'md'
+  assign color = color | default: 'primary'
+  assign label = label | default: 'Loading'
+  assign class = class | default: ''
+  assign attributes = attributes | default: ''
+%}
+
+<div 
+  class="ds-spinner ds-spinner--{{ size }} ds-spinner--{{ color }} {{ class }}"
+  role="status"
+  aria-label="{{ label }}"
+  {{ attributes }}
+>
+  <div class="ds-spinner__circle"></div>
+  {% if label != blank %}
+    <span class="ds-spinner__label visually-hidden">{{ label }}</span>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .ds-spinner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  
+  .ds-spinner__circle {
+    border: 3px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: ds-spinner-rotate 0.8s linear infinite;
+  }
+  
+  .ds-spinner--xs .ds-spinner__circle {
+    width: 1rem;
+    height: 1rem;
+    border-width: 2px;
+  }
+  
+  .ds-spinner--sm .ds-spinner__circle {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-width: 2px;
+  }
+  
+  .ds-spinner--md .ds-spinner__circle {
+    width: 2rem;
+    height: 2rem;
+    border-width: 3px;
+  }
+  
+  .ds-spinner--lg .ds-spinner__circle {
+    width: 3rem;
+    height: 3rem;
+    border-width: 4px;
+  }
+  
+  .ds-spinner--xl .ds-spinner__circle {
+    width: 4rem;
+    height: 4rem;
+    border-width: 5px;
+  }
+  
+  .ds-spinner--default {
+    color: var(--color-foreground);
+  }
+  
+  .ds-spinner--primary {
+    color: var(--color-primary);
+  }
+  
+  .ds-spinner--secondary {
+    color: var(--color-secondary-text);
+  }
+  
+  .ds-spinner--accent {
+    color: var(--color-accent);
+  }
+  
+  .ds-spinner__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+  
+  @keyframes ds-spinner-rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+{% endstylesheet %}
+

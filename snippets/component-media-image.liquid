@@ -1,0 +1,92 @@
+{% comment %}
+  Image Component
+  Embeds an image within the interface and controls its presentation.
+  
+  @param {image} image - Image object (required)
+  @param {string} alt - Alt text (required)
+  @param {number} width - Image width (optional)
+  @param {number} height - Image height (optional)
+  @param {string} aspect_ratio - Aspect ratio: auto, square, 16:9, 4:3, 3:2 (default: auto)
+  @param {string} fit - Object fit: cover, contain, fill, none (default: cover)
+  @param {string} radius - Border radius: none, sm, md, lg, full (default: none)
+  @param {boolean} lazy - Enable lazy loading (default: true)
+  @param {string} class - Additional CSS classes
+  @param {string} attributes - Additional HTML attributes
+  
+  @example
+  {% render 'component-media-image', image: product.featured_image, alt: product.title, width: 400, aspect_ratio: 'square' %}
+{% endcomment %}
+
+{% liquid
+  assign image = image | default: empty
+  assign alt = alt | default: ''
+  assign width = width | default: 0
+  assign height = height | default: 0
+  assign aspect_ratio = aspect_ratio | default: 'auto'
+  assign fit = fit | default: 'cover'
+  assign radius = radius | default: 'none'
+  assign lazy = lazy | default: true
+  assign class = class | default: ''
+  assign attributes = attributes | default: ''
+  
+  unless image != empty
+    echo '<!-- Error: image parameter required for image component -->'
+    break
+  endunless
+  
+  unless alt != blank
+    assign alt = image.alt | default: 'Image'
+  endunless
+%}
+
+<div class="ds-image ds-image--aspect-{{ aspect_ratio }} ds-image--radius-{{ radius }} {{ class }}">
+  {% if width > 0 %}
+    {% if height > 0 %}
+      {{ image | image_url: width: width, height: height | image_tag: alt: alt, loading: lazy, class: 'ds-image__img', style: "object-fit: {{ fit }};" }}
+    {% else %}
+      {{ image | image_url: width: width | image_tag: alt: alt, loading: lazy, class: 'ds-image__img', style: "object-fit: {{ fit }};" }}
+    {% endif %}
+  {% else %}
+    {{ image | image_url: width: 1200 | image_tag: alt: alt, loading: lazy, class: 'ds-image__img', style: "object-fit: {{ fit }};" }}
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .ds-image {
+    display: block;
+    overflow: hidden;
+  }
+  
+  .ds-image__img {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  
+  .ds-image--aspect-auto {
+    aspect-ratio: auto;
+  }
+  
+  .ds-image--aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+  
+  .ds-image--aspect-16\:9 {
+    aspect-ratio: 16 / 9;
+  }
+  
+  .ds-image--aspect-4\:3 {
+    aspect-ratio: 4 / 3;
+  }
+  
+  .ds-image--aspect-3\:2 {
+    aspect-ratio: 3 / 2;
+  }
+  
+  .ds-image--radius-none { border-radius: 0; }
+  .ds-image--radius-sm { border-radius: calc(var(--card-border-radius) * 0.5); }
+  .ds-image--radius-md { border-radius: var(--card-border-radius); }
+  .ds-image--radius-lg { border-radius: calc(var(--card-border-radius) * 1.5); }
+  .ds-image--radius-full { border-radius: 9999px; }
+{% endstylesheet %}
+

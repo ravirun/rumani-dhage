@@ -1,0 +1,35 @@
+{% comment %}
+  URLField Component
+  Collect URLs from users with built-in formatting and validation.
+  
+  @param {string} name - Input name attribute (required)
+  @param {string} id - Input ID attribute (optional)
+  @param {string} value - Input value (optional)
+  @param {string} placeholder - Placeholder text (optional)
+  @param {string} label - Label text (optional)
+  @param {boolean} required - Mark as required (default: false)
+  @param {boolean} disabled - Disable input (default: false)
+  @param {string} error - Error message (optional)
+  @param {string} help - Help text (optional)
+  @param {string} class - Additional CSS classes
+  @param {string} attributes - Additional HTML attributes
+  
+  @example
+  {% render 'component-forms-url-field', name: 'website', label: 'Website URL', placeholder: 'https://example.com' %}
+{% endcomment %}
+
+{% render 'component-forms-text-field',
+  name: name,
+  id: id,
+  value: value,
+  placeholder: placeholder,
+  label: label,
+  type: 'url',
+  required: required,
+  disabled: disabled,
+  error: error,
+  help: help,
+  class: class,
+  attributes: attributes
+%}
+

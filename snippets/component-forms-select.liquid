@@ -1,0 +1,136 @@
+{% comment %}
+  Select Component
+  Allow users to pick one option from a menu.
+  
+  @param {string} name - Select name attribute (required)
+  @param {string} id - Select ID attribute (optional)
+  @param {string} label - Label text (optional)
+  @param {array} options - Array of options with value and label (required)
+  @param {string} selected - Selected value (optional)
+  @param {string} placeholder - Placeholder option text (optional)
+  @param {boolean} required - Mark as required (default: false)
+  @param {boolean} disabled - Disable select (default: false)
+  @param {string} error - Error message (optional)
+  @param {string} help - Help text (optional)
+  @param {string} class - Additional CSS classes
+  @param {string} attributes - Additional HTML attributes
+  
+  @example
+  {% assign options = 'Option 1|Option 2|Option 3' | split: '|' %}
+  {% render 'component-forms-select', name: 'choice', label: 'Choose option', options: options, selected: 'Option 2' %}
+{% endcomment %}
+
+{% liquid
+  assign name = name | default: ''
+  assign id = id | default: name
+  assign label = label | default: ''
+  assign options = options | default: empty
+  assign selected = selected | default: ''
+  assign placeholder = placeholder | default: ''
+  assign required = required | default: false
+  assign disabled = disabled | default: false
+  assign error = error | default: ''
+  assign help = help | default: ''
+  assign class = class | default: ''
+  assign attributes = attributes | default: ''
+  
+  unless name != blank
+    echo '<!-- Error: name parameter required for select component -->'
+    break
+  endunless
+%}
+
+<div class="ds-select {{ class }}">
+  {% if label != blank %}
+    <label for="{{ id }}" class="ds-select__label">
+      {{ label }}
+      {% if required %}<span class="ds-select__required" aria-label="required">*</span>{% endif %}
+    </label>
+  {% endif %}
+  
+  <select
+    id="{{ id }}"
+    name="{{ name }}"
+    class="ds-input ds-select__input {% if error != blank %}ds-select__input--error{% endif %}"
+    {% if required %}required{% endif %}
+    {% if disabled %}disabled{% endif %}
+    {{ attributes }}
+  >
+    {% if placeholder != blank %}
+      <option value="" {% if selected == blank %}selected{% endif %} disabled>{{ placeholder }}</option>
+    {% endif %}
+    
+    {% for option in options %}
+      {% if option.value != blank %}
+        <option value="{{ option.value }}" {% if selected == option.value %}selected{% endif %}>
+          {{ option.label | default: option.value }}
+        </option>
+      {% else %}
+        <option value="{{ option }}" {% if selected == option %}selected{% endif %}>
+          {{ option }}
+        </option>
+      {% endif %}
+    {% endfor %}
+  </select>
+  
+  {% if error != blank %}
+    <span class="ds-select__error" role="alert">{{ error }}</span>
+  {% endif %}
+  
+  {% if help != blank and error == blank %}
+    <span class="ds-select__help">{{ help }}</span>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .ds-select {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    position: relative;
+  }
+  
+  .ds-select__label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-primary--weight);
+    color: var(--color-foreground);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+  
+  .ds-select__required {
+    color: var(--color-error);
+  }
+  
+  .ds-select__input {
+    width: 100%;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 4.5L6 7.5L9 4.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--input-padding-horizontal) center;
+    padding-right: calc(var(--input-padding-horizontal) * 2 + 12px);
+  }
+  
+  .ds-select__input--error {
+    border-color: var(--color-error);
+  }
+  
+  .ds-select__input--error:focus {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error) 20%, transparent);
+  }
+  
+  .ds-select__error {
+    font-size: var(--font-size-sm);
+    color: var(--color-error);
+    display: block;
+  }
+  
+  .ds-select__help {
+    font-size: var(--font-size-sm);
+    color: color-mix(in srgb, var(--color-foreground) 60%, transparent);
+    display: block;
+  }
+{% endstylesheet %}
+

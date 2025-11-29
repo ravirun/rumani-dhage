@@ -1,0 +1,166 @@
+{% comment %}
+  ColorField Component
+  Allow users to select a color with a color picker or as a text input.
+  
+  @param {string} name - Input name attribute (required)
+  @param {string} id - Input ID attribute (optional)
+  @param {string} value - Input value (hex color) (optional)
+  @param {string} label - Label text (optional)
+  @param {boolean} required - Mark as required (default: false)
+  @param {boolean} disabled - Disable input (default: false)
+  @param {string} error - Error message (optional)
+  @param {string} help - Help text (optional)
+  @param {string} class - Additional CSS classes
+  @param {string} attributes - Additional HTML attributes
+  
+  @example
+  {% render 'component-forms-color-field', name: 'theme_color', label: 'Theme color', value: '#1a5d3a' %}
+{% endcomment %}
+
+{% liquid
+  assign name = name | default: ''
+  assign id = id | default: name
+  assign value = value | default: '#000000'
+  assign label = label | default: ''
+  assign required = required | default: false
+  assign disabled = disabled | default: false
+  assign error = error | default: ''
+  assign help = help | default: ''
+  assign class = class | default: ''
+  assign attributes = attributes | default: ''
+  
+  unless name != blank
+    echo '<!-- Error: name parameter required for color-field component -->'
+    break
+  endunless
+%}
+
+<div class="ds-color-field {{ class }}">
+  {% if label != blank %}
+    <label for="{{ id }}" class="ds-color-field__label">
+      {{ label }}
+      {% if required %}<span class="ds-color-field__required" aria-label="required">*</span>{% endif %}
+    </label>
+  {% endif %}
+  
+  <div class="ds-color-field__wrapper">
+    <input
+      type="color"
+      id="{{ id }}"
+      name="{{ name }}"
+      value="{{ value }}"
+      class="ds-color-field__picker {% if error != blank %}ds-color-field__picker--error{% endif %}"
+      {% if required %}required{% endif %}
+      {% if disabled %}disabled{% endif %}
+      {{ attributes }}
+    >
+    <input
+      type="text"
+      id="{{ id }}-text"
+      name="{{ name }}-text"
+      value="{{ value }}"
+      class="ds-input ds-color-field__input {% if error != blank %}ds-color-field__input--error{% endif %}"
+      pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+      {% if required %}required{% endif %}
+      {% if disabled %}disabled{% endif %}
+    >
+  </div>
+  
+  {% if error != blank %}
+    <span class="ds-color-field__error" role="alert">{{ error }}</span>
+  {% endif %}
+  
+  {% if help != blank and error == blank %}
+    <span class="ds-color-field__help">{{ help }}</span>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .ds-color-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .ds-color-field__label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-primary--weight);
+    color: var(--color-foreground);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+  
+  .ds-color-field__required {
+    color: var(--color-error);
+  }
+  
+  .ds-color-field__wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+  
+  .ds-color-field__picker {
+    width: 3rem;
+    height: 3rem;
+    border: var(--input-border-width) solid var(--color-border);
+    border-radius: var(--input-border-radius);
+    cursor: pointer;
+    padding: 0.25rem;
+  }
+  
+  .ds-color-field__picker--error {
+    border-color: var(--color-error);
+  }
+  
+  .ds-color-field__input {
+    flex: 1;
+    font-family: monospace;
+  }
+  
+  .ds-color-field__input--error {
+    border-color: var(--color-error);
+  }
+  
+  .ds-color-field__input--error:focus {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error) 20%, transparent);
+  }
+  
+  .ds-color-field__error {
+    font-size: var(--font-size-sm);
+    color: var(--color-error);
+    display: block;
+  }
+  
+  .ds-color-field__help {
+    font-size: var(--font-size-sm);
+    color: color-mix(in srgb, var(--color-foreground) 60%, transparent);
+    display: block;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    const colorFields = document.querySelectorAll('.ds-color-field');
+    
+    colorFields.forEach(field => {
+      const picker = field.querySelector('input[type="color"]');
+      const textInput = field.querySelector('input[type="text"]');
+      
+      if (picker && textInput) {
+        picker.addEventListener('input', function() {
+          textInput.value = this.value;
+        });
+        
+        textInput.addEventListener('input', function() {
+          if (/^#[0-9A-F]{6}$/i.test(this.value)) {
+            picker.value = this.value;
+          }
+        });
+      }
+    });
+  })();
+{% endjavascript %}
+

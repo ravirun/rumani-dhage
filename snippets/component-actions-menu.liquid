@@ -1,0 +1,269 @@
+{% comment %}
+  Menu Component
+  Use Menu to display a list of actions that can be performed on a resource.
+  
+  @param {array} items - Array of menu items with label, url, icon, etc. (required)
+  @param {string} trigger_text - Trigger button text (required)
+  @param {string} trigger_icon - Trigger button icon (optional)
+  @param {string} position - Menu position: bottom-left, bottom-right, top-left, top-right (default: bottom-left)
+  @param {string} class - Additional CSS classes
+  @param {string} attributes - Additional HTML attributes
+  
+  @example
+  {% assign items = 'Item 1|Item 2|Item 3' | split: '|' %}
+  {% render 'component-actions-menu', trigger_text: 'Menu', items: items %}
+{% endcomment %}
+
+{% liquid
+  assign items = items | default: empty
+  assign trigger_text = trigger_text | default: ''
+  assign trigger_icon = trigger_icon | default: ''
+  assign position = position | default: 'bottom-left'
+  assign class = class | default: ''
+  assign attributes = attributes | default: ''
+  
+  unless items != empty
+    echo '<!-- Error: items parameter required for menu component -->'
+    break
+  endunless
+  
+  assign menu_id = 'menu-' | append: 'now' | date: '%s' | append: '-' | append: forloop.index0
+%}
+
+<div class="ds-menu {{ class }}" data-menu {{ attributes }}>
+  <button 
+    type="button"
+    class="ds-menu__trigger"
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-controls="{{ menu_id }}"
+    data-menu-trigger
+  >
+    {% if trigger_icon != blank %}
+      <i data-lucide="{{ trigger_icon }}" class="ds-menu__trigger-icon"></i>
+    {% endif %}
+    {% if trigger_text != blank %}
+      <span class="ds-menu__trigger-text">{{ trigger_text }}</span>
+    {% endif %}
+    <i data-lucide="chevron-down" class="ds-menu__trigger-chevron"></i>
+  </button>
+  
+  <div 
+    id="{{ menu_id }}"
+    class="ds-menu__content ds-menu__content--{{ position }}"
+    role="menu"
+    data-menu-content
+  >
+    {% for item in items %}
+      {% liquid
+        assign item_label = item.label | default: item
+        assign item_url = item.url | default: '#'
+        assign item_icon = item.icon | default: ''
+        assign item_disabled = item.disabled | default: false
+        assign item_divider = item.divider | default: false
+      %}
+      
+      {% if item_divider %}
+        <hr class="ds-menu__divider">
+      {% else %}
+        <a 
+          href="{{ item_url }}"
+          class="ds-menu__item {% if item_disabled %}ds-menu__item--disabled{% endif %}"
+          role="menuitem"
+          {% if item_disabled %}aria-disabled="true" tabindex="-1"{% endif %}
+        >
+          {% if item_icon != blank %}
+            <i data-lucide="{{ item_icon }}" class="ds-menu__item-icon"></i>
+          {% endif %}
+          <span class="ds-menu__item-label">{{ item_label }}</span>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .ds-menu {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .ds-menu__trigger {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--button-padding);
+    background-color: var(--color-secondary);
+    color: var(--color-secondary-text);
+    border: 1px solid var(--color-border);
+    border-radius: var(--button-border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: var(--font-primary--family);
+    font-size: var(--font-size-base);
+  }
+  
+  .ds-menu__trigger:hover {
+    background-color: color-mix(in srgb, var(--color-secondary) 90%, transparent);
+  }
+  
+  .ds-menu__trigger-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
+  .ds-menu__trigger-chevron {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 0.2s ease;
+  }
+  
+  .ds-menu__trigger[aria-expanded="true"] .ds-menu__trigger-chevron {
+    transform: rotate(180deg);
+  }
+  
+  .ds-menu__content {
+    position: absolute;
+    z-index: 1000;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--shadow-lg);
+    min-width: 12rem;
+    padding: var(--spacing-xs) 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-0.5rem);
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+    margin-top: var(--spacing-xs);
+  }
+  
+  .ds-menu__content--open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  
+  .ds-menu__content--bottom-left {
+    top: 100%;
+    left: 0;
+  }
+  
+  .ds-menu__content--bottom-right {
+    top: 100%;
+    right: 0;
+  }
+  
+  .ds-menu__content--top-left {
+    bottom: 100%;
+    left: 0;
+    margin-top: 0;
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .ds-menu__content--top-right {
+    bottom: 100%;
+    right: 0;
+    margin-top: 0;
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .ds-menu__item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--color-foreground);
+    text-decoration: none;
+    transition: var(--transition);
+    font-size: var(--font-size-base);
+  }
+  
+  .ds-menu__item:hover,
+  .ds-menu__item:focus {
+    background-color: color-mix(in srgb, var(--color-foreground) 5%, transparent);
+    outline: none;
+  }
+  
+  .ds-menu__item--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  .ds-menu__item-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+  }
+  
+  .ds-menu__item-label {
+    flex: 1;
+  }
+  
+  .ds-menu__divider {
+    margin: var(--spacing-xs) 0;
+    border: none;
+    border-top: 1px solid var(--color-divider);
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+    
+    const menus = document.querySelectorAll('[data-menu]');
+    
+    menus.forEach(menu => {
+      const trigger = menu.querySelector('[data-menu-trigger]');
+      const content = menu.querySelector('[data-menu-content]');
+      
+      if (!trigger || !content) return;
+      
+      trigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const isOpen = content.classList.contains('ds-menu__content--open');
+        
+        // Close all other menus
+        document.querySelectorAll('.ds-menu__content--open').forEach(openContent => {
+          if (openContent !== content) {
+            openContent.classList.remove('ds-menu__content--open');
+            const openTrigger = document.querySelector(`[aria-controls="${openContent.id}"]`);
+            if (openTrigger) {
+              openTrigger.setAttribute('aria-expanded', 'false');
+            }
+          }
+        });
+        
+        if (isOpen) {
+          content.classList.remove('ds-menu__content--open');
+          trigger.setAttribute('aria-expanded', 'false');
+        } else {
+          content.classList.add('ds-menu__content--open');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      });
+      
+      // Close on outside click
+      document.addEventListener('click', function(e) {
+        if (!menu.contains(e.target)) {
+          content.classList.remove('ds-menu__content--open');
+          trigger.setAttribute('aria-expanded', 'false');
+        }
+      });
+      
+      // Close on escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && content.classList.contains('ds-menu__content--open')) {
+          content.classList.remove('ds-menu__content--open');
+          trigger.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  })();
+{% endjavascript %}
+

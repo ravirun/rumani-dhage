@@ -1,0 +1,116 @@
+{% comment %}
+  TextField Block
+  Theme block version of the TextField component
+{% endcomment %}
+
+<div {{ block.shopify_attributes }} class="block-text-field">
+  {% render 'component-forms-text-field',
+    name: block.settings.name,
+    id: block.settings.id,
+    value: block.settings.value,
+    placeholder: block.settings.placeholder,
+    label: block.settings.label,
+    type: block.settings.type,
+    required: block.settings.required,
+    disabled: block.settings.disabled,
+    error: block.settings.error,
+    help: block.settings.help,
+    class: block.settings.class
+  %}
+</div>
+
+{% schema %}
+{
+  "name": "Text Field",
+  "settings": [
+    {
+      "type": "text",
+      "id": "name",
+      "label": "Field name",
+      "default": "field_name"
+    },
+    {
+      "type": "text",
+      "id": "id",
+      "label": "Field ID",
+      "info": "Optional, defaults to name"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Placeholder"
+    },
+    {
+      "type": "text",
+      "id": "value",
+      "label": "Default value"
+    },
+    {
+      "type": "select",
+      "id": "type",
+      "label": "Input type",
+      "options": [
+        {
+          "value": "text",
+          "label": "Text"
+        },
+        {
+          "value": "email",
+          "label": "Email"
+        },
+        {
+          "value": "tel",
+          "label": "Telephone"
+        },
+        {
+          "value": "url",
+          "label": "URL"
+        },
+        {
+          "value": "search",
+          "label": "Search"
+        }
+      ],
+      "default": "text"
+    },
+    {
+      "type": "checkbox",
+      "id": "required",
+      "label": "Required",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "disabled",
+      "label": "Disabled",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "error",
+      "label": "Error message"
+    },
+    {
+      "type": "text",
+      "id": "help",
+      "label": "Help text"
+    },
+    {
+      "type": "text",
+      "id": "class",
+      "label": "Additional CSS classes"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text Field"
+    }
+  ]
+}
+{% endschema %}
+

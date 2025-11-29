@@ -1,0 +1,86 @@
+{% comment %}
+  UnorderedList Component
+  Displays a bulleted list of related items.
+  
+  @param {array} items - Array of list items (required)
+  @param {string} marker - List marker style: disc, circle, square, none (default: disc)
+  @param {string} spacing - Spacing between items: none, xs, sm, md, lg (default: sm)
+  @param {string} class - Additional CSS classes
+  @param {string} attributes - Additional HTML attributes
+  
+  @example
+  {% assign items = 'Item 1|Item 2|Item 3' | split: '|' %}
+  {% render 'component-structure-unordered-list', items: items %}
+{% endcomment %}
+
+{% liquid
+  assign items = items | default: empty
+  assign marker = marker | default: 'disc'
+  assign spacing = spacing | default: 'sm'
+  assign class = class | default: ''
+  assign attributes = attributes | default: ''
+  
+  unless items != empty
+    echo '<!-- Error: items parameter required for unordered-list component -->'
+    break
+  endunless
+%}
+
+<ul 
+  class="ds-unordered-list ds-unordered-list--{{ marker }} ds-unordered-list--spacing-{{ spacing }} {{ class }}"
+  {{ attributes }}
+>
+  {% for item in items %}
+    <li class="ds-unordered-list__item">{{ item }}</li>
+  {% endfor %}
+</ul>
+
+{% stylesheet %}
+  .ds-unordered-list {
+    margin: 0;
+    padding-left: var(--spacing-lg);
+    color: var(--color-foreground);
+  }
+  
+  .ds-unordered-list--disc {
+    list-style-type: disc;
+  }
+  
+  .ds-unordered-list--circle {
+    list-style-type: circle;
+  }
+  
+  .ds-unordered-list--square {
+    list-style-type: square;
+  }
+  
+  .ds-unordered-list--none {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .ds-unordered-list--spacing-none .ds-unordered-list__item {
+    margin-bottom: 0;
+  }
+  
+  .ds-unordered-list--spacing-xs .ds-unordered-list__item {
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .ds-unordered-list--spacing-sm .ds-unordered-list__item {
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .ds-unordered-list--spacing-md .ds-unordered-list__item {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .ds-unordered-list--spacing-lg .ds-unordered-list__item {
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .ds-unordered-list__item:last-child {
+    margin-bottom: 0;
+  }
+{% endstylesheet %}
+

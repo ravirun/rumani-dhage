@@ -1,0 +1,121 @@
+{% comment %}
+  Divider Block
+  Theme block version of the Divider component
+{% endcomment %}
+
+<div {{ block.shopify_attributes }} class="block-divider">
+  {% render 'component-structure-divider',
+    orientation: block.settings.orientation,
+    spacing: block.settings.spacing,
+    color: block.settings.color,
+    thickness: block.settings.thickness,
+    class: block.settings.class
+  %}
+</div>
+
+{% schema %}
+{
+  "name": "Divider",
+  "settings": [
+    {
+      "type": "select",
+      "id": "orientation",
+      "label": "Orientation",
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "Horizontal"
+        },
+        {
+          "value": "vertical",
+          "label": "Vertical"
+        }
+      ],
+      "default": "horizontal"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Spacing",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "xs",
+          "label": "Extra Small"
+        },
+        {
+          "value": "sm",
+          "label": "Small"
+        },
+        {
+          "value": "md",
+          "label": "Medium"
+        },
+        {
+          "value": "lg",
+          "label": "Large"
+        },
+        {
+          "value": "xl",
+          "label": "Extra Large"
+        }
+      ],
+      "default": "md"
+    },
+    {
+      "type": "select",
+      "id": "color",
+      "label": "Color",
+      "options": [
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "border",
+          "label": "Border"
+        },
+        {
+          "value": "divider",
+          "label": "Divider"
+        }
+      ],
+      "default": "divider"
+    },
+    {
+      "type": "select",
+      "id": "thickness",
+      "label": "Thickness",
+      "options": [
+        {
+          "value": "thin",
+          "label": "Thin"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "thick",
+          "label": "Thick"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "text",
+      "id": "class",
+      "label": "Additional CSS classes"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Divider"
+    }
+  ]
+}
+{% endschema %}
+

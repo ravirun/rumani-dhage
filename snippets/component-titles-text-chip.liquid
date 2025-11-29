@@ -1,0 +1,163 @@
+{% comment %}
+  Chip Component
+  Represents a set of user-supplied keywords that help label, organize, and categorize objects.
+  
+  @param {string} text - Chip text (required)
+  @param {string} variant - Chip style: default, primary, secondary, outline (default: default)
+  @param {string} size - Chip size: sm, md, lg (default: md)
+  @param {boolean} removable - Show remove button (default: false)
+  @param {string} icon - Icon name (Lucide icon) (optional)
+  @param {string} class - Additional CSS classes
+  @param {string} attributes - Additional HTML attributes
+  
+  @example
+  {% render 'component-titles-text-chip', text: 'Tag', variant: 'primary', removable: true %}
+{% endcomment %}
+
+{% liquid
+  assign text = text | default: ''
+  assign variant = variant | default: 'default'
+  assign size = size | default: 'md'
+  assign removable = removable | default: false
+  assign icon = icon | default: ''
+  assign class = class | default: ''
+  assign attributes = attributes | default: ''
+  
+  unless text != blank
+    echo '<!-- Error: text parameter required for chip component -->'
+    break
+  endunless
+  
+  assign chip_id = 'chip-' | append: 'now' | date: '%s' | append: '-' | append: forloop.index0
+%}
+
+<span 
+  class="ds-chip ds-chip--{{ variant }} ds-chip--{{ size }} {{ class }}"
+  id="{{ chip_id }}"
+  {{ attributes }}
+>
+  {% if icon != blank %}
+    <i data-lucide="{{ icon }}" class="ds-chip__icon"></i>
+  {% endif %}
+  <span class="ds-chip__text">{{ text }}</span>
+  {% if removable %}
+    <button 
+      type="button"
+      class="ds-chip__remove"
+      aria-label="Remove"
+      data-chip-remove
+    >
+      <i data-lucide="x" class="ds-chip__remove-icon"></i>
+    </button>
+  {% endif %}
+</span>
+
+{% stylesheet %}
+  .ds-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-primary--weight);
+    line-height: 1;
+    white-space: nowrap;
+    vertical-align: middle;
+    border-radius: 9999px;
+    transition: var(--transition);
+  }
+  
+  .ds-chip--sm {
+    padding: calc(var(--spacing-xs) * 0.5) var(--spacing-xs);
+    font-size: var(--font-size-xs);
+  }
+  
+  .ds-chip--md {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-sm);
+  }
+  
+  .ds-chip--lg {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-base);
+  }
+  
+  .ds-chip--default {
+    background-color: var(--color-secondary);
+    color: var(--color-secondary-text);
+  }
+  
+  .ds-chip--primary {
+    background-color: var(--color-primary);
+    color: var(--color-primary-text);
+  }
+  
+  .ds-chip--secondary {
+    background-color: var(--color-secondary);
+    color: var(--color-secondary-text);
+  }
+  
+  .ds-chip--outline {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+  }
+  
+  .ds-chip__icon {
+    width: 0.875em;
+    height: 0.875em;
+    flex-shrink: 0;
+  }
+  
+  .ds-chip__text {
+    display: inline-block;
+  }
+  
+  .ds-chip__remove {
+    background: none;
+    border: none;
+    padding: 0.125rem;
+    cursor: pointer;
+    color: currentColor;
+    opacity: 0.7;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: calc(var(--spacing-xs) * -0.5);
+  }
+  
+  .ds-chip__remove:hover {
+    opacity: 1;
+  }
+  
+  .ds-chip__remove-icon {
+    width: 0.875em;
+    height: 0.875em;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    const removeButtons = document.querySelectorAll('[data-chip-remove]');
+    
+    removeButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const chip = this.closest('.ds-chip');
+        if (chip) {
+          chip.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+          chip.style.opacity = '0';
+          chip.style.transform = 'scale(0.8)';
+          setTimeout(() => {
+            chip.remove();
+          }, 200);
+        }
+      });
+    });
+    
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  })();
+{% endjavascript %}
+

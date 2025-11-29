@@ -1,0 +1,94 @@
+{% comment %}
+  Divider Component
+  Create clear visual separation between elements in your user interface.
+  
+  @param {string} orientation - Divider orientation: horizontal, vertical (default: horizontal)
+  @param {string} spacing - Spacing around divider: none, xs, sm, md, lg, xl (default: md)
+  @param {string} color - Divider color: default, border, divider (default: divider)
+  @param {string} thickness - Divider thickness: thin, medium, thick (default: medium)
+  @param {string} class - Additional CSS classes
+  @param {string} attributes - Additional HTML attributes
+  
+  @example
+  {% render 'component-structure-divider', orientation: 'horizontal', spacing: 'lg' %}
+{% endcomment %}
+
+{% liquid
+  assign orientation = orientation | default: 'horizontal'
+  assign spacing = spacing | default: 'md'
+  assign color = color | default: 'divider'
+  assign thickness = thickness | default: 'medium'
+  assign class = class | default: ''
+  assign attributes = attributes | default: ''
+%}
+
+<hr 
+  class="ds-divider ds-divider--{{ orientation }} ds-divider--spacing-{{ spacing }} ds-divider--color-{{ color }} ds-divider--thickness-{{ thickness }} {{ class }}"
+  {{ attributes }}
+>
+
+{% stylesheet %}
+  .ds-divider {
+    border: none;
+    margin: 0;
+  }
+  
+  .ds-divider--horizontal {
+    width: 100%;
+    height: 1px;
+  }
+  
+  .ds-divider--vertical {
+    width: 1px;
+    height: 100%;
+    display: inline-block;
+  }
+  
+  .ds-divider--spacing-none { margin: 0; }
+  .ds-divider--spacing-xs { margin: var(--spacing-xs) 0; }
+  .ds-divider--spacing-sm { margin: var(--spacing-sm) 0; }
+  .ds-divider--spacing-md { margin: var(--spacing-md) 0; }
+  .ds-divider--spacing-lg { margin: var(--spacing-lg) 0; }
+  .ds-divider--spacing-xl { margin: var(--spacing-xl) 0; }
+  
+  .ds-divider--color-default {
+    background-color: var(--color-foreground);
+    opacity: 0.1;
+  }
+  
+  .ds-divider--color-border {
+    background-color: var(--color-border);
+  }
+  
+  .ds-divider--color-divider {
+    background-color: var(--color-divider);
+  }
+  
+  .ds-divider--thickness-thin {
+    height: 1px;
+  }
+  
+  .ds-divider--thickness-medium {
+    height: 2px;
+  }
+  
+  .ds-divider--thickness-thick {
+    height: 4px;
+  }
+  
+  .ds-divider--vertical.ds-divider--thickness-thin {
+    width: 1px;
+    height: auto;
+  }
+  
+  .ds-divider--vertical.ds-divider--thickness-medium {
+    width: 2px;
+    height: auto;
+  }
+  
+  .ds-divider--vertical.ds-divider--thickness-thick {
+    width: 4px;
+    height: auto;
+  }
+{% endstylesheet %}
+

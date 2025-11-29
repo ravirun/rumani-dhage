@@ -1,0 +1,119 @@
+{% comment %}
+  TextField Component
+  Lets users enter or edit text within a single-line input.
+  
+  @param {string} name - Input name attribute (required)
+  @param {string} id - Input ID attribute (optional)
+  @param {string} value - Input value (optional)
+  @param {string} placeholder - Placeholder text (optional)
+  @param {string} label - Label text (optional)
+  @param {string} type - Input type: text, email, tel, url, search (default: text)
+  @param {boolean} required - Mark as required (default: false)
+  @param {boolean} disabled - Disable input (default: false)
+  @param {boolean} readonly - Make readonly (default: false)
+  @param {string} error - Error message (optional)
+  @param {string} help - Help text (optional)
+  @param {string} class - Additional CSS classes
+  @param {string} attributes - Additional HTML attributes
+  
+  @example
+  {% render 'component-forms-text-field', name: 'email', label: 'Email', type: 'email', required: true %}
+{% endcomment %}
+
+{% liquid
+  assign name = name | default: ''
+  assign id = id | default: name
+  assign value = value | default: ''
+  assign placeholder = placeholder | default: ''
+  assign label = label | default: ''
+  assign type = type | default: 'text'
+  assign required = required | default: false
+  assign disabled = disabled | default: false
+  assign readonly = readonly | default: false
+  assign error = error | default: ''
+  assign help = help | default: ''
+  assign class = class | default: ''
+  assign attributes = attributes | default: ''
+  
+  unless name != blank
+    echo '<!-- Error: name parameter required for text-field component -->'
+    break
+  endunless
+%}
+
+<div class="ds-text-field {{ class }}">
+  {% if label != blank %}
+    <label for="{{ id }}" class="ds-text-field__label">
+      {{ label }}
+      {% if required %}<span class="ds-text-field__required" aria-label="required">*</span>{% endif %}
+    </label>
+  {% endif %}
+  
+  <input
+    type="{{ type }}"
+    id="{{ id }}"
+    name="{{ name }}"
+    value="{{ value }}"
+    placeholder="{{ placeholder }}"
+    class="ds-input ds-text-field__input {% if error != blank %}ds-text-field__input--error{% endif %}"
+    {% if required %}required{% endif %}
+    {% if disabled %}disabled{% endif %}
+    {% if readonly %}readonly{% endif %}
+    {{ attributes }}
+  >
+  
+  {% if error != blank %}
+    <span class="ds-text-field__error" role="alert">{{ error }}</span>
+  {% endif %}
+  
+  {% if help != blank and error == blank %}
+    <span class="ds-text-field__help">{{ help }}</span>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .ds-text-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .ds-text-field__label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-primary--weight);
+    color: var(--color-foreground);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+  
+  .ds-text-field__required {
+    color: var(--color-error);
+  }
+  
+  .ds-text-field__input {
+    width: 100%;
+  }
+  
+  .ds-text-field__input--error {
+    border-color: var(--color-error);
+  }
+  
+  .ds-text-field__input--error:focus {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error) 20%, transparent);
+  }
+  
+  .ds-text-field__error {
+    font-size: var(--font-size-sm);
+    color: var(--color-error);
+    display: block;
+  }
+  
+  .ds-text-field__help {
+    font-size: var(--font-size-sm);
+    color: color-mix(in srgb, var(--color-foreground) 60%, transparent);
+    display: block;
+  }
+{% endstylesheet %}
+
