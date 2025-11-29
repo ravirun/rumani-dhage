@@ -2,7 +2,10 @@
   "404": {
     "title": "404",
     "not_found": "Page not found.",
-    "back_to_shopping": "Back to shopping"
+    "back_to_shopping": "Back to shopping",
+    "back_to_home": "Back to Home",
+    "view_collections": "View Collections",
+    "featured_collections": "Shop by Category"
   },
   "blog": {
     "article_comments": "Comments",
