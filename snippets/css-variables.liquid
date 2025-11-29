@@ -1,9 +1,3 @@
-{% comment %}
-  Design System CSS Variables
-  All design tokens are customizable through Theme Settings
-  Reference: Use CSS variables throughout your codebase for consistency
-{% endcomment %}
-
 {% style %}
   {% # Loads all font variantions with display: swap %}
   {{ settings.type_primary_font | font_face: font_display: 'swap' }}
@@ -12,92 +6,13 @@
   {{ settings.type_primary_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
 
   :root {
-    {% comment %} TYPOGRAPHY {% endcomment %}
     --font-primary--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
     --font-primary--style: {{ settings.type_primary_font.style }};
     --font-primary--weight: {{ settings.type_primary_font.weight }};
-    {% # Font size scale (calculated from base and ratio) %}
-    --font-size-base: {{ settings.font_size_base | default: 16 }}px;
-    --font-scale-ratio: {{ settings.font_scale_ratio | default: 1.25 }};
-    --font-size-xs: calc(var(--font-size-base) / var(--font-scale-ratio) / var(--font-scale-ratio));
-    --font-size-sm: calc(var(--font-size-base) / var(--font-scale-ratio));
-    --font-size-lg: calc(var(--font-size-base) * var(--font-scale-ratio));
-    --font-size-xl: calc(var(--font-size-base) * var(--font-scale-ratio) * var(--font-scale-ratio));
-    --font-size-2xl: calc(var(--font-size-base) * var(--font-scale-ratio) * var(--font-scale-ratio) * var(--font-scale-ratio));
-    --font-size-3xl: calc(var(--font-size-base) * var(--font-scale-ratio) * var(--font-scale-ratio) * var(--font-scale-ratio) * var(--font-scale-ratio));
-    --line-height-body: {{ settings.line_height_body | default: 1.6 }};
-    --line-height-heading: {{ settings.line_height_heading | default: 1.2 }};
-
-    {% comment %} COLORS {% endcomment %}
-    --color-background: {{ settings.background_color | default: '#FFFFFF' }};
-    --color-foreground: {{ settings.foreground_color | default: '#333333' }};
-    
-    {% # Primary Colors %}
-    --color-primary: {{ settings.color_primary | default: '#1a5d3a' }};
-    --color-primary-text: {{ settings.color_primary_text | default: '#FFFFFF' }};
-    
-    {% # Secondary Colors %}
-    --color-secondary: {{ settings.color_secondary | default: '#F5F5F5' }};
-    --color-secondary-text: {{ settings.color_secondary_text | default: '#333333' }};
-    
-    {% # Accent Colors %}
-    --color-accent: {{ settings.color_accent | default: '#FF6B6B' }};
-    --color-success: {{ settings.color_success | default: '#28A745' }};
-    --color-warning: {{ settings.color_warning | default: '#FFC107' }};
-    --color-error: {{ settings.color_error | default: '#DC3545' }};
-    
-    {% # Border & Divider Colors %}
-    --color-border: {{ settings.color_border | default: '#E0E0E0' }};
-    --color-divider: {{ settings.color_divider | default: '#F0F0F0' }};
-
-    {% comment %} LAYOUT {% endcomment %}
-    --page-width: {{ settings.max_page_width | default: '90rem' }};
-    --page-margin: {{ settings.min_page_margin | default: 20 }}px;
-    
-    {% # Spacing Scale (based on base unit) %}
-    --spacing-base: {{ settings.spacing_base | default: 8 }}px;
-    --spacing-xs: calc(var(--spacing-base) * 0.25);
-    --spacing-sm: calc(var(--spacing-base) * 0.5);
-    --spacing-md: var(--spacing-base);
-    --spacing-lg: calc(var(--spacing-base) * 2);
-    --spacing-xl: calc(var(--spacing-base) * 3);
-    --spacing-2xl: calc(var(--spacing-base) * 4);
-    --spacing-3xl: calc(var(--spacing-base) * 6);
-
-    {% comment %} BUTTONS {% endcomment %}
-    --button-border-radius: {{ settings.button_border_radius | default: 8 }}px;
-    --button-padding-vertical: {{ settings.button_padding_vertical | default: 12 }}px;
-    --button-padding-horizontal: {{ settings.button_padding_horizontal | default: 24 }}px;
-    --button-padding: var(--button-padding-vertical) var(--button-padding-horizontal);
-    --button-border-width: {{ settings.button_border_width | default: 0 }}px;
-    --button-style: {{ settings.button_style | default: 'solid' }};
-
-    {% comment %} CARDS {% endcomment %}
-    --card-border-radius: {{ settings.card_border_radius | default: 12 }}px;
-    --card-padding: {{ settings.card_padding | default: 24 }}px;
-    --card-border-width: {{ settings.card_border_width | default: 1 }}px;
-    --card-shadow-enabled: {% if settings.card_shadow_enabled %}1{% else %}0{% endif %};
-    --card-shadow-opacity: {{ settings.card_shadow_opacity | default: 10 | divided_by: 100.0 }};
-
-    {% comment %} FORMS & INPUTS {% endcomment %}
-    --input-border-radius: {{ settings.input_corner_radius | default: 4 }}px;
-    --input-padding-vertical: {{ settings.input_padding_vertical | default: 12 }}px;
-    --input-padding-horizontal: {{ settings.input_padding_horizontal | default: 16 }}px;
-    --input-padding: var(--input-padding-vertical) var(--input-padding-horizontal);
-    --input-border-width: {{ settings.input_border_width | default: 1 }}px;
-    --style-border-radius-inputs: var(--input-border-radius);
-
-    {% comment %} SHADOWS {% endcomment %}
-    --shadow-blur: {{ settings.shadow_blur | default: 10 }}px;
-    --shadow-spread: {{ settings.shadow_spread | default: 0 }}px;
-    --shadow-offset-x: {{ settings.shadow_offset_x | default: 0 }}px;
-    --shadow-offset-y: {{ settings.shadow_offset_y | default: 2 }}px;
-    --shadow-color: rgba(0, 0, 0, 0.1);
-    --shadow: var(--shadow-offset-x) var(--shadow-offset-y) var(--shadow-blur) var(--shadow-spread) var(--shadow-color);
-
-    {% comment %} TRANSITIONS {% endcomment %}
-    --transition-duration: {{ settings.transition_duration | default: 200 }}ms;
-    --transition-easing: {{ settings.transition_easing | default: 'ease-out' }};
-    --transition: all var(--transition-duration) var(--transition-easing);
+    --page-width: {{ settings.max_page_width }};
+    --page-margin: {{ settings.min_page_margin }}px;
+    --color-background: {{ settings.background_color }};
+    --color-foreground: {{ settings.foreground_color }};
+    --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
   }
 {% endstyle %}

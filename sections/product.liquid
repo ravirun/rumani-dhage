@@ -6,13 +6,9 @@
 {% endcomment %}
 
 <div class="product-images">
-  {%- for image in product.images limit: 10 -%}
-    {%- render 'image', 
-      class: 'product-image', 
-      image: image,
-      alt: product.title | append: ' - Image ' | append: forloop.index
-    -%}
-  {%- endfor -%}
+  {% for image in product.images %}
+    {% render 'image', class: 'product-image', image: image %}
+  {% endfor %}
 </div>
 
 <div class="product-info">
@@ -22,38 +18,27 @@
 </div>
 
 <div class="product-form">
-  {%- form 'product', product -%}
-    {%- liquid
-      assign current_variant = product.selected_or_first_available_variant
-    -%}
+  {% form 'product', product %}
+    {% assign current_variant = product.selected_or_first_available_variant %}
 
-    <label for="product-variant-select" class="visually-hidden">Select variant</label>
-    <select name="id" id="product-variant-select" aria-label="Product variant">
-      {%- for variant in product.variants -%}
+    <select name="id">
+      {% for variant in product.variants %}
         <option
           value="{{ variant.id }}"
-          {%- if variant == current_variant -%}
+          {% if variant == current_variant %}
             selected="selected"
-          {%- endif -%}
+          {% endif %}
         >
           {{ variant.title }} - {{ variant.price | money }}
         </option>
-      {%- endfor -%}
+      {% endfor %}
     </select>
 
-    <label for="product-quantity" class="visually-hidden">Quantity</label>
-    <input 
-      type="number" 
-      name="quantity" 
-      id="product-quantity"
-      min="1" 
-      value="1"
-      aria-label="Quantity"
-    >
+    <input type="text" name="quantity" min="1" value="1">
 
-    <input type="submit" value="Add to cart" aria-label="Add {{ product.title }} to cart">
+    <input type="submit" value="Add to cart">
     {{ form | payment_button }}
-  {%- endform -%}
+  {% endform %}
 </div>
 
 {% schema %}
@@ -62,11 +47,6 @@
   "settings": [],
   "disabled_on": {
     "groups": ["header", "footer"]
-  },
-  "presets": [
-    {
-      "name": "t:general.product"
-    }
-  ]
+  }
 }
 {% endschema %}
