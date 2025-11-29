@@ -1,3 +1,6 @@
+{% comment %} Load Lucide Icons for menu icons {% endcomment %}
+<script src="{{ 'lucide.js' | asset_url }}" defer></script>
+
 <header>
   <h2 class="header__title">
     {{ shop.name | link_to: routes.root_url }}
@@ -14,9 +17,56 @@
       {{ 'icon-account.svg' | inline_asset_content | link_to: routes.account_url }}
     {% endif %}
 
-    {% comment %}  {% endcomment %}
+    {% comment %} Menu Icon - opens slide-out menu {% endcomment %}
+    <button type="button" class="header__menu-icon" aria-label="Open menu" data-menu-toggle>
+      <i data-lucide="menu"></i>
+    </button>
   </div>
 </header>
+
+{% comment %} Slide-out Menu Drawer {% endcomment %}
+<div class="menu-drawer" id="menu-drawer" role="dialog" aria-modal="true" aria-labelledby="menu-drawer-title">
+  <div class="menu-drawer__overlay" data-menu-close></div>
+  <div class="menu-drawer__content">
+    <div class="menu-drawer__header">
+      <h2 id="menu-drawer-title" class="menu-drawer__title">{{ shop.name }}</h2>
+      <button type="button" class="menu-drawer__close" data-menu-close aria-label="Close menu">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <nav class="menu-drawer__nav" role="navigation">
+      {% if section.settings.menu and section.settings.menu.links.size > 0 %}
+        <ul class="menu-drawer__list">
+          {% for link in section.settings.menu.links %}
+            <li class="menu-drawer__item">
+              <a href="{{ link.url }}" class="menu-drawer__link">
+                {{ link.title }}
+                {% if link.links.size > 0 %}
+                  <i data-lucide="chevron-right" class="menu-drawer__chevron"></i>
+                {% endif %}
+              </a>
+              {% if link.links.size > 0 %}
+                <ul class="menu-drawer__sublist">
+                  {% for child_link in link.links %}
+                    <li class="menu-drawer__subitem">
+                      <a href="{{ child_link.url }}" class="menu-drawer__sublink">
+                        {{ child_link.title }}
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="menu-drawer__empty">
+          <p>No menu items available. Please configure a menu in theme settings.</p>
+        </div>
+      {% endif %}
+    </nav>
+  </div>
+</div>
 
 {% stylesheet %}
   header {
@@ -24,27 +74,355 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0 var(--page-margin);
+    background-color: var(--color-background);
+    position: relative;
+    z-index: 100;
   }
+
   header a {
     position: relative;
     text-decoration: none;
     color: var(--color-foreground);
   }
+
   header a sup {
     position: absolute;
     left: 100%;
     overflow: hidden;
     max-width: var(--page-margin);
   }
+
   header svg {
     width: 2rem;
   }
-  header .header__menu,
-  header .header__icons {
+
+  .header__menu {
     display: flex;
+    gap: 1.5rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .header__menu {
+      display: none;
+    }
+  }
+
+  .header__icons {
+    display: flex;
+    align-items: center;
     gap: 1rem;
   }
+
+  .header__menu-icon {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: var(--color-foreground);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+  }
+
+  .header__menu-icon:hover,
+  .header__menu-icon:focus {
+    opacity: 0.7;
+    outline: none;
+  }
+
+  .header__menu-icon i {
+    width: 1.5rem;
+    height: 1.5rem;
+    stroke-width: 2;
+  }
+
+  /* Menu Drawer Styles */
+  .menu-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: flex;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+  }
+
+  .menu-drawer.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .menu-drawer__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+  }
+
+  .menu-drawer__content {
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    height: 100%;
+    background-color: var(--color-background);
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+  }
+
+  .menu-drawer.active .menu-drawer__content {
+    transform: translateX(0);
+  }
+
+  .menu-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
+    flex-shrink: 0;
+  }
+
+  .menu-drawer__title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-foreground);
+  }
+
+  .menu-drawer__close {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: var(--color-foreground);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+  }
+
+  .menu-drawer__close:hover,
+  .menu-drawer__close:focus {
+    opacity: 0.7;
+    outline: none;
+  }
+
+  .menu-drawer__close i {
+    width: 1.5rem;
+    height: 1.5rem;
+    stroke-width: 2;
+  }
+
+  .menu-drawer__nav {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 1rem 0;
+  }
+
+  .menu-drawer__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .menu-drawer__item {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 5%, transparent);
+  }
+
+  .menu-drawer__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    text-decoration: none;
+    color: var(--color-foreground);
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background 0.2s ease;
+  }
+
+  .menu-drawer__link:hover,
+  .menu-drawer__link:focus {
+    background: color-mix(in srgb, var(--color-foreground) 5%, transparent);
+    outline: none;
+  }
+
+  .menu-drawer__chevron {
+    width: 1rem;
+    height: 1rem;
+    color: color-mix(in srgb, var(--color-foreground) 50%, transparent);
+    stroke-width: 2;
+  }
+
+  .menu-drawer__sublist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: color-mix(in srgb, var(--color-foreground) 2%, transparent);
+    display: none;
+  }
+
+  .menu-drawer__item.active .menu-drawer__sublist {
+    display: block;
+  }
+
+  .menu-drawer__subitem {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 3%, transparent);
+  }
+
+  .menu-drawer__sublink {
+    display: block;
+    padding: 0.75rem 1.5rem 0.75rem 3rem;
+    text-decoration: none;
+    color: color-mix(in srgb, var(--color-foreground) 80%, transparent);
+    font-size: 0.9rem;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .menu-drawer__sublink:hover,
+  .menu-drawer__sublink:focus {
+    background: color-mix(in srgb, var(--color-foreground) 5%, transparent);
+    color: var(--color-foreground);
+    outline: none;
+  }
+
+  .menu-drawer__empty {
+    padding: 2rem 1.5rem;
+    text-align: center;
+    color: color-mix(in srgb, var(--color-foreground) 60%, transparent);
+    font-size: 0.9rem;
+  }
+
+  /* Ensure menu items are visible */
+  .menu-drawer__list {
+    min-height: 100px;
+  }
+
+  .menu-drawer__item {
+    min-height: 3rem;
+  }
+
+  /* Prevent body scroll when menu is open */
+  body.menu-open {
+    overflow: hidden;
+  }
 {% endstylesheet %}
+
+{% javascript %}
+  (function() {
+    // Initialize Lucide icons
+    function initIcons() {
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+    }
+
+    // Wait for Lucide to load
+    if (typeof lucide !== 'undefined') {
+      initIcons();
+    } else {
+      document.addEventListener('DOMContentLoaded', function() {
+        initIcons();
+      });
+    }
+
+    const menuToggle = document.querySelector('[data-menu-toggle]');
+    const menuDrawer = document.getElementById('menu-drawer');
+    const menuCloseButtons = document.querySelectorAll('[data-menu-close]');
+    const body = document.body;
+    const menuItems = document.querySelectorAll('.menu-drawer__item');
+
+    if (!menuToggle || !menuDrawer) return;
+
+    // Open menu
+    function openMenu() {
+      body.classList.add('menu-open');
+      menuDrawer.classList.add('active');
+      
+      // Prevent scroll on body
+      const scrollY = window.scrollY;
+      body.style.position = 'fixed';
+      body.style.top = `-${scrollY}px`;
+      body.style.width = '100%';
+      
+      // Re-initialize icons
+      initIcons();
+    }
+
+    // Close menu
+    function closeMenu() {
+      const scrollY = body.style.top;
+      body.classList.remove('menu-open');
+      body.style.position = '';
+      body.style.top = '';
+      body.style.width = '';
+      
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
+      
+      menuDrawer.classList.remove('active');
+      
+      // Close any open submenus
+      menuItems.forEach(item => {
+        item.classList.remove('active');
+      });
+    }
+
+    // Toggle menu on button click
+    menuToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (menuDrawer.classList.contains('active')) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+
+    // Close menu on close button or overlay click
+    menuCloseButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        closeMenu();
+      });
+    });
+
+    // Toggle submenu on parent item click
+    menuItems.forEach(item => {
+      const link = item.querySelector('.menu-drawer__link');
+      const sublist = item.querySelector('.menu-drawer__sublist');
+      
+      if (sublist) {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          item.classList.toggle('active');
+          initIcons();
+        });
+      }
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && menuDrawer.classList.contains('active')) {
+        closeMenu();
+      }
+    });
+  })();
+{% endjavascript %}
 
 {% schema %}
 {

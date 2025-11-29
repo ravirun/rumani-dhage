@@ -1,7 +1,7 @@
 {% comment %} Mobile-only bottom navigation section with Home, Categories, New Products, and Cart {% endcomment %}
 
-{% comment %} Load Lucide Icons from CDN {% endcomment %}
-<script src="https://unpkg.com/lucide@latest" defer></script>
+{% comment %} Load Lucide Icons from local assets {% endcomment %}
+<script src="{{ 'lucide.js' | asset_url }}" defer></script>
 
 <div class="bottom-navigation" id="bottom-navigation">
   <a href="{{ routes.root_url }}" class="bottom-nav__item" data-nav="home">
