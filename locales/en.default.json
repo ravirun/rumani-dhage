@@ -43,7 +43,15 @@
   "password": {
     "title": "This shop is private",
     "password": "Password",
-    "enter": "Enter"
+    "enter": "Enter",
+    "password_placeholder": "Enter store password",
+    "email_heading": "Notify me when this store opens",
+    "email": "Email address",
+    "email_placeholder": "Enter your email",
+    "email_submit": "Notify me",
+    "email_success": "Thanks! We'll notify you when we launch.",
+    "social_heading": "Follow us",
+    "powered_by": "Powered by"
   },
   "search": {
     "title": "Search",
