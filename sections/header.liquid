@@ -13,6 +13,22 @@
   </div>
 
   <div class="header__icons">
+    {% comment %} Search Input {% endcomment %}
+    <form action="{{ routes.search_url }}" method="get" class="header__search" role="search">
+      <input
+        type="search"
+        name="q"
+        placeholder="Search products..."
+        class="header__search-input"
+        id="header-search-input"
+        autocomplete="off"
+        aria-label="Search"
+      >
+      <button type="submit" class="header__search-submit" aria-label="Submit search">
+        <i data-lucide="search"></i>
+      </button>
+    </form>
+
     {% if shop.customer_accounts_enabled %}
       {{ 'icon-account.svg' | inline_asset_content | link_to: routes.account_url }}
     {% endif %}
@@ -112,6 +128,62 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+  }
+
+  .header__search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 20rem;
+    width: 100%;
+  }
+
+  .header__search-input {
+    width: 100%;
+    padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--input-border-radius);
+    font-size: var(--font-size-sm);
+    font-family: var(--font-primary--family);
+    color: var(--color-foreground);
+    background: var(--color-background);
+    transition: var(--transition);
+  }
+
+  .header__search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 20%, transparent);
+  }
+
+  .header__search-submit {
+    position: absolute;
+    right: 0.25rem;
+    background: none;
+    border: none;
+    padding: 0.375rem;
+    cursor: pointer;
+    color: var(--color-foreground);
+    opacity: 0.6;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header__search-submit:hover {
+    opacity: 1;
+  }
+
+  .header__search-submit i {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .header__search {
+      display: none;
+    }
   }
 
   .header__menu-icon {

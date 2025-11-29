@@ -19,15 +19,13 @@
     <span>New</span>
   </button>
 
-  <a href="{{ routes.cart_url }}" class="bottom-nav__item" data-nav="cart">
+  <button type="button" class="bottom-nav__item" data-nav="cart" data-open-cart-drawer>
     <div class="bottom-nav__cart-wrapper">
       <i data-lucide="shopping-cart"></i>
-      {% if cart.item_count > 0 %}
-        <span class="bottom-nav__badge">{{ cart.item_count }}</span>
-      {% endif %}
+      <span class="bottom-nav__badge" id="bottom-nav-cart-badge" style="{% if cart.item_count == 0 %}display: none;{% endif %}">{{ cart.item_count }}</span>
     </div>
     <span>Cart</span>
-  </a>
+  </button>
 </div>
 
 {% comment %} Categories Modal {% endcomment %}
@@ -143,6 +141,7 @@
     cursor: pointer;
     transition: color 0.2s ease;
     position: relative;
+    font-family: inherit;
   }
 
   .bottom-nav__item:hover,
@@ -487,8 +486,43 @@
         } else if (navType === 'new-products') {
           e.preventDefault();
           openModal(newProductsModal);
+        } else if (navType === 'cart') {
+          e.preventDefault();
+          if (typeof window.openCartDrawer === 'function') {
+            window.openCartDrawer();
+          }
         }
       });
+    }
+
+    // Update cart badge when cart changes
+    function initCartBadge() {
+      if (typeof window.AjaxCart === 'undefined') {
+        // Retry after a short delay
+        setTimeout(initCartBadge, 100);
+        return;
+      }
+
+      const cartBadge = document.getElementById('bottom-nav-cart-badge');
+      
+      window.AjaxCart.onUpdate(function(cart) {
+        if (cartBadge) {
+          const itemCount = cart.item_count || 0;
+          if (itemCount > 0) {
+            cartBadge.textContent = itemCount;
+            cartBadge.style.display = 'flex';
+          } else {
+            cartBadge.style.display = 'none';
+          }
+        }
+      });
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCartBadge);
+    } else {
+      initCartBadge();
     }
 
     // Event listeners for closing modals

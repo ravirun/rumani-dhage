@@ -30,6 +30,13 @@
     {% render 'meta-tags' %}
 
     {{ content_for_header }}
+
+    {% # Ajax Cart API Scripts - ajax-cart.js uses async to load in parallel but execute when ready %}
+    {% comment %}theme-check-disable ParserBlockingScript{% endcomment %}
+    <script src="{{ 'ajax-cart.js' | asset_url }}" async></script>
+    {% comment %}theme-check-enable ParserBlockingScript{% endcomment %}
+    <script src="{{ 'search-autocomplete.js' | asset_url }}" defer></script>
+    <script src="{{ 'product-recommendations.js' | asset_url }}" defer></script>
   </head>
 
   <body style="position: relative;">
@@ -38,5 +45,8 @@
     {% sections 'footer-group' %}
     {% section 'floating-cart' %}
     {% section 'bottomNavigation' %}
+    {% render 'ajax-cart-drawer' %}
+    {% render 'search-autocomplete' %}
+    {% render 'ajax-cart-notifications' %}
   </body>
 </html>

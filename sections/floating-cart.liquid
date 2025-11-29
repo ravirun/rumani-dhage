@@ -1,25 +1,23 @@
 {% comment %} Floating cart bar - shows when cart has items, but not on cart or checkout pages {% endcomment %}
-{% if cart.item_count > 0 and request.page_type != 'cart' %}
-  <div class="floating-cart">
-    <div class="floating-cart__icon-wrapper">
-      <i data-lucide="shopping-cart"></i>
-    </div>
-    
-    <div class="floating-cart__info">
-      <div class="floating-cart__quantity">
-        {{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}
-      </div>
-      <div class="floating-cart__total">
-        {{ cart.total_price | money }}
-      </div>
-    </div>
-    
-    <a href="{{ routes.cart_url }}" class="floating-cart__button">
-      View Cart
-      <i data-lucide="arrow-right"></i>
-    </a>
+<div class="floating-cart" id="floating-cart" style="{% if cart.item_count == 0 or request.page_type == 'cart' %}display: none;{% endif %}">
+  <div class="floating-cart__icon-wrapper">
+    <i data-lucide="shopping-cart"></i>
   </div>
-{% endif %}
+  
+  <div class="floating-cart__info">
+    <div class="floating-cart__quantity" id="floating-cart-quantity">
+      {{ cart.item_count }} {% if cart.item_count == 1 %}item{% else %}items{% endif %}
+    </div>
+    <div class="floating-cart__total" id="floating-cart-total">
+      {{ cart.total_price | money }}
+    </div>
+  </div>
+  
+  <button type="button" class="floating-cart__button" data-open-cart-drawer>
+    View Cart
+    <i data-lucide="arrow-right"></i>
+  </button>
+</div>
 
 {% stylesheet %}
   .floating-cart {
@@ -94,6 +92,8 @@
     transition: all 0.2s ease;
     white-space: nowrap;
     flex-shrink: 0;
+    cursor: pointer;
+    font-family: inherit;
   }
 
   .floating-cart__button:hover,
@@ -130,6 +130,74 @@
           lucide.createIcons();
         }
       });
+    }
+
+    // Update floating cart when cart changes
+    function initFloatingCart() {
+      if (typeof window.AjaxCart === 'undefined') {
+        // Retry after a short delay
+        setTimeout(initFloatingCart, 100);
+        return;
+      }
+
+      const floatingCart = document.getElementById('floating-cart');
+      const quantityEl = document.getElementById('floating-cart-quantity');
+      const totalEl = document.getElementById('floating-cart-total');
+      const openDrawerBtn = document.querySelector('[data-open-cart-drawer]');
+
+      // Format money helper
+      function formatMoney(cents) {
+        return new Intl.NumberFormat(document.documentElement.lang || 'en', {
+          style: 'currency',
+          currency: window.Shopify?.currency?.active || 'USD'
+        }).format(cents / 100);
+      }
+
+      // Update cart display
+      function updateFloatingCart(cart) {
+        if (!floatingCart || !cart) return;
+
+        const itemCount = cart.item_count || 0;
+        const isCartPage = window.location.pathname.includes('/cart') || window.location.pathname.includes('/checkout');
+
+        if (itemCount > 0 && !isCartPage) {
+          floatingCart.style.display = 'flex';
+          
+          if (quantityEl) {
+            quantityEl.textContent = `${itemCount} ${itemCount === 1 ? 'item' : 'items'}`;
+          }
+          
+          if (totalEl) {
+            totalEl.textContent = formatMoney(cart.total_price);
+          }
+        } else {
+          floatingCart.style.display = 'none';
+        }
+      }
+
+      // Listen for cart updates
+      window.AjaxCart.onUpdate(updateFloatingCart);
+
+      // Initial update
+      if (window.AjaxCart.cart) {
+        updateFloatingCart(window.AjaxCart.cart);
+      }
+
+      // Open cart drawer button
+      if (openDrawerBtn) {
+        openDrawerBtn.addEventListener('click', function() {
+          if (typeof window.openCartDrawer === 'function') {
+            window.openCartDrawer();
+          }
+        });
+      }
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initFloatingCart);
+    } else {
+      initFloatingCart();
     }
   })();
 {% endjavascript %}

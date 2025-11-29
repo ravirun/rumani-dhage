@@ -1,0 +1,176 @@
+{% comment %}
+  Product Recommendations Section
+  Displays recommended products using Ajax API
+{% endcomment %}
+
+<div class="product-recommendations" id="product-recommendations-{{ section.id }}" data-limit="{{ section.settings.limit | default: 4 }}">
+  {% if section.settings.title != blank %}
+    <h2 class="product-recommendations__heading">
+      {{ section.settings.title }}
+    </h2>
+  {% endif %}
+  
+  <div class="product-recommendations__container" data-recommendations-container></div>
+</div>
+
+{% stylesheet %}
+  .product-recommendations {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .product-recommendations__heading {
+    margin: 0 0 var(--spacing-lg) 0;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-primary--weight);
+    color: var(--color-foreground);
+    text-align: center;
+  }
+
+  .product-recommendations__container {
+    min-height: 200px;
+  }
+
+  .product-recommendations__loading,
+  .product-recommendations__error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-xl);
+    color: color-mix(in srgb, var(--color-foreground) 60%, transparent);
+  }
+
+  .product-recommendations__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  .product-recommendations__item {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--card-border-radius);
+    overflow: hidden;
+    transition: var(--transition);
+  }
+
+  .product-recommendations__item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .product-recommendations__link {
+    text-decoration: none;
+    color: inherit;
+    flex: 1;
+  }
+
+  .product-recommendations__image {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--color-secondary);
+  }
+
+  .product-recommendations__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-recommendations__content {
+    padding: var(--spacing-md);
+  }
+
+  .product-recommendations__title {
+    margin: 0 0 var(--spacing-sm) 0;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-primary--weight);
+    color: var(--color-foreground);
+    line-height: 1.3;
+  }
+
+  .product-recommendations__price {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  .product-recommendations__price-current {
+    font-size: var(--font-size-base);
+    font-weight: calc(var(--font-primary--weight) + 200);
+    color: var(--color-primary);
+  }
+
+  .product-recommendations__price-compare {
+    font-size: var(--font-size-sm);
+    color: color-mix(in srgb, var(--color-foreground) 60%, transparent);
+    text-decoration: line-through;
+  }
+
+  .product-recommendations__add-to-cart {
+    margin: 0 var(--spacing-md) var(--spacing-md);
+    padding: var(--button-padding);
+    background: var(--color-primary);
+    color: var(--color-primary-text);
+    border: 1px solid var(--color-primary);
+    border-radius: var(--button-border-radius);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-primary--weight);
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .product-recommendations__add-to-cart:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+
+  .product-recommendations__add-to-cart:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  @media screen and (max-width: 749px) {
+    .product-recommendations__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-md);
+    }
+  }
+{% endstylesheet %}
+
+{% comment %}
+  Product Recommendations initialization is handled by product-recommendations.js
+  The script auto-initializes when the container is found
+{% endcomment %}
+
+{% schema %}
+{
+  "name": "Product Recommendations",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "You may also like"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Number of products",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Recommendations"
+    }
+  ]
+}
+{% endschema %}
+
