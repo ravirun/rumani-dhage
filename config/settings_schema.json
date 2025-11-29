@@ -19,12 +19,164 @@
         "id": "type_primary_font",
         "default": "work_sans_n4",
         "label": "t:general.primary"
+      },
+      {
+        "type": "header",
+        "content": "Font Sizes"
+      },
+      {
+        "type": "range",
+        "id": "font_size_base",
+        "min": 12,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "label": "Base font size",
+        "default": 16,
+        "info": "Base font size for body text"
+      },
+      {
+        "type": "range",
+        "id": "font_scale_ratio",
+        "min": 1.1,
+        "max": 1.5,
+        "step": 0.1,
+        "label": "Font scale ratio",
+        "default": 1.25,
+        "info": "Ratio for heading sizes (1.25 = 25% increase per level)"
+      },
+      {
+        "type": "header",
+        "content": "Line Heights"
+      },
+      {
+        "type": "range",
+        "id": "line_height_body",
+        "min": 1.2,
+        "max": 2.0,
+        "step": 0.1,
+        "label": "Body line height",
+        "default": 1.6
+      },
+      {
+        "type": "range",
+        "id": "line_height_heading",
+        "min": 1.0,
+        "max": 1.8,
+        "step": 0.1,
+        "label": "Heading line height",
+        "default": 1.2
+      }
+    ]
+  },
+  {
+    "name": "t:general.colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Base Colors"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "default": "#FFFFFF",
+        "label": "t:labels.background"
+      },
+      {
+        "type": "color",
+        "id": "foreground_color",
+        "default": "#333333",
+        "label": "t:labels.foreground"
+      },
+      {
+        "type": "header",
+        "content": "Primary Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "default": "#1a5d3a",
+        "label": "Primary color",
+        "info": "Main brand color for buttons, links, and accents"
+      },
+      {
+        "type": "color",
+        "id": "color_primary_text",
+        "default": "#FFFFFF",
+        "label": "Primary text color",
+        "info": "Text color on primary background"
+      },
+      {
+        "type": "header",
+        "content": "Secondary Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "default": "#F5F5F5",
+        "label": "Secondary color",
+        "info": "Secondary background color"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary_text",
+        "default": "#333333",
+        "label": "Secondary text color"
+      },
+      {
+        "type": "header",
+        "content": "Accent Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "default": "#FF6B6B",
+        "label": "Accent color",
+        "info": "Highlight color for special elements"
+      },
+      {
+        "type": "color",
+        "id": "color_success",
+        "default": "#28A745",
+        "label": "Success color"
+      },
+      {
+        "type": "color",
+        "id": "color_warning",
+        "default": "#FFC107",
+        "label": "Warning color"
+      },
+      {
+        "type": "color",
+        "id": "color_error",
+        "default": "#DC3545",
+        "label": "Error color"
+      },
+      {
+        "type": "header",
+        "content": "Border & Divider Colors"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "default": "#E0E0E0",
+        "label": "Border color"
+      },
+      {
+        "type": "color",
+        "id": "color_divider",
+        "default": "#F0F0F0",
+        "label": "Divider color"
       }
     ]
   },
   {
     "name": "t:general.layout",
     "settings": [
+      {
+        "type": "header",
+        "content": "Page Layout"
+      },
       {
         "type": "select",
         "id": "max_page_width",
@@ -50,33 +202,292 @@
         "unit": "px",
         "label": "t:labels.page_margin",
         "default": 20
+      },
+      {
+        "type": "header",
+        "content": "Spacing Scale"
+      },
+      {
+        "type": "range",
+        "id": "spacing_base",
+        "min": 4,
+        "max": 16,
+        "step": 2,
+        "unit": "px",
+        "label": "Base spacing unit",
+        "default": 8,
+        "info": "Base unit for spacing scale (8px = 0.5rem)"
       }
     ]
   },
   {
-    "name": "t:general.colors",
+    "name": "Buttons",
     "settings": [
       {
-        "type": "color",
-        "id": "background_color",
-        "default": "#FFFFFF",
-        "label": "t:labels.background"
+        "type": "header",
+        "content": "Button Styles"
       },
       {
-        "type": "color",
-        "id": "foreground_color",
-        "default": "#333333",
-        "label": "t:labels.foreground"
+        "type": "range",
+        "id": "button_border_radius",
+        "min": 0,
+        "max": 50,
+        "step": 2,
+        "unit": "px",
+        "label": "Button border radius",
+        "default": 8
+      },
+      {
+        "type": "range",
+        "id": "button_padding_vertical",
+        "min": 8,
+        "max": 24,
+        "step": 2,
+        "unit": "px",
+        "label": "Button vertical padding",
+        "default": 12
+      },
+      {
+        "type": "range",
+        "id": "button_padding_horizontal",
+        "min": 16,
+        "max": 48,
+        "step": 4,
+        "unit": "px",
+        "label": "Button horizontal padding",
+        "default": 24
+      },
+      {
+        "type": "range",
+        "id": "button_border_width",
+        "min": 0,
+        "max": 4,
+        "step": 1,
+        "unit": "px",
+        "label": "Button border width",
+        "default": 0
+      },
+      {
+        "type": "select",
+        "id": "button_style",
+        "label": "Button style",
+        "options": [
+          {
+            "value": "solid",
+            "label": "Solid"
+          },
+          {
+            "value": "outline",
+            "label": "Outline"
+          },
+          {
+            "value": "ghost",
+            "label": "Ghost"
+          }
+        ],
+        "default": "solid"
+      }
+    ]
+  },
+  {
+    "name": "Cards",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Card Styles"
+      },
+      {
+        "type": "range",
+        "id": "card_border_radius",
+        "min": 0,
+        "max": 50,
+        "step": 2,
+        "unit": "px",
+        "label": "Card border radius",
+        "default": 12
+      },
+      {
+        "type": "range",
+        "id": "card_padding",
+        "min": 8,
+        "max": 48,
+        "step": 4,
+        "unit": "px",
+        "label": "Card padding",
+        "default": 24
+      },
+      {
+        "type": "range",
+        "id": "card_border_width",
+        "min": 0,
+        "max": 4,
+        "step": 1,
+        "unit": "px",
+        "label": "Card border width",
+        "default": 1
+      },
+      {
+        "type": "checkbox",
+        "id": "card_shadow_enabled",
+        "label": "Enable card shadow",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "card_shadow_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "Card shadow opacity",
+        "default": 10,
+        "info": "Only applies if shadow is enabled"
+      }
+    ]
+  },
+  {
+    "name": "Forms & Inputs",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Input Styles"
       },
       {
         "type": "range",
         "id": "input_corner_radius",
         "min": 0,
-        "max": 10,
+        "max": 20,
         "step": 1,
         "unit": "px",
         "label": "t:labels.input_corner_radius",
         "default": 4
+      },
+      {
+        "type": "range",
+        "id": "input_padding_vertical",
+        "min": 8,
+        "max": 20,
+        "step": 2,
+        "unit": "px",
+        "label": "Input vertical padding",
+        "default": 12
+      },
+      {
+        "type": "range",
+        "id": "input_padding_horizontal",
+        "min": 12,
+        "max": 24,
+        "step": 2,
+        "unit": "px",
+        "label": "Input horizontal padding",
+        "default": 16
+      },
+      {
+        "type": "range",
+        "id": "input_border_width",
+        "min": 1,
+        "max": 4,
+        "step": 1,
+        "unit": "px",
+        "label": "Input border width",
+        "default": 1
+      }
+    ]
+  },
+  {
+    "name": "Shadows",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Shadow Styles"
+      },
+      {
+        "type": "range",
+        "id": "shadow_blur",
+        "min": 0,
+        "max": 50,
+        "step": 2,
+        "unit": "px",
+        "label": "Shadow blur radius",
+        "default": 10
+      },
+      {
+        "type": "range",
+        "id": "shadow_spread",
+        "min": -10,
+        "max": 10,
+        "step": 1,
+        "unit": "px",
+        "label": "Shadow spread",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "shadow_offset_x",
+        "min": -10,
+        "max": 10,
+        "step": 1,
+        "unit": "px",
+        "label": "Shadow horizontal offset",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "shadow_offset_y",
+        "min": 0,
+        "max": 10,
+        "step": 1,
+        "unit": "px",
+        "label": "Shadow vertical offset",
+        "default": 2
+      }
+    ]
+  },
+  {
+    "name": "Transitions",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Animation Settings"
+      },
+      {
+        "type": "range",
+        "id": "transition_duration",
+        "min": 100,
+        "max": 500,
+        "step": 50,
+        "unit": "ms",
+        "label": "Transition duration",
+        "default": 200,
+        "info": "Default duration for transitions and animations"
+      },
+      {
+        "type": "select",
+        "id": "transition_easing",
+        "label": "Transition easing",
+        "options": [
+          {
+            "value": "ease",
+            "label": "Ease"
+          },
+          {
+            "value": "ease-in",
+            "label": "Ease In"
+          },
+          {
+            "value": "ease-out",
+            "label": "Ease Out"
+          },
+          {
+            "value": "ease-in-out",
+            "label": "Ease In Out"
+          },
+          {
+            "value": "linear",
+            "label": "Linear"
+          }
+        ],
+        "default": "ease-out"
       }
     ]
   }

@@ -21,6 +21,9 @@
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 
+    {% # Load Design System Utilities %}
+    {% render 'design-system-utils' %}
+
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
