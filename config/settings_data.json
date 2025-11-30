@@ -9,7 +9,8 @@
  */
 {
   "current": {
-    "logo": "shopify://shop_images/Group_43.png",
+    "logo": "shopify://shop_images/Group_43.svg",
+    "favicon": "shopify://shop_images/image_1.svg",
     "cart_type": "drawer",
     "content_for_index": [],
     "color_schemes": {
