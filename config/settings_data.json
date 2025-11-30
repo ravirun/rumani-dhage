@@ -11,6 +11,8 @@
   "current": {
     "logo": "shopify://shop_images/Group_43.svg",
     "favicon": "shopify://shop_images/image_1.svg",
+    "type_header_font": "poppins_n6",
+    "type_body_font": "poppins_n4",
     "buttons_radius": 24,
     "media_border_thickness": 0,
     "media_border_opacity": 0,
