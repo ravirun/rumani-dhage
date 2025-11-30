@@ -9,23 +9,27 @@
  */
 {
   "current": {
+    "cart_type": "drawer",
+    "content_for_index": [],
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background": "#FFFFFF",
+          "background": "#ffffff",
+          "background_gradient": "",
           "text": "#121212",
           "button": "#121212",
-          "button_label": "#FFFFFF",
+          "button_label": "#ffffff",
           "secondary_button_label": "#121212",
           "shadow": "#121212"
         }
       },
       "scheme-2": {
         "settings": {
-          "background": "#F5F5F5",
+          "background": "#f5f5f5",
+          "background_gradient": "",
           "text": "#121212",
           "button": "#121212",
-          "button_label": "#FFFFFF",
+          "button_label": "#ffffff",
           "secondary_button_label": "#121212",
           "shadow": "#121212"
         }
@@ -33,31 +37,34 @@
       "scheme-3": {
         "settings": {
           "background": "#121212",
-          "text": "#FFFFFF",
-          "button": "#FFFFFF",
+          "background_gradient": "",
+          "text": "#ffffff",
+          "button": "#ffffff",
           "button_label": "#121212",
-          "secondary_button_label": "#FFFFFF",
+          "secondary_button_label": "#ffffff",
           "shadow": "#000000"
         }
       },
       "scheme-4": {
         "settings": {
-          "background": "#FFFFFF",
+          "background": "#ffffff",
+          "background_gradient": "",
           "text": "#121212",
           "button": "#000000",
-          "button_label": "#FFFFFF",
+          "button_label": "#ffffff",
           "secondary_button_label": "#121212",
           "shadow": "#000000"
         }
       },
       "scheme-5": {
         "settings": {
-          "background": "#FF0000",
-          "text": "#FFFFFF",
-          "button": "#FFFFFF",
-          "button_label": "#FF0000",
-          "secondary_button_label": "#FFFFFF",
-          "shadow": "#CC0000"
+          "background": "#ff0000",
+          "background_gradient": "",
+          "text": "#ffffff",
+          "button": "#ffffff",
+          "button_label": "#ff0000",
+          "secondary_button_label": "#ffffff",
+          "shadow": "#cc0000"
         }
       }
     }
