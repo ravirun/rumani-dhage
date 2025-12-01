@@ -47,19 +47,18 @@ menu-drawer > details[open] > summary::before {
   height: calc(var(--viewport-height, 100vh) - (var(--header-bottom-position, 100%)));
 }
 
-.js details[open] > .menu-drawer,
-.js details[open] > .menu-drawer__submenu {
+.js details[open] > .menu-drawer {
   transition: transform var(--duration-default) ease, visibility var(--duration-default) ease;
 }
 
-.js details[open].menu-opening > .menu-drawer,
-details[open].menu-opening > .menu-drawer__submenu {
+.js details[open].menu-opening > .menu-drawer {
   transform: translateX(0);
   visibility: visible;
 }
 
-.js .menu-drawer__navigation .submenu-open {
-  visibility: hidden; /* hide menus from screen readers when hidden by submenu */
+/* Accordion style submenu - slide down instead of slide in */
+.js details[open] > .menu-drawer__submenu {
+  transition: max-height var(--duration-default) ease, opacity var(--duration-default) ease;
 }
 
 @media screen and (min-width: 750px) {
@@ -89,9 +88,8 @@ details[open].menu-opening > .menu-drawer__submenu {
 }
 
 .menu-drawer__inner-submenu {
-  height: 100%;
   overflow-x: hidden;
-  overflow-y: auto;
+  padding: 0;
 }
 
 .js .menu-drawer__menu li {
@@ -131,42 +129,45 @@ details[open].menu-opening > .menu-drawer__submenu {
   right: 3rem;
   top: 50%;
   transform: translateY(-50%);
+  transition: transform var(--duration-default) ease;
 }
 
+/* Rotate arrow icon when submenu is open */
+details[open] > summary.menu-drawer__menu-item > .svg-wrapper:first-of-type {
+  transform: translateY(-50%) rotate(90deg);
+}
+
+/* Accordion style: submenu slides down instead of sliding in from right */
 .js .menu-drawer__submenu {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  bottom: 0;
-  left: 0;
-  background-color: rgb(var(--color-background));
-  z-index: 1;
-  transform: translateX(100%);
-  visibility: hidden;
+  position: relative;
+  max-height: 0;
+  overflow: hidden;
+  background-color: rgba(var(--color-foreground), 0.02);
+  opacity: 0;
+  transition: max-height var(--duration-default) ease, opacity var(--duration-default) ease;
+  margin-left: 1.5rem;
+}
+
+/* When details is open, expand the submenu */
+.js details[open] > .menu-drawer__submenu {
+  max-height: 2000px; /* Large enough for most submenus */
+  opacity: 1;
+  visibility: visible;
 }
 
 .js .menu-drawer__submenu .menu-drawer__submenu {
-  overflow-y: auto;
+  max-height: 0;
+  overflow: hidden;
 }
 
+.js .menu-drawer__submenu .menu-drawer__submenu details[open] > .menu-drawer__submenu {
+  max-height: 2000px;
+  opacity: 1;
+}
+
+/* Hide back button in accordion style - not needed */
 .menu-drawer__close-button {
-  margin-top: 1.5rem;
-  padding: 1.2rem 2.6rem 1.2rem 3rem;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  font-size: 1.4rem;
-  width: 100%;
-  background-color: transparent;
-  font-family: var(--font-body-family);
-  font-style: var(--font-body-style);
-  text-align: left;
-}
-
-.menu-drawer__close-button .svg-wrapper {
-  transform: rotate(180deg);
-  margin-right: 1rem;
-  width: 15px;
+  display: none;
 }
 
 .menu-drawer__utility-links {

@@ -445,22 +445,20 @@ class MenuDrawer extends HTMLElement {
     const openDetailsElement = event.target.closest('details[open]');
     if (!openDetailsElement) return;
 
-    openDetailsElement === this.mainDetailsToggle
-      ? this.closeMenuDrawer(event, this.mainDetailsToggle.querySelector('summary'))
-      : this.closeSubmenu(openDetailsElement);
+    if (openDetailsElement === this.mainDetailsToggle) {
+      this.closeMenuDrawer(event, this.mainDetailsToggle.querySelector('summary'));
+    } else {
+      // For accordion submenus, just close the details element
+      openDetailsElement.removeAttribute('open');
+      const summary = openDetailsElement.querySelector('summary');
+      if (summary) summary.setAttribute('aria-expanded', false);
+    }
   }
 
   onSummaryClick(event) {
     const summaryElement = event.currentTarget;
     const detailsElement = summaryElement.parentNode;
-    const parentMenuElement = detailsElement.closest('.has-submenu');
     const isOpen = detailsElement.hasAttribute('open');
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    function addTrapFocus() {
-      trapFocus(summaryElement.nextElementSibling, detailsElement.querySelector('button'));
-      summaryElement.nextElementSibling.removeEventListener('transitionend', addTrapFocus);
-    }
 
     if (detailsElement === this.mainDetailsToggle) {
       if (isOpen) event.preventDefault();
@@ -470,14 +468,11 @@ class MenuDrawer extends HTMLElement {
         document.documentElement.style.setProperty('--viewport-height', `${window.innerHeight}px`);
       }
     } else {
+      // For accordion submenus, let native <details> handle open/close
+      // Just update aria-expanded for accessibility
       setTimeout(() => {
-        detailsElement.classList.add('menu-opening');
-        summaryElement.setAttribute('aria-expanded', true);
-        parentMenuElement && parentMenuElement.classList.add('submenu-open');
-        !reducedMotion || reducedMotion.matches
-          ? addTrapFocus()
-          : summaryElement.nextElementSibling.addEventListener('transitionend', addTrapFocus);
-      }, 100);
+        summaryElement.setAttribute('aria-expanded', !isOpen);
+      }, 0);
     }
   }
 
@@ -494,12 +489,12 @@ class MenuDrawer extends HTMLElement {
     if (event === undefined) return;
 
     this.mainDetailsToggle.classList.remove('menu-opening');
+    // Close all submenus when main drawer closes
     this.mainDetailsToggle.querySelectorAll('details').forEach((details) => {
       details.removeAttribute('open');
       details.classList.remove('menu-opening');
-    });
-    this.mainDetailsToggle.querySelectorAll('.submenu-open').forEach((submenu) => {
-      submenu.classList.remove('submenu-open');
+      const summary = details.querySelector('summary');
+      if (summary) summary.setAttribute('aria-expanded', false);
     });
     document.body.classList.remove(`overflow-hidden-${this.dataset.breakpoint}`);
     removeTrapFocus(elementToFocus);
@@ -516,17 +511,14 @@ class MenuDrawer extends HTMLElement {
   }
 
   onCloseButtonClick(event) {
+    // Back buttons removed in accordion style, but keep for compatibility
+    // Native <details> handles closing now
     const detailsElement = event.currentTarget.closest('details');
-    this.closeSubmenu(detailsElement);
-  }
-
-  closeSubmenu(detailsElement) {
-    const parentMenuElement = detailsElement.closest('.submenu-open');
-    parentMenuElement && parentMenuElement.classList.remove('submenu-open');
-    detailsElement.classList.remove('menu-opening');
-    detailsElement.querySelector('summary').setAttribute('aria-expanded', false);
-    removeTrapFocus(detailsElement.querySelector('summary'));
-    this.closeAnimation(detailsElement);
+    if (detailsElement) {
+      detailsElement.removeAttribute('open');
+      const summary = detailsElement.querySelector('summary');
+      if (summary) summary.setAttribute('aria-expanded', false);
+    }
   }
 
   closeAnimation(detailsElement) {
