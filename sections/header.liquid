@@ -70,6 +70,32 @@
       padding-top: 0.5rem;
     }
   }
+
+  .header__icons .search-form {
+    display: flex;
+    align-items: center;
+    margin: 0 1rem;
+  }
+
+  .header__icons .search {
+    position: relative;
+    min-width: 200px;
+    max-width: 400px;
+  }
+
+  .header__icons .field {
+    position: relative;
+  }
+
+  .header__icons .search__input {
+    padding-right: 4rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .header__icons .search-form {
+      display: none;
+    }
+  }
 </style>
 
 {%- style -%}
@@ -232,7 +258,7 @@
           </localization-form>
         {%- endif -%}
       </div>
-      {% render 'header-search', input_id: 'Search-In-Modal' %}
+      
 
       {%- if shop.customer_accounts_enabled -%}
         <a
@@ -278,6 +304,65 @@
     -%}
     </div>
   </header>
+  <div class="header" style="display: block;">
+    {% comment %} search modal  {% endcomment %}
+    {%- if settings.predictive_search_enabled -%}
+      <predictive-search class="search-form" data-loading-text="{{ 'accessibility.loading' | t }}">
+    {%- else -%}
+      <search-form class="search-form">
+    {%- endif -%}
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search">
+      <div class="field">
+        <input
+          class="search__input field__input"
+          id="Search-In-Header"
+          type="search"
+          name="q"
+          value="{{ search.terms | escape }}"
+          placeholder="{{ 'general.search.search' | t }}"
+          {%- if settings.predictive_search_enabled -%}
+            role="combobox"
+            aria-expanded="false"
+            aria-owns="predictive-search-results"
+            aria-controls="predictive-search-results"
+            aria-haspopup="listbox"
+            aria-autocomplete="list"
+            autocorrect="off"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+          {%- endif -%}
+        >
+        <label class="field__label" for="Search-In-Header">{{ 'general.search.search' | t }}</label>
+        <input type="hidden" name="options[prefix]" value="last">
+        <button
+          type="reset"
+          class="reset__button field__button{% if search.terms == blank %} hidden{% endif %}"
+          aria-label="{{ 'general.search.reset' | t }}"
+        >
+          <span class="svg-wrapper">
+            {{- 'icon-reset.svg' | inline_asset_content -}}
+          </span>
+        </button>
+        <button class="search__button field__button" aria-label="{{ 'general.search.search' | t }}">
+          <span class="svg-wrapper">
+            {{- 'icon-search.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      </div>
+      {%- if settings.predictive_search_enabled -%}
+        <div style="height: 90vh;" class="predictive-search predictive-search--header" tabindex="-1" data-predictive-search>
+          {%- render 'loading-spinner', class: 'predictive-search__loading-state' -%}
+        </div>
+        <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+      {%- endif -%}
+    </form>
+    {%- if settings.predictive_search_enabled -%}
+      </predictive-search>
+    {%- else -%}
+      </search-form>
+    {%- endif -%}
+  </div>
 </{{ header_tag }}>
 
 {%- if settings.cart_type == "notification" -%}
