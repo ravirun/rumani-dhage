@@ -405,6 +405,12 @@
     "name": "t:settings_schema.inputs.name",
     "settings": [
       {
+        "type": "color_scheme",
+        "id": "inputs_color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "scheme-1"
+      },
+      {
         "type": "header",
         "content": "t:settings_schema.global.settings.header__border.content"
       },

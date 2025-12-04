@@ -10,7 +10,7 @@
   {% render 'quantity-input' variant: variant %}
 {% endcomment %}
 
-<quantity-input class="quantity cart-quantity">
+<quantity-input class="quantity cart-quantity color-{{ settings.inputs_color_scheme }}">
   <button class="quantity__button" name="minus" type="button" data-target="decrement-{{ variant.id }}">
     <span class="visually-hidden">
       {{- 'products.product.quantity.decrease' | t: product: variant.title | escape -}}

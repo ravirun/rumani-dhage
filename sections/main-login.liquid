@@ -29,7 +29,7 @@
 
     {%- form 'recover_customer_password' -%}
       {% assign recover_success = form.posted_successfully? %}
-      <div class="field">
+      <div class="field color-{{ settings.inputs_color_scheme }}">
         <input
           type="email"
           value=""
@@ -104,7 +104,7 @@
         </section>
       {%- endif -%}
 
-      <div class="field">
+      <div class="field color-{{ settings.inputs_color_scheme }}">
         <input
           type="email"
           name="customer[email]"
@@ -123,7 +123,7 @@
       </div>
 
       {%- if form.password_needed -%}
-        <div class="field">
+        <div class="field color-{{ settings.inputs_color_scheme }}">
           <input
             type="password"
             value=""

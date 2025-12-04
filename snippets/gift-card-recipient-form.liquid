@@ -64,7 +64,7 @@
     <div class="recipient-fields">
       <hr>
       <div class="recipient-fields__field">
-        <div class="field">
+        <div class="field color-{{ settings.inputs_color_scheme }}">
           <input
             class="field__input"
             id="Recipient-email-{{ section.id }}"
@@ -99,7 +99,7 @@
       </div>
 
       <div class="recipient-fields__field">
-        <div class="field">
+        <div class="field color-{{ settings.inputs_color_scheme }}">
           <input
             class="field__input"
             autocomplete="name"
@@ -135,7 +135,7 @@
         {%- assign max_chars_message = 200 -%}
         {%- assign max_chars_message_rendered = 'recipient.form.max_characters' | t: max_chars: max_chars_message -%}
         {%- assign message_label_rendered = 'recipient.form.message_label' | t -%}
-        <div class="field">
+        <div class="field color-{{ settings.inputs_color_scheme }}">
           <textarea
             rows="10"
             id="Recipient-message-{{ section.id }}"
@@ -172,7 +172,7 @@
       </div>
 
       <div class="recipient-fields__field">
-        <div class="field">
+        <div class="field color-{{ settings.inputs_color_scheme }}">
           <input
             class="field__input text-body"
             autocomplete="send_on"

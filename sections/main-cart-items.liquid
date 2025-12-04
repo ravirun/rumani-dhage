@@ -235,7 +235,7 @@
                                 {{- 'icon-info.svg' | inline_asset_content -}}
                               </button>
                             {%- endif -%}
-                            <quantity-input class="quantity cart-quantity">
+                            <quantity-input class="quantity cart-quantity color-{{ settings.inputs_color_scheme }}">
                               {% assign can_update_quantity = item.instructions.can_update_quantity | default: true %}
                               <button
                                 class="quantity__button"
