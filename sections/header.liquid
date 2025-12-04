@@ -304,7 +304,8 @@
     -%}
     </div>
   </header>
-  <div class="header" style="display: block;">
+  
+    <div class="header page-width" style="display: block;">
     {% comment %} search modal  {% endcomment %}
     {%- if settings.predictive_search_enabled -%}
       <predictive-search class="search-form" data-loading-text="{{ 'accessibility.loading' | t }}">
@@ -363,6 +364,7 @@
       </search-form>
     {%- endif -%}
   </div>
+
 </{{ header_tag }}>
 
 {%- if settings.cart_type == "notification" -%}
