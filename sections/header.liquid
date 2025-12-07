@@ -279,7 +279,6 @@
           </div>
           {%- if settings.predictive_search_enabled -%}
             <div
-              style="height: 90vh;"
               class="predictive-search predictive-search--header"
               tabindex="-1"
               data-predictive-search
@@ -383,7 +382,6 @@
         </div>
         {%- if settings.predictive_search_enabled -%}
           <div
-            style="height: 90vh;"
             class="predictive-search predictive-search--header"
             tabindex="-1"
             data-predictive-search
@@ -516,7 +514,9 @@
 
     closeSearchModal() {
       this.searchModal = this.searchModal || this.header.querySelector('details-modal');
-      this.searchModal.close(false);
+      if (this.searchModal) {
+        this.searchModal.close(false);
+      }
     }
   }
 
