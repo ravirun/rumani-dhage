@@ -28,13 +28,14 @@
     }
   {%- endif -%}
 
-  {%- if section.settings.menu_type_desktop != "drawer" -%}
-    @media screen and (min-width: 990px) {
-      header-drawer {
-        display: none;
-      }
+  {%- comment -%} Hamburger menu is now visible on all screen sizes {%- endcomment -%}
+
+  {%- comment -%} Hide desktop dropdown/mega menus - using hamburger menu for all screen sizes {%- endcomment -%}
+  @media screen and (min-width: 990px) {
+    .header__inline-menu {
+      display: none;
     }
-  {%- endif -%}
+  }
 
   .menu-drawer-container {
     display: flex;
@@ -208,6 +209,7 @@
       {%- endif -%}
     {%- endif -%}
 
+    {%- comment -%} Desktop menus (dropdown/mega) are hidden - using hamburger menu for all screen sizes {%- endcomment -%}
     {%- liquid
       if section.settings.menu != blank
         if section.settings.menu_type_desktop == 'dropdown'
@@ -216,7 +218,7 @@
           render 'header-mega-menu'
         endif
       endif
-    %}
+    -%}
 
     {%- if section.settings.logo_position == 'middle-center' -%}
       {%- if request.page_type == 'index' -%}
@@ -320,8 +322,7 @@
       -%}
     </div>
   </header>
-
-  <div class="header page-width" style="display: block;">
+  <div class="header" style="display: block;">
     {% comment %} search modal  {% endcomment %}
     {%- if settings.predictive_search_enabled -%}
       <predictive-search class="search-form" data-loading-text="{{ 'accessibility.loading' | t }}">
@@ -329,7 +330,7 @@
       <search-form class="search-form">
     {%- endif -%}
     <form action="{{ routes.search_url }}" method="get" role="search" class="search">
-      <div class="field color-{{ settings.inputs_color_scheme }}">
+      <div class="field">
         <input
           class="search__input field__input"
           id="Search-In-Header"
