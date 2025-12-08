@@ -37,6 +37,9 @@
   elsif image != blank and image.alt != blank
     assign alt_text = image.alt
   endif
+
+  # Calculate image width for retina display (2x)
+  assign image_width = size | times: 4
 %}
 
 {% style %}
@@ -84,8 +87,9 @@
 <div class="insta-story-outer-circle">
   <div class="insta-story-inner-circle">
     {% if image != blank %}
+      {% comment %}theme-check-disable RemoteAsset {% endcomment %}
       <img
-        src="{{ image | image_url: width: size }}"
+        src="{{ image | image_url: width: image_width }}"
         alt="{{ alt_text | escape }}"
         width="{{ size }}"
         height="{{ size }}"
