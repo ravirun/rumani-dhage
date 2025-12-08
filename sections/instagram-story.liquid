@@ -1,7 +1,7 @@
 <section class="page-width" aria-labelledby="instagram-story-heading">
   <h2 id="instagram-story-heading" class="visually-hidden">Instagram Stories</h2>
   <div class="instagram-story">
-    <div class="instagram-story__container" role="list" aria-label="Instagram stories">
+    <div class="instagram-story__container" aria-label="Instagram stories">
       {% for block in section.blocks limit: 10 %}
         {% case block.type %}
           {% when 'instastory' %}
@@ -128,6 +128,8 @@
 {% style %}
   .instagram-story {
     padding: 1rem 0;
+    /* Prevent layout shift */
+    min-height: 120px;
   }
   .instagram-story__container {
     display: flex;
@@ -138,7 +140,9 @@
     -webkit-overflow-scrolling: touch;
     content-visibility: auto;
     contain: layout style paint;
-    min-height: 120px; /* Prevent CLS */
+    /* Prevent CLS - reserve space for content */
+    min-height: 120px;
+    width: 100%;
   }
 
   /* Prevent layout shift during load */
@@ -148,8 +152,11 @@
     align-items: center;
     flex-shrink: 0;
     scroll-snap-align: start;
-    min-width: 80px; /* Match circle size - prevent CLS */
-    min-height: 120px; /* Account for circle + title - prevent CLS */
+    /* Reserve space to prevent CLS */
+    min-width: 80px;
+    width: 80px;
+    min-height: 120px;
+    height: auto;
   }
 
   .instagram-story__button {
@@ -536,6 +543,11 @@
       img.loading = 'eager';
       img.className = 'insta-story-full-view__image';
       img.setAttribute('fetchpriority', 'high');
+      // Prevent CLS - set dimensions
+      img.width = 1080;
+      img.height = 1080;
+      img.style.aspectRatio = '1 / 1';
+      img.style.display = 'block';
 
       container.innerHTML = '';
       container.appendChild(img);
