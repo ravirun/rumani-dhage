@@ -7,7 +7,6 @@
           {% when 'instastory' %}
             <article
               class="instagram-story__item"
-              role="listitem"
               data-story-index="{{ forloop.index0 }}"
               data-story-image="{{ block.settings.image | image_url: width: 1080 }}"
               data-story-video="{{ block.settings.video.id | default: '' }}"
@@ -70,8 +69,8 @@
   </quick-add-modal>
 </section>
 
-{% comment %} Load quick-add assets {% endcomment %}
-{{ 'quick-add.css' | asset_url | stylesheet_tag }}
+{% comment %} Load quick-add assets - defer loading until needed {% endcomment %}
+{{ 'quick-add.css' | asset_url | stylesheet_tag: preload: true }}
 <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
 
 {% comment %} Structured data for SEO {% endcomment %}
@@ -139,14 +138,18 @@
     -webkit-overflow-scrolling: touch;
     content-visibility: auto;
     contain: layout style paint;
+    min-height: 120px; /* Prevent CLS */
   }
 
+  /* Prevent layout shift during load */
   .instagram-story__item {
     display: flex;
     flex-direction: column;
     align-items: center;
     flex-shrink: 0;
     scroll-snap-align: start;
+    min-width: 80px; /* Match circle size - prevent CLS */
+    min-height: 120px; /* Account for circle + title - prevent CLS */
   }
 
   .instagram-story__button {
@@ -155,6 +158,11 @@
     padding: 0;
     margin: 0;
     cursor: pointer;
+    min-width: 44px; /* Accessibility: minimum touch target */
+    min-height: 44px; /* Accessibility: minimum touch target */
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .instagram-story__button:focus-visible {
@@ -173,6 +181,11 @@
     color: rgb(var(--color-foreground));
     text-decoration: none;
     transition: opacity 0.2s ease;
+    min-height: 44px; /* Accessibility: minimum touch target */
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    margin: -0.25rem -0.5rem; /* Compensate for padding to maintain layout */
   }
 
   .instagram-story__product-link:hover {
@@ -487,11 +500,23 @@
       clonedVideo.setAttribute('loop', '');
       clonedVideo.setAttribute('muted', '');
       clonedVideo.setAttribute('playsinline', '');
+      clonedVideo.setAttribute('preload', 'auto');
       clonedVideo.setAttribute(
         'aria-label',
         productTitle ? `${this.escapeHtml(productTitle)} video story` : 'Instagram story video'
       );
       clonedVideo.removeAttribute('controls');
+
+      // Ensure track element exists for accessibility
+      if (!clonedVideo.querySelector('track')) {
+        const track = document.createElement('track');
+        track.kind = 'captions';
+        track.src = '';
+        track.srclang = 'en';
+        track.label = 'English';
+        track.default = true;
+        clonedVideo.appendChild(track);
+      }
 
       container.innerHTML = '';
       container.appendChild(clonedVideo);

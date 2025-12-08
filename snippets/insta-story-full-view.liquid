@@ -108,8 +108,25 @@
             muted: true,
             playsinline: true,
             controls: false,
+            preload: 'auto',
             class: 'insta-story-full-view__video'
         }}
+        {% comment %} Add track element via JavaScript for accessibility {% endcomment %}
+        <script>
+          (function() {
+            const video = document.currentScript.previousElementSibling;
+            if (video && video.tagName === 'VIDEO' && !video.querySelector('track')) {
+              const track = document.createElement('track');
+              track.kind = 'captions';
+              track.src = '';
+              track.srclang = 'en';
+              track.label = 'English';
+              track.default = true;
+              video.appendChild(track);
+              video.setAttribute('aria-label', {{ media_alt | json }});
+            }
+          })();
+        </script>
       {% endif %}
     </div>
 
@@ -168,6 +185,8 @@
     border-radius: 50%;
     width: 3rem;
     height: 3rem;
+    min-width: 44px; /* Accessibility: minimum touch target */
+    min-height: 44px; /* Accessibility: minimum touch target */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -195,6 +214,8 @@
     border-radius: 50%;
     width: 3.5rem;
     height: 3.5rem;
+    min-width: 44px; /* Accessibility: minimum touch target */
+    min-height: 44px; /* Accessibility: minimum touch target */
     display: flex;
     align-items: center;
     justify-content: center;

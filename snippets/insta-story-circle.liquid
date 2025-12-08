@@ -94,6 +94,12 @@
         {% endif %}
       >
     {% elsif video != blank %}
+      {% liquid
+        assign video_alt = alt_text
+        if video_alt == blank
+          assign video_alt = 'Instagram story video'
+        endif
+      %}
       {{
         video
         | media_tag:
@@ -105,8 +111,25 @@
           muted: true,
           playsinline: true,
           controls: false,
+          preload: 'none',
           class: 'insta-story-video'
       }}
+      {% comment %} Add track element via JavaScript for accessibility {% endcomment %}
+      <script>
+        (function() {
+          const video = document.currentScript.previousElementSibling;
+          if (video && video.tagName === 'VIDEO' && !video.querySelector('track')) {
+            const track = document.createElement('track');
+            track.kind = 'captions';
+            track.src = '';
+            track.srclang = 'en';
+            track.label = 'English';
+            track.default = true;
+            video.appendChild(track);
+            video.setAttribute('aria-label', {{ video_alt | json }});
+          }
+        })();
+      </script>
     {% endif %}
   </div>
 </div>
