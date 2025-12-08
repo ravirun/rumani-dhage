@@ -2,8 +2,8 @@
   position: initial;
 }
 
-.js menu-drawer > details > summary::before,
-.js menu-drawer > details[open]:not(.menu-opening) > summary::before {
+.js menu-drawer>details>summary::before,
+.js menu-drawer>details[open]:not(.menu-opening)>summary::before {
   content: '';
   position: absolute;
   cursor: default;
@@ -19,7 +19,7 @@
   transition: opacity 0s, visibility 0s;
 }
 
-menu-drawer > details[open] > summary::before {
+menu-drawer>details[open]>summary::before {
   visibility: visible;
   opacity: 1;
   transition: opacity var(--duration-default) ease, visibility var(--duration-default) ease;
@@ -36,10 +36,7 @@ menu-drawer > details[open] > summary::before {
   padding: 0;
   background-color: rgb(var(--color-background));
   overflow-x: hidden;
-  filter: drop-shadow(
-    var(--drawer-shadow-horizontal-offset) var(--drawer-shadow-vertical-offset) var(--drawer-shadow-blur-radius)
-      rgba(var(--color-shadow), var(--drawer-shadow-opacity))
-  );
+  filter: drop-shadow(var(--drawer-shadow-horizontal-offset) var(--drawer-shadow-vertical-offset) var(--drawer-shadow-blur-radius) rgba(var(--color-shadow), var(--drawer-shadow-opacity)));
 }
 
 .js .menu-drawer {
@@ -47,17 +44,17 @@ menu-drawer > details[open] > summary::before {
   height: calc(var(--viewport-height, 100vh) - (var(--header-bottom-position, 100%)));
 }
 
-.js details[open] > .menu-drawer {
+.js details[open]>.menu-drawer {
   transition: transform var(--duration-default) ease, visibility var(--duration-default) ease;
 }
 
-.js details[open].menu-opening > .menu-drawer {
+.js details[open].menu-opening>.menu-drawer {
   transform: translateX(0);
   visibility: visible;
 }
 
 /* Accordion style submenu - slide down instead of slide in */
-.js details[open] > .menu-drawer__submenu {
+.js details[open]>.menu-drawer__submenu {
   transition: max-height var(--duration-default) ease, opacity var(--duration-default) ease;
 }
 
@@ -123,7 +120,7 @@ menu-drawer > details[open] > summary::before {
   display: none;
 }
 
-.menu-drawer__menu-item > .svg-wrapper {
+.menu-drawer__menu-item>.svg-wrapper {
   width: 15px;
   position: absolute;
   right: 3rem;
@@ -133,7 +130,7 @@ menu-drawer > details[open] > summary::before {
 }
 
 /* Rotate arrow icon when submenu is open */
-details[open] > summary.menu-drawer__menu-item > .svg-wrapper:first-of-type {
+details[open]>summary.menu-drawer__menu-item>.svg-wrapper:first-of-type {
   transform: translateY(-50%) rotate(90deg);
 }
 
@@ -149,8 +146,9 @@ details[open] > summary.menu-drawer__menu-item > .svg-wrapper:first-of-type {
 }
 
 /* When details is open, expand the submenu */
-.js details[open] > .menu-drawer__submenu {
-  max-height: 2000px; /* Large enough for most submenus */
+.js details[open]>.menu-drawer__submenu {
+  max-height: 2000px;
+  /* Large enough for most submenus */
   opacity: 1;
   visibility: visible;
 }
@@ -160,7 +158,7 @@ details[open] > summary.menu-drawer__menu-item > .svg-wrapper:first-of-type {
   overflow: hidden;
 }
 
-.js .menu-drawer__submenu .menu-drawer__submenu details[open] > .menu-drawer__submenu {
+.js .menu-drawer__submenu .menu-drawer__submenu details[open]>.menu-drawer__submenu {
   max-height: 2000px;
   opacity: 1;
 }
@@ -171,7 +169,7 @@ details[open] > summary.menu-drawer__menu-item > .svg-wrapper:first-of-type {
 }
 
 .menu-drawer__utility-links {
-  padding: 0;
+  padding: 2rem 3rem;
   background-color: rgba(var(--color-foreground), 0.03);
   position: relative;
 }
@@ -206,7 +204,7 @@ details[open] > summary.menu-drawer__menu-item > .svg-wrapper:first-of-type {
   margin: 0;
 }
 
-.menu-drawer__account account-icon > .svg-wrapper {
+.menu-drawer__account account-icon>.svg-wrapper {
   height: 2rem;
   width: 2rem;
   margin-right: 1rem;
@@ -218,7 +216,7 @@ details[open] > summary.menu-drawer__menu-item > .svg-wrapper:first-of-type {
   margin-left: -0.45rem;
 }
 
-.menu-drawer__account:hover account-icon > .svg-wrapper {
+.menu-drawer__account:hover account-icon>.svg-wrapper {
   transform: scale(1.07);
 }
 
