@@ -1,0 +1,294 @@
+{% comment %}
+  Floating cart button - only renders when cart has items
+  Displays: cart icon, "View cart" text, item count, and arrow
+{% endcomment %}
+
+<floating-cart class="color-{{ section.settings.color_scheme }} gradient">
+  {% if cart.item_count > 0 %}
+    <button type="button" class="floating-cart" aria-label="{{ 'templates.cart.cart' | t }}" data-open-cart-drawer>
+      <div class="floating-cart__content">
+        <div class="floating-cart__icon">
+          <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+        </div>
+        <div class="floating-cart__text">
+          <span class="floating-cart__label">{{ 'templates.cart.cart' | t }}</span>
+          <span class="floating-cart__count">
+            {% liquid
+              assign item_text = 'ITEM'
+              if cart.item_count > 1
+                assign item_text = 'ITEMS'
+              endif
+            %}
+            {{ cart.item_count }}
+            {{ item_text }}
+          </span>
+        </div>
+        <div class="floating-cart__arrow">
+          <span class="icon icon-arrow icon-arrow--right" aria-hidden="true">
+            {{ 'icon-arrow.svg' | inline_asset_content }}
+          </span>
+        </div>
+      </div>
+    </button>
+  {% endif %}
+</floating-cart>
+
+{% style %}
+  .floating-cart {
+    position: fixed;
+    bottom: 80px; /* Above bottom navigation */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    background-color: rgb(var(--color-button));
+    color: rgb(var(--color-button-text));
+    border: none;
+    border-radius: 50px;
+    padding: 0 1.5rem;
+    height: 47px;
+    min-width: 200px;
+    max-width: 90%;
+    box-shadow: 0 4px 12px rgba(var(--color-shadow), 0.15);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+  }
+
+  .floating-cart:hover {
+    transform: translateX(-50%) translateY(-2px);
+    box-shadow: 0 6px 16px rgba(var(--color-shadow), 0.2);
+    opacity: 0.9;
+  }
+
+  .floating-cart:active {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .floating-cart__content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .floating-cart__icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .floating-cart__icon .svg-wrapper {
+    width: 40px;
+    height: 40px;
+    color: rgb(var(--color-button-text));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .floating-cart__icon .icon {
+    width: 40px;
+    height: 40px;
+    color: rgb(var(--color-button-text));
+  }
+
+  .floating-cart__text {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: flex-start;
+  }
+
+  .floating-cart__label {
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: 0.1rem;
+    line-height: calc(1 + 0.2 / var(--font-body-scale));
+    color: rgb(var(--color-button-text));
+    font-family: var(--font-body-family);
+    font-style: var(--font-body-style);
+  }
+
+  .floating-cart__count {
+    font-size: 1.2rem;
+    font-weight: 400;
+    letter-spacing: 0.06rem;
+    line-height: calc(1 + 0.2 / var(--font-body-scale));
+    color: rgb(var(--color-button-text));
+    opacity: 0.9;
+    margin-top: 0.25rem;
+    font-family: var(--font-body-family);
+    font-style: var(--font-body-style);
+  }
+
+  .floating-cart__arrow {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .floating-cart__arrow .icon {
+    width: 20px;
+    height: 20px;
+    color: rgb(var(--color-button-text));
+  }
+
+  @media screen and (max-width: 749px) {
+    .floating-cart {
+      bottom: 70px; /* Adjust for mobile bottom nav */
+      padding: 0.625rem 1.25rem;
+      min-width: 180px;
+    }
+
+    .floating-cart__icon .svg-wrapper {
+      width: 40px;
+      height: 40px;
+    }
+
+    .floating-cart__label {
+      font-size: 1.3rem;
+    }
+
+    .floating-cart__count {
+      font-size: 1rem;
+    }
+  }
+{% endstyle %}
+
+{% javascript %}
+  class FloatingCart extends HTMLElement {
+    constructor() {
+      super();
+      this.cartButton = this.querySelector('.floating-cart');
+      this.countElement = this.querySelector('.floating-cart__count');
+
+      // Set up click handler to open cart drawer
+      if (this.cartButton) {
+        this.cartButton.addEventListener('click', (event) => {
+          event.preventDefault();
+          this.openCartDrawer();
+        });
+      }
+
+      // Listen for cart updates via pub/sub
+      if (typeof subscribe !== 'undefined' && typeof PUB_SUB_EVENTS !== 'undefined') {
+        this.cartUpdateUnsubscriber = subscribe(PUB_SUB_EVENTS.cartUpdate, (data) => {
+          // Handle both direct cartData and nested structure
+          const cartData = data?.cartData || data;
+          if (cartData) {
+            this.updateCart(cartData);
+          }
+        });
+      }
+
+      // Also listen for DOM mutations on cart drawer to catch section updates
+      this.observeCartDrawer();
+    }
+
+    observeCartDrawer() {
+      const cartDrawer = document.querySelector('cart-drawer');
+      if (cartDrawer && typeof MutationObserver !== 'undefined') {
+        const observer = new MutationObserver((mutations) => {
+          // Check if is-empty class was added/removed
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+              const isEmpty = cartDrawer.classList.contains('is-empty');
+              this.updateCart({ item_count: isEmpty ? 0 : 1 }); // Trigger update, will fetch actual count
+              this.checkCartState();
+            }
+          });
+        });
+
+        observer.observe(cartDrawer, {
+          attributes: true,
+          attributeFilter: ['class'],
+        });
+
+        this.cartObserver = observer;
+      }
+    }
+
+    async checkCartState() {
+      try {
+        if (typeof routes !== 'undefined' && routes.cart_url) {
+          const response = await fetch(`${routes.cart_url}.js`);
+          if (response.ok) {
+            const cartData = await response.json();
+            this.updateCart(cartData);
+          }
+        }
+      } catch (error) {
+        // Silently fail - cart state will update via pub/sub
+      }
+    }
+
+    disconnectedCallback() {
+      if (this.cartUpdateUnsubscriber) {
+        this.cartUpdateUnsubscriber();
+      }
+      if (this.cartObserver) {
+        this.cartObserver.disconnect();
+      }
+    }
+
+    openCartDrawer() {
+      const cartDrawer = document.querySelector('cart-drawer');
+      if (cartDrawer && typeof cartDrawer.open === 'function') {
+        cartDrawer.open(this.cartButton);
+      }
+    }
+
+    updateCart(cartData) {
+      if (!cartData) return;
+
+      const itemCount = cartData.item_count || 0;
+      const itemText = itemCount === 1 ? 'ITEM' : 'ITEMS';
+
+      // Update count
+      if (this.countElement) {
+        this.countElement.textContent = `${itemCount} ${itemText}`;
+      }
+
+      // Show/hide floating cart based on item count
+      if (this.cartButton) {
+        if (itemCount > 0) {
+          this.cartButton.style.display = 'flex';
+          this.style.display = 'block';
+        } else {
+          this.cartButton.style.display = 'none';
+          this.style.display = 'none';
+        }
+      } else {
+        // Hide entire wrapper if no button exists
+        this.style.display = itemCount > 0 ? 'block' : 'none';
+      }
+    }
+  }
+
+  customElements.define('floating-cart', FloatingCart);
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Floating Cart",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1",
+      "info": "t:sections.all.colors.has_cards_info"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Floating Cart"
+    }
+  ]
+}
+{% endschema %}
