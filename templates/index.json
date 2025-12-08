@@ -9,232 +9,65 @@
  */
 {
   "sections": {
-    "slideshow_nLWCpJ": {
-      "type": "slideshow",
+    "instagram_story_AgKUUC": {
+      "type": "instagram-story",
       "blocks": {
-        "slide_DH8k48": {
-          "type": "slide",
+        "instastory_6d7bXi": {
+          "type": "instastory",
           "settings": {
-            "image": "shopify://shop_images/soap-image-5.png",
-            "image_overlay_opacity": 0,
-            "heading": "Image slide",
-            "heading_size": "h1",
-            "subheading": "Tell your brand's story through images",
-            "button_label": "Button label",
-            "link": "",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "middle-center",
-            "text_alignment": "center",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-5"
+            "video": "shopify://files/videos/assets_task_01jpgdd7btfmb8j8vjvknpwaf7_task_01jpgdd7btfmb8j8vjvknpwaf7_genid_0faf4a6e-5a73-46d8-8904-56f3f884b2ab_25_03_16_21_23_263085_videos_00000_707562846_source.mp4",
+            "product": "soap"
           }
         },
-        "slide_L9jwKU": {
-          "type": "slide",
+        "instastory_PKjYHU": {
+          "type": "instastory",
           "settings": {
-            "image_overlay_opacity": 0,
-            "heading": "Image slide",
-            "heading_size": "h1",
-            "subheading": "Tell your brand's story through images",
-            "button_label": "Button label",
-            "link": "",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "middle-center",
-            "text_alignment": "center",
-            "text_alignment_mobile": "center",
-            "color_scheme": ""
+            "image": "shopify://shop_images/a-festive-scene-of-a-beautifully-decorated-indian-boutique-entrance-the-doorway-is-adorned-with-fresh-marigold-gendaphool-and-jasmine-flower-garlands-a-rich-silk-ribbon-in-deep-maroon.png",
+            "product": "soap"
+          }
+        },
+        "instastory_Yr4ftz": {
+          "type": "instastory",
+          "settings": {
+            "image": "shopify://shop_images/a-luxurious-flat-lay-composition-of-assorted-high-end-indian-ethnic-wear-folded-kanjivaram-silk-sarees-in-royal-blue-and-emerald-green-an-embroidered-salwar-suit-and-a-sheer-dupatta-w.png",
+            "product": "soap"
+          }
+        },
+        "instastory_8DfBYE": {
+          "type": "instastory",
+          "settings": {
+            "image": "shopify://shop_images/a-luxurious-deep-maroon-banarasi-silk-saree-with-intricate-gold-embroidery-draped-elegantly-over-a-vintage-armchair-in-a-sunlit-room-a-few-jasmine-flowers-and-antique-jewelry-pieces-a.png",
+            "product": "soap"
+          }
+        },
+        "instastory_iAweqR": {
+          "type": "instastory",
+          "settings": {
+            "image": "shopify://shop_images/82f4b5_b2a9073891934c75b82d98421d67d55f_mv2.jpg",
+            "product": "soap"
+          }
+        },
+        "instastory_4WKWPB": {
+          "type": "instastory",
+          "settings": {
+            "image": "shopify://shop_images/RUM_1.png",
+            "product": "soap"
           }
         }
       },
       "block_order": [
-        "slide_DH8k48",
-        "slide_L9jwKU"
+        "instastory_6d7bXi",
+        "instastory_PKjYHU",
+        "instastory_Yr4ftz",
+        "instastory_8DfBYE",
+        "instastory_iAweqR",
+        "instastory_4WKWPB"
       ],
-      "name": "t:sections.slideshow.presets.name",
-      "settings": {
-        "layout": "grid",
-        "slide_height": "adapt_image",
-        "slider_visual": "dots",
-        "auto_rotate": true,
-        "change_slides_speed": 3,
-        "image_behavior": "none",
-        "show_text_below": false,
-        "accessibility_info": "Slideshow about our brand"
-      }
-    },
-    "rich_text": {
-      "type": "rich-text",
-      "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Talk about your brand",
-            "heading_size": "h1"
-          }
-        },
-        "text": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "heading",
-        "text"
-      ],
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "scheme-1",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 0
-      }
-    },
-    "featured_collection": {
-      "type": "featured-collection",
-      "settings": {
-        "collection": "all",
-        "products_to_show": 8,
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "columns_desktop": 4,
-        "enable_desktop_slider": false,
-        "full_width": false,
-        "show_view_all": false,
-        "view_all_style": "solid",
-        "color_scheme": "scheme-1",
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "swipe_on_mobile": false,
-        "padding_top": 28,
-        "padding_bottom": 36
-      }
-    },
-    "collage": {
-      "type": "collage",
-      "blocks": {
-        "collection-0": {
-          "type": "collection",
-          "settings": {
-            "collection": ""
-          }
-        },
-        "product": {
-          "type": "product",
-          "settings": {
-            "product": "",
-            "second_image": false
-          }
-        },
-        "collection-1": {
-          "type": "collection",
-          "settings": {
-            "collection": ""
-          }
-        }
-      },
-      "block_order": [
-        "collection-0",
-        "product",
-        "collection-1"
-      ],
-      "settings": {
-        "heading": "Multimedia collage",
-        "heading_size": "h2",
-        "desktop_layout": "left",
-        "mobile_layout": "collage",
-        "card_styles": "product-card-wrapper",
-        "color_scheme": "scheme-1",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "video": {
-      "type": "video",
-      "settings": {
-        "heading": "",
-        "heading_size": "h1",
-        "enable_video_looping": false,
-        "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-        "description": "",
-        "full_width": false,
-        "color_scheme": "scheme-1",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "multicolumn": {
-      "type": "multicolumn",
-      "blocks": {
-        "column1": {
-          "type": "column",
-          "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column2": {
-          "type": "column",
-          "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column3": {
-          "type": "column",
-          "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "column1",
-        "column2",
-        "column3"
-      ],
-      "settings": {
-        "title": "",
-        "heading_size": "h1",
-        "image_width": "third",
-        "image_ratio": "adapt",
-        "button_label": "",
-        "button_link": "",
-        "columns_desktop": 3,
-        "column_alignment": "center",
-        "background_style": "none",
-        "color_scheme": "scheme-1",
-        "columns_mobile": "1",
-        "swipe_on_mobile": false,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
+      "name": "Instagram Story",
+      "settings": {}
     }
   },
   "order": [
-    "slideshow_nLWCpJ",
-    "rich_text",
-    "featured_collection",
-    "collage",
-    "video",
-    "multicolumn"
+    "instagram_story_AgKUUC"
   ]
 }
