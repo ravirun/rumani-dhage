@@ -75,6 +75,7 @@
     "skip_to_text": "Skip to content",
     "skip_to_product_info": "Skip to product information",
     "close": "Close",
+    "view_story": "View story: {{ title }}",
     "unit_price_separator": "per",
     "vendor": "Vendor:",
     "error": "Error",

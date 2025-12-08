@@ -1,0 +1,301 @@
+{% doc %}
+  Renders a full-screen Instagram story viewer modal
+
+  @param {object} [image] - Image object (default: null)
+  @param {object} [video] - Video/media object (default: null)
+  @param {object} [product] - Product object for ATC button (default: null)
+  @param {number} [index] - Current story index (default: 0)
+  @param {number} [total] - Total number of stories (default: 0)
+{% enddoc %}
+
+{% liquid
+  assign image = image | default: null
+  assign video = video | default: null
+  assign product = product | default: null
+  assign index = index | default: 0
+  assign total = total | default: 0
+%}
+
+<modal-dialog id="InstaStoryModal" class="insta-story-full-view-modal">
+  <div
+    role="dialog"
+    aria-label="Instagram Story"
+    aria-modal="true"
+    class="insta-story-full-view"
+    tabindex="-1"
+  >
+    {% comment %} Top right close icon {% endcomment %}
+    <button
+      id="ModalClose-InstaStoryModal"
+      type="button"
+      class="insta-story-full-view__close"
+      aria-label="{{ 'accessibility.close' | t }}"
+      data-close-modal
+    >
+      {{- 'icon-close.svg' | inline_asset_content -}}
+    </button>
+
+    {% comment %} Center left/right navigation chevrons {% endcomment %}
+    {% liquid
+      assign next_index = index | plus: 1
+      assign is_last = false
+      if next_index >= total
+        assign is_last = true
+      endif
+    %}
+    <button
+      type="button"
+      class="insta-story-full-view__nav insta-story-full-view__nav--prev"
+      aria-label="{{ 'general.pagination.previous' | t }}"
+      data-story-prev
+      {% if index == 0 %}
+        style="display: none;"
+        aria-hidden="true"
+        tabindex="-1"
+      {% endif %}
+    >
+      <span class="icon icon-arrow icon-arrow--left" aria-hidden="true">
+        {{- 'icon-arrow.svg' | inline_asset_content -}}
+      </span>
+    </button>
+
+    <button
+      type="button"
+      class="insta-story-full-view__nav insta-story-full-view__nav--next"
+      aria-label="{{ 'general.pagination.next' | t }}"
+      data-story-next
+      {% if is_last %}
+        style="display: none;"
+        aria-hidden="true"
+        tabindex="-1"
+      {% endif %}
+    >
+      <span class="icon icon-arrow icon-arrow--right" aria-hidden="true">
+        {{- 'icon-arrow.svg' | inline_asset_content -}}
+      </span>
+    </button>
+
+    {% comment %} Story media content {% endcomment %}
+    {% liquid
+      assign media_alt = 'Instagram story'
+      if product != blank
+        assign media_alt = product.title | append: ' - Instagram story'
+      elsif image != blank and image.alt != blank
+        assign media_alt = image.alt
+      endif
+    %}
+    <div class="insta-story-full-view__media">
+      {% if image != blank %}
+        <img
+          src="{{ image | image_url: width: 1080 }}"
+          alt="{{ media_alt | escape }}"
+          width="1080"
+          height="1080"
+          loading="eager"
+          fetchpriority="high"
+          class="insta-story-full-view__image"
+          {% if product != blank %}
+            itemprop="image"
+          {% endif %}
+        >
+      {% elsif video != blank %}
+        {{
+          video
+          | media_tag:
+            image_size: '1080x1080',
+            autoplay: true,
+            loop: true,
+            muted: true,
+            playsinline: true,
+            controls: false,
+            class: 'insta-story-full-view__video'
+        }}
+      {% endif %}
+    </div>
+
+    {% comment %} Bottom center ATC button {% endcomment %}
+    {% if product != blank %}
+      <div class="insta-story-full-view__actions">
+        <button
+          type="button"
+          class="button insta-story-full-view__atc"
+          data-product-url="{{ product.url }}"
+          data-open-quick-add
+          aria-label="{{ 'products.product.add_to_cart' | t: product: product.title }}"
+        >
+          <span>{{ 'products.product.add_to_cart' | t }}</span>
+        </button>
+      </div>
+    {% endif %}
+  </div>
+</modal-dialog>
+
+{% style %}
+  .insta-story-full-view-modal {
+    opacity: 0;
+    position: fixed;
+    visibility: hidden;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+  }
+
+  .insta-story-full-view-modal[open] {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1000;
+  }
+
+  .insta-story-full-view {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .insta-story-full-view__close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    color: white;
+  }
+
+  .insta-story-full-view__close:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .insta-story-full-view__close .icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .insta-story-full-view__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    color: white;
+  }
+
+  .insta-story-full-view__nav:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .insta-story-full-view__nav--prev {
+    left: 1.5rem;
+  }
+
+  .insta-story-full-view__nav--next {
+    right: 1.5rem;
+  }
+
+  .insta-story-full-view__nav .icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .icon-arrow--left {
+    transform: rotate(180deg);
+  }
+
+  .icon-arrow--right {
+    transform: rotate(0deg);
+  }
+
+  .insta-story-full-view__media {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 1080px;
+    max-height: 100vh;
+  }
+
+  .insta-story-full-view__image,
+  .insta-story-full-view__video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100vh;
+  }
+
+  .insta-story-full-view__actions {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+
+  .insta-story-full-view__atc {
+    background: rgb(var(--color-button));
+    color: rgb(var(--color-button-text));
+    padding: 1rem 2rem;
+    border-radius: 0.4rem;
+    font-weight: 500;
+    min-width: 200px;
+  }
+
+  .insta-story-full-view__atc:hover {
+    opacity: 0.9;
+  }
+
+  @media screen and (max-width: 749px) {
+    .insta-story-full-view__nav {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .insta-story-full-view__nav--prev {
+      left: 0.5rem;
+    }
+
+    .insta-story-full-view__nav--next {
+      right: 0.5rem;
+    }
+
+    .insta-story-full-view__close {
+      top: 1rem;
+      right: 1rem;
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .insta-story-full-view__actions {
+      bottom: 1rem;
+    }
+
+    .insta-story-full-view__atc {
+      min-width: 150px;
+      padding: 0.75rem 1.5rem;
+    }
+  }
+{% endstyle %}

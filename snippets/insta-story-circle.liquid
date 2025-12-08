@@ -1,0 +1,112 @@
+{% doc %}
+  Renders a circle for an insta story
+
+  @param {object} [image] - Image object (default: null)
+  @param {object} [video] - Video/media object (default: null)
+  @param {object} [product] - Product object for SEO alt text (default: null)
+  @param {number} [size] - Size of the circle in pixels (default: 80)
+  @param {string} [color] - Color of the circle border (default: '#B91E4C')
+
+  @example
+  {% render 'insta-story-circle',
+    image: product.featured_image,
+    product: product,
+    size: 100,
+    color: '#FF5733'
+  %}
+{% enddoc %}
+
+{% liquid
+  # Parameter validation and defaults
+  assign size = size | default: 80
+  assign color = color | default: '#B91E4C'
+  assign image = image | default: null
+  assign video = video | default: null
+  assign product = product | default: null
+
+  # Early return if no media provided
+  unless image != blank or video != blank
+    echo '<!-- Error: image or video parameter required for insta-story-circle snippet -->'
+    break
+  endunless
+
+  # Generate SEO-friendly alt text
+  assign alt_text = 'Instagram story'
+  if product != blank
+    assign alt_text = product.title | append: ' - Instagram story'
+  elsif image != blank and image.alt != blank
+    assign alt_text = image.alt
+  endif
+%}
+
+{% style %}
+  .insta-story-outer-circle {
+    width: {{ size }}px;
+    height: {{ size }}px;
+    background-color: {{ color }};
+    border-radius: 50%;
+    border: 2px solid {{ color }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    will-change: transform;
+  }
+
+  .insta-story-outer-circle:hover {
+    transform: scale(1.05);
+  }
+
+  .insta-story-inner-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .insta-story-inner-circle img,
+  .insta-story-inner-circle video {
+    width: {{ size }}px;
+    height: {{ size }}px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+{% endstyle %}
+
+<div class="insta-story-outer-circle">
+  <div class="insta-story-inner-circle">
+    {% if image != blank %}
+      <img
+        src="{{ image | image_url: width: size }}"
+        alt="{{ alt_text | escape }}"
+        width="{{ size }}"
+        height="{{ size }}"
+        loading="lazy"
+        fetchpriority="low"
+        {% if product != blank %}
+          itemprop="image"
+        {% endif %}
+      >
+    {% elsif video != blank %}
+      {{
+        video
+        | media_tag:
+          image_size: size,
+          width: size,
+          height: size,
+          autoplay: false,
+          loop: true,
+          muted: true,
+          playsinline: true,
+          controls: false,
+          class: 'insta-story-video'
+      }}
+    {% endif %}
+  </div>
+</div>
