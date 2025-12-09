@@ -1322,3 +1322,113 @@ class CartPerformance {
     );
   }
 }
+
+class FloatingAnnouncementBar extends HTMLElement {
+  constructor() {
+    super();
+    this.toasts = [];
+    this.badge = null;
+    this.storageType = this.dataset.storageType || 'localStorage';
+  }
+
+  connectedCallback() {
+    // Initialize all toast items
+    this.toasts = Array.from(this.querySelectorAll('.floating-announcement-bar__toast'));
+    this.badge = this.querySelector('[data-toast-count]');
+    
+    // Filter out dismissed toasts (only if storage is enabled)
+    const visibleToasts = this.toasts.filter((toast) => {
+      if (this.storageType === 'none') {
+        return true; // Always show if no storage
+      }
+      
+      const dismissKey = toast.dataset.dismissKey;
+      const hasBeenDismissed = this.checkDismissed(dismissKey);
+      
+      if (hasBeenDismissed) {
+        toast.classList.add('is-removed');
+        return false;
+      }
+      return true;
+    });
+
+    // Update badge count
+    if (this.badge) {
+      this.badge.textContent = visibleToasts.length;
+    }
+
+    // Show toasts with staggered animation
+    visibleToasts.forEach((toast, index) => {
+      // Stagger the animation for each toast
+      setTimeout(() => {
+        toast.classList.add('is-visible');
+      }, index * 150);
+
+      // Add close button event listener
+      const closeButton = toast.querySelector('[data-close-toast]');
+      if (closeButton) {
+        closeButton.addEventListener('click', () => this.handleClose(toast, toast.dataset.dismissKey));
+      }
+    });
+  }
+
+  getStorage() {
+    if (this.storageType === 'sessionStorage') {
+      return window.sessionStorage;
+    } else if (this.storageType === 'localStorage') {
+      return window.localStorage;
+    }
+    return null;
+  }
+
+  checkDismissed(dismissKey) {
+    if (this.storageType === 'none' || !dismissKey) return false;
+    
+    const storage = this.getStorage();
+    if (!storage) return false;
+    
+    return storage.getItem(dismissKey) === 'true';
+  }
+
+  handleClose(toast, dismissKey) {
+    this.dismiss(dismissKey);
+    this.hide(toast);
+  }
+
+  dismiss(dismissKey) {
+    if (this.storageType === 'none' || !dismissKey) return;
+    
+    const storage = this.getStorage();
+    if (storage) {
+      storage.setItem(dismissKey, 'true');
+    }
+  }
+
+  hide(toast) {
+    toast.classList.remove('is-visible');
+    toast.classList.add('is-hiding');
+    
+    // Update badge count
+    const remainingToasts = this.toasts.filter(t => 
+      !t.classList.contains('is-removed') && 
+      !t.classList.contains('is-hiding') &&
+      t !== toast
+    );
+    
+    if (this.badge) {
+      if (remainingToasts.length > 0) {
+        this.badge.textContent = remainingToasts.length;
+      } else {
+        this.badge.style.opacity = '0';
+      }
+    }
+    
+    // Remove from DOM after animation
+    setTimeout(() => {
+      toast.classList.add('is-removed');
+      toast.style.display = 'none';
+    }, 250);
+  }
+}
+
+customElements.define('floating-announcement-bar', FloatingAnnouncementBar);
