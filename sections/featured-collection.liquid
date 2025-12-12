@@ -36,29 +36,6 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
-
-  #collection-{{ section.id }} .flex.justify-space-between {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-  }
-
-  #collection-{{ section.id }} .collection__toggle {
-    flex-shrink: 0;
-  }
-
-  @media screen and (max-width: 749px) {
-    #collection-{{ section.id }} .flex.justify-space-between {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    #collection-{{ section.id }} .collection__toggle {
-      width: 100%;
-    }
-  }
 {%- endstyle -%}
 
 {%- liquid
@@ -95,50 +72,22 @@
     id="collection-{{ section.id }}"
     data-id="{{ section.id }}"
   >
-    <div class="flex justify-space-between items-center page-width{% if show_mobile_slider %} title-wrapper--self-padded-tablet-down{% endif %}{% if show_desktop_slider %} collection__title--desktop-slider{% endif %}">
-      <div class="flex flex-col">
-        <div class="collection__title title-wrapper title-wrapper--no-top-margin">
-          {%- if section.settings.title != blank -%}
-            <h2 class="title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-              {{ section.settings.title }}
-            </h2>
-          {%- endif -%}
-          {%- if section.settings.description != blank
-            or section.settings.show_description
-            and section.settings.collection.description != empty
-          -%}
-            <div class="collection__description {{ section.settings.description_style }} rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-              {%- if section.settings.show_description -%}
-                {{ section.settings.collection.description }}
-              {%- else -%}
-                {{ section.settings.description -}}
-              {%- endif %}
-            </div>
-          {%- endif -%}
-        </div>
-
-        {%- if section.settings.show_view_all and more_in_collection -%}
-          <div class="collection__view-all{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-            <a
-              href="{{ section.settings.collection.url }}"
-              class="{% if section.settings.view_all_style == 'link' %}link underlined-link{% elsif section.settings.view_all_style == 'solid' %}button{% else %}button button--secondary{% endif %}"
-              aria-label="{{ 'sections.featured_collection.view_all_label' | t: collection_name: section.settings.collection.title | escape }}"
-            >
-              {{ 'sections.featured_collection.view_all' | t }}
-            </a>
-          </div>
-        {%- endif -%}
-      </div>
-
-      {%- if section.settings.show_toggle -%}
-        <div class="collection__toggle{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-          {%
-            render 'toggle-btn',
-            option_1: section.settings.toggle_option_1,
-            option_2: section.settings.toggle_option_2,
-            active_option: section.settings.toggle_active_option,
-            toggle_id: 'featured-collection-toggle-' | append: section.id
-          %}
+    <div class="collection__title title-wrapper title-wrapper--no-top-margin page-width{% if show_mobile_slider %} title-wrapper--self-padded-tablet-down{% endif %}{% if show_desktop_slider %} collection__title--desktop-slider{% endif %}">
+      {%- if section.settings.title != blank -%}
+        <h2 class="title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          {{ section.settings.title }}
+        </h2>
+      {%- endif -%}
+      {%- if section.settings.description != blank
+        or section.settings.show_description
+        and section.settings.collection.description != empty
+      -%}
+        <div class="collection__description {{ section.settings.description_style }} rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          {%- if section.settings.show_description -%}
+            {{ section.settings.collection.description }}
+          {%- else -%}
+            {{ section.settings.description -}}
+          {%- endif %}
         </div>
       {%- endif -%}
     </div>
@@ -247,6 +196,18 @@
         </div>
       {%- endif -%}
     </slider-component>
+
+    {%- if section.settings.show_view_all and more_in_collection -%}
+      <div class="center collection__view-all{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        <a
+          href="{{ section.settings.collection.url }}"
+          class="{% if section.settings.view_all_style == 'link' %}link underlined-link{% elsif section.settings.view_all_style == 'solid' %}button{% else %}button button--secondary{% endif %}"
+          aria-label="{{ 'sections.featured_collection.view_all_label' | t: collection_name: section.settings.collection.title | escape }}"
+        >
+          {{ 'sections.featured_collection.view_all' | t }}
+        </a>
+      </div>
+    {%- endif -%}
     {% if section.settings.image_shape == 'arch' %}
       {{ 'mask-arch.svg' | inline_asset_content }}
     {%- endif -%}
@@ -275,11 +236,11 @@
       "step": 1,
       "default": 4,
       "label": "t:sections.featured-collection.settings.products_to_show.label"
-    },
+    },     
     {
       "type": "header",
       "content": "t:sections.featured-collection.settings.header_text.content"
-    },
+    },   
     {
       "type": "inline_richtext",
       "id": "title",
@@ -323,7 +284,7 @@
       "type": "checkbox",
       "id": "show_description",
       "label": "t:sections.featured-collection.settings.show_description.label",
-      "default": false
+      "default": false   
     },
     {
       "type": "select",
@@ -348,7 +309,7 @@
     {
       "type": "header",
       "content": "t:sections.featured-collection.settings.header_collection.content"
-    },
+    },    
     {
       "type": "range",
       "id": "columns_desktop",
@@ -358,7 +319,7 @@
       "default": 4,
       "label": "t:sections.featured-collection.settings.columns_desktop.label"
     },
-    {
+        {
       "type": "checkbox",
       "id": "enable_desktop_slider",
       "label": "t:sections.featured-collection.settings.enable_desktop_slider.label",
@@ -396,45 +357,7 @@
         }
       ],
       "default": "solid"
-    },
-    {
-      "type": "header",
-      "content": "Toggle Button"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_toggle",
-      "label": "Show toggle button",
-      "default": false
-    },
-    {
-      "type": "text",
-      "id": "toggle_option_1",
-      "label": "Toggle option 1",
-      "default": "Model"
-    },
-    {
-      "type": "text",
-      "id": "toggle_option_2",
-      "label": "Toggle option 2",
-      "default": "Pack"
-    },
-    {
-      "type": "select",
-      "id": "toggle_active_option",
-      "label": "Default active option",
-      "options": [
-        {
-          "value": "option_1",
-          "label": "Option 1"
-        },
-        {
-          "value": "option_2",
-          "label": "Option 2"
-        }
-      ],
-      "default": "option_1"
-    },
+    }, 
     {
       "type": "color_scheme",
       "id": "color_scheme",
@@ -564,13 +487,13 @@
           "label": "t:sections.featured-collection.settings.columns_mobile.options__2.label"
         }
       ]
-    },
+    },    
     {
       "type": "checkbox",
       "id": "swipe_on_mobile",
       "default": false,
       "label": "t:sections.featured-collection.settings.swipe_on_mobile.label"
-    },
+    },          
     {
       "type": "header",
       "content": "t:sections.all.padding.section_padding_heading"

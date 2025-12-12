@@ -9,65 +9,399 @@
  */
 {
   "sections": {
-    "instagram_story_AgKUUC": {
+    "instagram_story_main": {
       "type": "instagram-story",
       "blocks": {
-        "instastory_6d7bXi": {
+        "instastory_1": {
           "type": "instastory",
           "settings": {
-            "video": "shopify://files/videos/assets_task_01jpgdd7btfmb8j8vjvknpwaf7_task_01jpgdd7btfmb8j8vjvknpwaf7_genid_0faf4a6e-5a73-46d8-8904-56f3f884b2ab_25_03_16_21_23_263085_videos_00000_707562846_source.mp4",
-            "product": "soap"
+            "image": "shopify://shop_images/placeholder.svg"
           }
         },
-        "instastory_PKjYHU": {
+        "instastory_2": {
           "type": "instastory",
           "settings": {
-            "image": "shopify://shop_images/a-festive-scene-of-a-beautifully-decorated-indian-boutique-entrance-the-doorway-is-adorned-with-fresh-marigold-gendaphool-and-jasmine-flower-garlands-a-rich-silk-ribbon-in-deep-maroon.png",
-            "product": "soap"
+            "image": "shopify://shop_images/placeholder.svg"
           }
         },
-        "instastory_Yr4ftz": {
+        "instastory_3": {
           "type": "instastory",
           "settings": {
-            "image": "shopify://shop_images/a-luxurious-flat-lay-composition-of-assorted-high-end-indian-ethnic-wear-folded-kanjivaram-silk-sarees-in-royal-blue-and-emerald-green-an-embroidered-salwar-suit-and-a-sheer-dupatta-w.png",
-            "product": "soap"
-          }
-        },
-        "instastory_8DfBYE": {
-          "type": "instastory",
-          "settings": {
-            "image": "shopify://shop_images/a-luxurious-deep-maroon-banarasi-silk-saree-with-intricate-gold-embroidery-draped-elegantly-over-a-vintage-armchair-in-a-sunlit-room-a-few-jasmine-flowers-and-antique-jewelry-pieces-a.png",
-            "product": "soap"
-          }
-        },
-        "instastory_iAweqR": {
-          "type": "instastory",
-          "settings": {
-            "image": "shopify://shop_images/82f4b5_b2a9073891934c75b82d98421d67d55f_mv2.jpg",
-            "product": "soap"
-          }
-        },
-        "instastory_4WKWPB": {
-          "type": "instastory",
-          "settings": {
-            "image": "shopify://shop_images/RUM_1.png",
-            "product": "soap"
+            "image": "shopify://shop_images/placeholder.svg"
           }
         }
       },
       "block_order": [
-        "instastory_6d7bXi",
-        "instastory_PKjYHU",
-        "instastory_Yr4ftz",
-        "instastory_8DfBYE",
-        "instastory_iAweqR",
-        "instastory_4WKWPB"
+        "instastory_1",
+        "instastory_2",
+        "instastory_3"
       ],
       "name": "Instagram Story",
       "settings": {}
+    },
+    "slideshow_main": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/placeholder.svg",
+            "heading": "Welcome to our store",
+            "heading_size": "h1",
+            "subheading": "Discover our latest collection",
+            "button_label": "Shop now",
+            "show_text_box": true,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/placeholder.svg",
+            "heading": "New arrivals",
+            "heading_size": "h1",
+            "subheading": "Check out what's new",
+            "button_label": "Explore",
+            "show_text_box": true,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
+          }
+        }
+      },
+      "block_order": [
+        "slide_1",
+        "slide_2"
+      ],
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "medium",
+        "slider_visual": "counter",
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": true,
+        "accessibility_info": "Slideshow about our brand"
+      }
+    },
+    "featured_collection_main": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Featured Collection",
+        "heading_size": "h1",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-1",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "show_toggle": false,
+        "toggle_option_1": "Model",
+        "toggle_option_2": "Pack",
+        "toggle_active_option": "option_1"
+      }
+    },
+    "stack_banner_main": {
+      "type": "stack-banner",
+      "blocks": {
+        "card_1": {
+          "type": "card",
+          "settings": {
+            "image": "",
+            "title": "Card Title 1",
+            "description": "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab dicta error nam eaque. Eum fuga laborum quos expedita iste saepe similique, unde possimus quia at magnam sed cupiditate? Reprehenderit, harum!</p>",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "card_2": {
+          "type": "card",
+          "settings": {
+            "image": "",
+            "title": "Card Title 2",
+            "description": "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab dicta error nam eaque. Eum fuga laborum quos expedita iste saepe similique, unde possimus quia at magnam sed cupiditate? Reprehenderit, harum!</p>",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "card_3": {
+          "type": "card",
+          "settings": {
+            "image": "",
+            "title": "Card Title 3",
+            "description": "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab dicta error nam eaque. Eum fuga laborum quos expedita iste saepe similique, unde possimus quia at magnam sed cupiditate? Reprehenderit, harum!</p>",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "card_4": {
+          "type": "card",
+          "settings": {
+            "image": "",
+            "title": "Card Title 4",
+            "description": "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab dicta error nam eaque. Eum fuga laborum quos expedita iste saepe similique, unde possimus quia at magnam sed cupiditate? Reprehenderit, harum!</p>",
+            "button_label": "",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3",
+        "card_4"
+      ],
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "featured_collection_main_2": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Featured Collection",
+        "heading_size": "h1",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-1",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "show_toggle": false,
+        "toggle_option_1": "Model",
+        "toggle_option_2": "Pack",
+        "toggle_active_option": "option_1"
+      }
+    },
+    "shopable_video_reel_main": {
+      "type": "shopable-video-reel",
+      "blocks": {
+        "video_1": {
+          "type": "video",
+          "settings": {
+            "poster_image": "",
+            "product_link": ""
+          }
+        },
+        "video_2": {
+          "type": "video",
+          "settings": {
+            "poster_image": "",
+            "product_link": ""
+          }
+        },
+        "video_3": {
+          "type": "video",
+          "settings": {
+            "poster_image": "",
+            "product_link": ""
+          }
+        },
+        "video_4": {
+          "type": "video",
+          "settings": {
+            "poster_image": "",
+            "product_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "video_1",
+        "video_2",
+        "video_3",
+        "video_4"
+      ],
+      "settings": {
+        "title": "Real people, Real Love",
+        "heading_size": "h1",
+        "view_all_text": "View All",
+        "view_all_link": "",
+        "color_scheme": "scheme-1",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "featured_blog_main": {
+      "type": "featured-blog",
+      "settings": {
+        "blog": "",
+        "post_limit": 4,
+        "heading": "Latest Articles",
+        "heading_size": "h1",
+        "columns_desktop": 4,
+        "show_view_all": true,
+        "show_image": true,
+        "show_date": true,
+        "show_author": false,
+        "color_scheme": "scheme-1",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "testimonials_main": {
+      "type": "testimonials",
+      "blocks": {
+        "testimonial_1": {
+          "type": "testimonial",
+          "settings": {
+            "testimonial_text": "<p>Superb quality! I'm very happy with this purchase and would highly recommend it to anyone</p>",
+            "product_link": ""
+          }
+        },
+        "testimonial_2": {
+          "type": "testimonial",
+          "settings": {
+            "testimonial_text": "<p>Beautiful saree and awesome quality. I received so many compliments in a family wedding event</p>",
+            "product_link": ""
+          }
+        },
+        "testimonial_3": {
+          "type": "testimonial",
+          "settings": {
+            "testimonial_text": "<p>Excellent craftsmanship and attention to detail. The fabric quality exceeded my expectations</p>",
+            "product_link": ""
+          }
+        },
+        "testimonial_4": {
+          "type": "testimonial",
+          "settings": {
+            "testimonial_text": "<p>Amazing product! Fast shipping and the item looks exactly as described. Highly satisfied!</p>",
+            "product_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_1",
+        "testimonial_2",
+        "testimonial_3",
+        "testimonial_4"
+      ],
+      "settings": {
+        "title": "Loved from people",
+        "heading_size": "h1",
+        "read_all_text": "Read All",
+        "read_all_link": "",
+        "scroll_duration": 30,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "collapsible_content_main": {
+      "type": "collapsible-content",
+      "blocks": {
+        "faq_1": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Frequently Asked Questions 1",
+            "icon": "question_mark",
+            "row_content": "<p>This is the answer to the first frequently asked question. You can provide detailed information here.</p>",
+            "page": ""
+          }
+        },
+        "faq_2": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Frequently Asked Questions 2",
+            "icon": "question_mark",
+            "row_content": "<p>This is the answer to the second frequently asked question. You can provide detailed information here.</p>",
+            "page": ""
+          }
+        },
+        "faq_3": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Frequently Asked Questions 3",
+            "icon": "question_mark",
+            "row_content": "<p>This is the answer to the third frequently asked question. You can provide detailed information here.</p>",
+            "page": ""
+          }
+        },
+        "faq_4": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Frequently Asked Questions 4",
+            "icon": "question_mark",
+            "row_content": "<p>This is the answer to the fourth frequently asked question. You can provide detailed information here.</p>",
+            "page": ""
+          }
+        },
+        "faq_5": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Frequently Asked Questions 5",
+            "icon": "question_mark",
+            "row_content": "<p>This is the answer to the fifth frequently asked question. You can provide detailed information here.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4",
+        "faq_5"
+      ],
+      "settings": {
+        "caption": "Have a query",
+        "heading": "Frequently Asked Questions",
+        "heading_size": "h1",
+        "heading_alignment": "left",
+        "layout": "none",
+        "container_color_scheme": "scheme-2",
+        "color_scheme": "scheme-1",
+        "open_first_collapsible_row": false,
+        "image": "",
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
-    "instagram_story_AgKUUC"
+    "instagram_story_main",
+    "slideshow_main",
+    "featured_collection_main",
+    "stack_banner_main",
+    "featured_collection_main_2",
+    "shopable_video_reel_main",
+    "featured_blog_main",
+    "testimonials_main",
+    "collapsible_content_main"
   ]
 }

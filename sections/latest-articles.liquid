@@ -1,0 +1,304 @@
+{% comment %}
+  Latest Articles Section with Snap Scroll
+
+  Displays blog articles in a horizontally scrollable container with snap scroll.
+  Mobile: 2 items per snap, Desktop: 4 items per snap
+{% endcomment %}
+
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-article-card.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .latest-articles {
+    width: 100%;
+  }
+
+  .latest-articles__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .latest-articles__title {
+    margin: 0;
+  }
+
+  .latest-articles__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: rgb(var(--color-foreground));
+    font-size: var(--font-body-size);
+    font-family: var(--font-body-family);
+    transition: opacity var(--duration-short) ease;
+  }
+
+  .latest-articles__view-all:hover {
+    opacity: 0.7;
+  }
+
+  .latest-articles__grid {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 1.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .latest-articles__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .latest-articles__grid {
+      gap: 1rem;
+    }
+  }
+
+  .latest-articles__item {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    width: calc(50% - 0.5rem);
+    max-width: 100%;
+  }
+
+  @media screen and (min-width: 750px) {
+    .latest-articles__item {
+      width: calc(25% - 1.125rem);
+    }
+  }
+
+  .latest-articles__item .article-card-wrapper {
+    width: 100%;
+    height: 100%;
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="latest-articles page-width section-{{ section.id }}-padding">
+    <div class="latest-articles__header">
+      {%- if section.settings.title != blank -%}
+        <h2 class="latest-articles__title title inline-richtext {{ section.settings.heading_size }}">
+          {{ section.settings.title }}
+        </h2>
+      {%- endif -%}
+      {%- if section.settings.view_all_text != blank and section.settings.view_all_link != blank -%}
+        <a href="{{ section.settings.view_all_link }}" class="latest-articles__view-all">
+          {{ section.settings.view_all_text }}
+          <span>→</span>
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.blog != blank and section.settings.blog.articles_count > 0 -%}
+      <div class="latest-articles__grid">
+        {%- for article in section.settings.blog.articles limit: section.settings.post_limit -%}
+          <div class="latest-articles__item">
+            {% render 'article-card',
+              blog: section.settings.blog,
+              article: article,
+              media_aspect_ratio: 1.66,
+              show_image: section.settings.show_image,
+              show_date: section.settings.show_date,
+              show_author: section.settings.show_author,
+              show_excerpt: true
+            %}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <div class="latest-articles__grid">
+        {%- for i in (1..section.settings.post_limit) -%}
+          {%- assign placeholder_image_index = forloop.index0 | modulo: 3 | plus: 1 -%}
+          {%- assign placeholder_image = 'blog-apparel-' | append: placeholder_image_index -%}
+          <div class="latest-articles__item">
+            <div class="article-card-wrapper card-wrapper">
+              <div
+                class="
+                  card article-card card--{{ settings.blog_card_style }}
+                  {% if section.settings.show_image %} card--media{% else %} card--text{% endif %}
+                  {% if settings.blog_card_style == 'card' %} color-{{ settings.blog_card_color_scheme }} gradient{% endif %}
+                "
+              >
+                <div
+                  class="card__inner{% if settings.blog_card_style == 'standard' %} color-{{ settings.blog_card_color_scheme }} gradient{% endif %} ratio"
+                  style="--ratio-percent: 80%;"
+                >
+                  {%- if section.settings.show_image == true -%}
+                    <div class="article-card__image-wrapper card__media">
+                      <div class="article-card__image media">
+                        {{ placeholder_image | placeholder_svg_tag: 'blog-placeholder-svg' }}
+                      </div>
+                    </div>
+                  {%- endif -%}
+                  <div class="card__content">
+                    <div class="card__information">
+                      <h3 class="card__heading h2">
+                        {{ 'sections.featured_blog.onboarding_title' | t }}
+                      </h3>
+                      <p class="article-card__excerpt rte-width">
+                        {{ 'sections.featured_blog.onboarding_content' | t }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Latest Articles",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 8,
+      "label": "Number of posts to show"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "Latest Articles"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Small"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h0",
+          "label": "Large"
+        },
+        {
+          "value": "hxl",
+          "label": "Extra large"
+        },
+        {
+          "value": "hxxl",
+          "label": "2X large"
+        }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View all text",
+      "default": "View All"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View all link"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "default": true,
+      "label": "Show image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "default": true,
+      "label": "Show date"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "default": false,
+      "label": "Show author"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Latest Articles"
+    }
+  ]
+}
+{% endschema %}

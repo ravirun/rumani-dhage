@@ -24,10 +24,10 @@
   assign video = video | default: null
   assign product = product | default: null
 
-  # Early return if no media provided
+  # Use placeholder if no media provided
+  assign show_placeholder = false
   unless image != blank or video != blank
-    echo '<!-- Error: image or video parameter required for insta-story-circle snippet -->'
-    break
+    assign show_placeholder = true
   endunless
 
   # Generate SEO-friendly alt text
@@ -136,6 +136,8 @@
           }
         })();
       </script>
+    {% elsif show_placeholder %}
+      {{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
     {% endif %}
   </div>
 </div>

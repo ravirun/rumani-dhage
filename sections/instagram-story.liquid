@@ -2,50 +2,75 @@
   <h2 id="instagram-story-heading" class="visually-hidden">Instagram Stories</h2>
   <div class="instagram-story">
     <div class="instagram-story__container" aria-label="Instagram stories">
-      {% for block in section.blocks limit: 10 %}
-        {% case block.type %}
-          {% when 'instastory' %}
-            <article
-              class="instagram-story__item"
-              data-story-index="{{ forloop.index0 }}"
-              data-story-image="{{ block.settings.image | image_url: width: 1080 }}"
-              data-story-video="{{ block.settings.video.id | default: '' }}"
-              data-story-product-url="{{ block.settings.product.url | default: '' }}"
-              data-story-product-title="{{ block.settings.product.title | default: '' }}"
-              data-open-story
-            >
-              <button
-                type="button"
-                class="instagram-story__button"
-                aria-label="{% if block.settings.product != blank %}View story for {{ block.settings.product.title | escape }}{% else %}View Instagram story{% endif %}"
+      {%- if section.blocks.size > 0 -%}
+        {% for block in section.blocks limit: 10 %}
+          {% case block.type %}
+            {% when 'instastory' %}
+              <article
+                class="instagram-story__item"
+                data-story-index="{{ forloop.index0 }}"
+                data-story-image="{% if block.settings.image %}{{ block.settings.image | image_url: width: 1080 }}{% else %}{% endif %}"
+                data-story-video="{{ block.settings.video.id | default: '' }}"
+                data-story-product-url="{{ block.settings.product.url | default: '' }}"
+                data-story-product-title="{{ block.settings.product.title | default: '' }}"
+                data-open-story
               >
-                {% render 'insta-story-circle',
-                  image: block.settings.image,
-                  video: block.settings.video,
-                  product: block.settings.product
-                %}
-              </button>
-              {% if block.settings.product != blank %}
-                <h3 class="instagram-story__product-title">
-                  <a href="{{ block.settings.product.url }}" class="instagram-story__product-link">
-                    {{ block.settings.product.title }}
-                  </a>
-                </h3>
-              {% endif %}
-            </article>
-        {% endcase %}
-      {% endfor %}
+                <button
+                  type="button"
+                  class="instagram-story__button"
+                  aria-label="{% if block.settings.product != blank %}View story for {{ block.settings.product.title | escape }}{% else %}View Instagram story{% endif %}"
+                >
+                  {% render 'insta-story-circle',
+                    image: block.settings.image,
+                    video: block.settings.video,
+                    product: block.settings.product
+                  %}
+                </button>
+                {% if block.settings.product != blank %}
+                  <h3 class="instagram-story__product-title">
+                    <a href="{{ block.settings.product.url }}" class="instagram-story__product-link">
+                      {{ block.settings.product.title }}
+                    </a>
+                  </h3>
+                {% endif %}
+              </article>
+          {% endcase %}
+        {% endfor %}
+      {%- else -%}
+        {%- comment -%} Placeholder content when no blocks exist {%- endcomment -%}
+        {%- for i in (1..3) -%}
+          <article
+            class="instagram-story__item"
+            data-story-index="{{ forloop.index0 }}"
+            data-story-image=""
+            data-story-video=""
+            data-story-product-url=""
+            data-story-product-title=""
+            data-open-story
+          >
+            <button
+              type="button"
+              class="instagram-story__button"
+              aria-label="View Instagram story"
+            >
+              {% render 'insta-story-circle' %}
+            </button>
+          </article>
+        {%- endfor -%}
+      {%- endif -%}
     </div>
   </div>
 
   {% comment %} Full view modal {% endcomment %}
-  {% render 'insta-story-full-view',
-    image: section.blocks.first.settings.image,
-    video: section.blocks.first.settings.video,
-    product: section.blocks.first.settings.product,
-    index: 0,
-    total: section.blocks.size
-  %}
+  {%- if section.blocks.size > 0 -%}
+    {% render 'insta-story-full-view',
+      image: section.blocks.first.settings.image,
+      video: section.blocks.first.settings.video,
+      product: section.blocks.first.settings.product,
+      index: 0,
+      total: section.blocks.size
+    %}
+  {%- endif -%}
 
   {% comment %} Quick-add modal for products {% endcomment %}
   <quick-add-modal id="QuickAdd-InstaStory" class="quick-add-modal">
@@ -715,24 +740,47 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Image"
+          "label": "Image",
+          "info": "Add an image for your Instagram story. Recommended size: 1080x1920px (9:16 aspect ratio)"
         },
         {
           "type": "video",
           "id": "video",
-          "label": "Video"
+          "label": "Video",
+          "info": "Optional: Add a video instead of an image for your story"
         },
         {
           "type": "product",
           "id": "product",
-          "label": "Product"
+          "label": "Product",
+          "info": "Optional: Link this story to a product. The product title will appear below the story circle"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Instagram Story"
+      "name": "Instagram Story",
+      "blocks": [
+        {
+          "type": "instastory",
+          "settings": {
+            "image": ""
+          }
+        },
+        {
+          "type": "instastory",
+          "settings": {
+            "image": ""
+          }
+        },
+        {
+          "type": "instastory",
+          "settings": {
+            "image": ""
+          }
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,421 @@
+{% comment %}
+  Testimonials Section
+  Displays customer testimonials with auto-scrolling animation.
+  Desktop: 1 line, Mobile: 2 lines
+{% endcomment %}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .testimonials {
+    width: 100%;
+    background-color: #F8F8F8;
+  }
+
+  .testimonials__header {
+    background-color: #C42B6A;
+    border-radius: 20px 20px 0 0;
+    padding: 2rem 2rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .testimonials__header {
+      padding: 1.5rem 1.5rem 1rem;
+      border-radius: 16px 16px 0 0;
+    }
+  }
+
+  .testimonials__title {
+    color: #FFFFFF;
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  @media screen and (max-width: 749px) {
+    .testimonials__title {
+      font-size: 1.75rem;
+    }
+  }
+
+  .testimonials__read-all {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 400;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: opacity var(--duration-short) ease;
+  }
+
+  .testimonials__read-all:hover {
+    opacity: 0.8;
+  }
+
+  .testimonials__container {
+    padding: 2rem;
+    overflow: hidden;
+    position: relative;
+    background-color: #C42B6A;
+  }
+
+  @media screen and (max-width: 749px) {
+    .testimonials__container {
+      padding: 1.5rem;
+      overflow: hidden;
+      height: auto;
+      min-height: calc(2 * (min-content + 1rem));
+    }
+  }
+
+  .testimonials__track {
+    display: flex;
+    gap: 1.5rem;
+    width: fit-content;
+    animation: scroll-{{ section.id }} {{ section.settings.scroll_duration | default: 30 }}s linear infinite;
+  }
+
+  @media screen and (max-width: 749px) {
+    .testimonials__track {
+      gap: 1rem;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      display: grid;
+      grid-auto-flow: column;
+      grid-template-rows: repeat(2, 1fr);
+      grid-auto-columns: calc(100vw - 3rem);
+      animation: scroll-mobile-{{ section.id }} {{ section.settings.scroll_duration | default: 30 }}s linear infinite;
+    }
+  }
+
+  .testimonials__track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes scroll-{{ section.id }} {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-50% - 0.75rem));
+    }
+  }
+
+  @keyframes scroll-mobile-{{ section.id }} {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-50% - 0.5rem));
+    }
+  }
+
+  .testimonials__card {
+    background-color: #F8F8F8;
+    border-radius: 20px;
+    padding: 2rem;
+    flex-shrink: 0;
+    width: 400px;
+    max-width: calc(100vw - 3rem);
+    box-sizing: border-box;
+  }
+
+  @media screen and (max-width: 749px) {
+    .testimonials__card {
+      width: 100%;
+      padding: 1.5rem;
+      border-radius: 16px;
+      height: fit-content;
+    }
+  }
+
+  .testimonials__text {
+    color: #C42B6A;
+    font-style: italic;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+    font-family: var(--font-body-family);
+  }
+
+  @media screen and (max-width: 749px) {
+    .testimonials__text {
+      font-size: 1rem;
+    }
+  }
+
+  .testimonials__product-link {
+    color: #C42B6A;
+    text-decoration: none;
+    font-style: italic;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: opacity var(--duration-short) ease;
+    font-family: var(--font-body-family);
+  }
+
+  .testimonials__product-link:hover {
+    opacity: 0.7;
+  }
+
+  /* Duplicate items for seamless loop */
+  .testimonials__track .testimonials__card:nth-child(n) {
+    /* Original items */
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .testimonials__track {
+      animation: none;
+    }
+  }
+{%- endstyle -%}
+
+<div class="testimonials section-{{ section.id }}-padding">
+  <div class="page-width">
+    <div class="testimonials__header">
+      {%- if section.settings.title != blank -%}
+        <h2 class="testimonials__title {{ section.settings.heading_size }}">
+          {{ section.settings.title }}
+        </h2>
+      {%- endif -%}
+      {%- if section.settings.read_all_text != blank and section.settings.read_all_link != blank -%}
+        <a href="{{ section.settings.read_all_link }}" class="testimonials__read-all">
+          {{ section.settings.read_all_text }}
+          <span>→</span>
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="testimonials__container">
+      {%- if section.blocks.size > 0 -%}
+        <div class="testimonials__track">
+          {%- for block in section.blocks -%}
+            {% case block.type %}
+              {% when 'testimonial' %}
+                <div class="testimonials__card" {{ block.shopify_attributes }}>
+                  {%- if block.settings.testimonial_text != blank -%}
+                    <p class="testimonials__text">
+                      {{ block.settings.testimonial_text }}
+                    </p>
+                  {%- endif -%}
+                  {%- if block.settings.product_link != blank -%}
+                    <a href="{{ block.settings.product_link }}" class="testimonials__product-link">
+                      Product Link
+                      <span>→</span>
+                    </a>
+                  {%- endif -%}
+                </div>
+            {% endcase %}
+          {%- endfor -%}
+          {%- comment -%} Duplicate items for seamless loop {%- endcomment -%}
+          {%- for block in section.blocks -%}
+            {% case block.type %}
+              {% when 'testimonial' %}
+                <div class="testimonials__card">
+                  {%- if block.settings.testimonial_text != blank -%}
+                    <p class="testimonials__text">
+                      {{ block.settings.testimonial_text }}
+                    </p>
+                  {%- endif -%}
+                  {%- if block.settings.product_link != blank -%}
+                    <a href="{{ block.settings.product_link }}" class="testimonials__product-link">
+                      Product Link
+                      <span>→</span>
+                    </a>
+                  {%- endif -%}
+                </div>
+            {% endcase %}
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <div class="testimonials__track">
+          {%- for i in (1..4) -%}
+            <div class="testimonials__card">
+              <p class="testimonials__text">
+                Superb quality! I'm very happy with this purchase and would highly recommend it to anyone
+              </p>
+              <a href="#" class="testimonials__product-link">
+                Product Link
+                <span>→</span>
+              </a>
+            </div>
+          {%- endfor -%}
+          {%- for i in (1..4) -%}
+            <div class="testimonials__card">
+              <p class="testimonials__text">
+                Superb quality! I'm very happy with this purchase and would highly recommend it to anyone
+              </p>
+              <a href="#" class="testimonials__product-link">
+                Product Link
+                <span>→</span>
+              </a>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "Loved from people"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Small"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h0",
+          "label": "Large"
+        },
+        {
+          "value": "hxl",
+          "label": "Extra large"
+        },
+        {
+          "value": "hxxl",
+          "label": "2X large"
+        }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "text",
+      "id": "read_all_text",
+      "label": "Read all text",
+      "default": "Read All"
+    },
+    {
+      "type": "url",
+      "id": "read_all_link",
+      "label": "Read all link"
+    },
+    {
+      "type": "range",
+      "id": "scroll_duration",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "label": "Scroll duration (seconds)",
+      "default": 30,
+      "info": "Time for one complete scroll cycle"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "testimonial_text",
+          "label": "Testimonial text",
+          "default": "<p>Superb quality! I'm very happy with this purchase and would highly recommend it to anyone</p>"
+        },
+        {
+          "type": "product",
+          "id": "product_link",
+          "label": "Product link",
+          "info": "Link to the product mentioned in the testimonial"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "testimonial_text": "<p>Superb quality! I'm very happy with this purchase and would highly recommend it to anyone</p>"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "testimonial_text": "<p>Beautiful saree and awesome quality. I received so many compliments in a family wedding event</p>"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "testimonial_text": "<p>Excellent craftsmanship and attention to detail. The fabric quality exceeded my expectations</p>"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "testimonial_text": "<p>Amazing product! Fast shipping and the item looks exactly as described. Highly satisfied!</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
