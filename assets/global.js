@@ -1322,3 +1322,90 @@ class CartPerformance {
     );
   }
 }
+
+/**
+ * Global Toggle State Manager
+ * Provides access to toggle button states stored in sessionStorage
+ */
+class ToggleStateManager {
+  /**
+   * Get the state of a specific toggle by ID
+   * @param {string} toggleId - The ID of the toggle button
+   * @returns {Object|null} The toggle state object or null if not found
+   */
+  static get(toggleId) {
+    try {
+      const stored = sessionStorage.getItem(`toggle_${toggleId}`);
+      return stored ? JSON.parse(stored) : null;
+    } catch (e) {
+      console.error('Failed to get toggle state:', e);
+      return null;
+    }
+  }
+
+  /**
+   * Set the state of a specific toggle
+   * @param {string} toggleId - The ID of the toggle button
+   * @param {Object} value - The state object to save
+   */
+  static set(toggleId, value) {
+    try {
+      sessionStorage.setItem(`toggle_${toggleId}`, JSON.stringify(value));
+    } catch (e) {
+      console.error('Failed to save toggle state:', e);
+    }
+  }
+
+  /**
+   * Get all toggle states from sessionStorage
+   * @returns {Object} An object with all toggle states keyed by toggle ID
+   */
+  static getAll() {
+    const states = {};
+    try {
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
+        if (key && key.startsWith('toggle_')) {
+          const toggleId = key.replace('toggle_', '');
+          states[toggleId] = this.get(toggleId);
+        }
+      }
+    } catch (e) {
+      console.error('Failed to get toggle states:', e);
+    }
+    return states;
+  }
+
+  /**
+   * Clear the state of a specific toggle
+   * @param {string} toggleId - The ID of the toggle button
+   */
+  static clear(toggleId) {
+    try {
+      sessionStorage.removeItem(`toggle_${toggleId}`);
+    } catch (e) {
+      console.error('Failed to clear toggle state:', e);
+    }
+  }
+
+  /**
+   * Clear all toggle states
+   */
+  static clearAll() {
+    try {
+      const keysToRemove = [];
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
+        if (key && key.startsWith('toggle_')) {
+          keysToRemove.push(key);
+        }
+      }
+      keysToRemove.forEach((key) => sessionStorage.removeItem(key));
+    } catch (e) {
+      console.error('Failed to clear all toggle states:', e);
+    }
+  }
+}
+
+// Make ToggleStateManager available globally
+window.ToggleStateManager = ToggleStateManager;

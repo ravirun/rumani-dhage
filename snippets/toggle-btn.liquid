@@ -1,0 +1,158 @@
+{% comment %}
+  Toggle Button Component
+
+  Renders a toggle button with two options (e.g., "Model" and "Pack").
+  Uses global theme variables for colors, spacing, and typography.
+
+  @param {string} option_1 - First option label (default: 'Model')
+  @param {string} option_2 - Second option label (default: 'Pack')
+  @param {string} active_option - Active option ('option_1' or 'option_2', default: 'option_1')
+  @param {string} toggle_id - Unique ID for the toggle (default: 'toggle-btn')
+  @param {string} toggle_class - Additional CSS classes
+
+  @example
+  {% render 'toggle-btn',
+    option_1: 'Model',
+    option_2: 'Pack',
+    active_option: 'option_1',
+    toggle_id: 'product-type-toggle'
+  %}
+{% endcomment %}
+
+{%- liquid
+  assign option_1 = option_1 | default: 'Model'
+  assign option_2 = option_2 | default: 'Pack'
+  assign active_option = active_option | default: 'option_1'
+  assign toggle_id = toggle_id | default: 'toggle-btn'
+  assign toggle_class = toggle_class | default: ''
+-%}
+
+<div
+  class="toggle-btn {{ toggle_class }}"
+  id="{{ toggle_id }}"
+  data-toggle-id="{{ toggle_id }}"
+>
+  <button
+    type="button"
+    class="toggle-btn__option toggle-btn__option--1{% if active_option == 'option_1' %} toggle-btn__option--active{% endif %}"
+    data-option="option_1"
+    aria-pressed="{% if active_option == 'option_1' %}true{% else %}false{% endif %}"
+    aria-label="{{ option_1 }}"
+  >
+    {{ option_1 }}
+  </button>
+  <button
+    type="button"
+    class="toggle-btn__option toggle-btn__option--2{% if active_option == 'option_2' %} toggle-btn__option--active{% endif %}"
+    data-option="option_2"
+    aria-pressed="{% if active_option == 'option_2' %}true{% else %}false{% endif %}"
+    aria-label="{{ option_2 }}"
+  >
+    {{ option_2 }}
+  </button>
+</div>
+
+<style>
+  .toggle-btn {
+    display: inline-flex;
+    border: var(--buttons-border-width, 2px) solid rgb(var(--color-foreground));
+    border-radius: var(--buttons-radius-outset, 24px);
+    background-color: rgb(var(--color-background));
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .toggle-btn__option {
+    flex: 1;
+    padding: 1.2rem 2.4rem;
+    border: none;
+    background-color: transparent;
+    color: rgb(var(--color-foreground));
+    font-weight: var(--font-body-weight-bold);
+    font-size: 1.5rem;
+    letter-spacing: 0.1rem;
+    line-height: calc(1 + 0.2 / var(--font-body-scale));
+    font-family: var(--font-body-family);
+    cursor: pointer;
+    transition: background-color var(--duration-short) ease, color var(--duration-short) ease;
+    white-space: nowrap;
+  }
+
+  .toggle-btn__option--active {
+    background-color: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
+  }
+
+  .toggle-btn__option:hover:not(.toggle-btn__option--active) {
+    opacity: 0.8;
+  }
+
+  .toggle-btn__option:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 0.3rem rgb(var(--color-background)), 0 0 0 0.5rem rgba(var(--color-foreground), 0.5),
+      0 0 0.5rem 0.4rem rgba(var(--color-foreground), 0.3);
+  }
+
+  .toggle-btn__option:focus:not(:focus-visible) {
+    outline: none;
+  }
+</style>
+
+<script>
+  (function () {
+    const toggleBtn = document.getElementById('{{ toggle_id }}');
+    if (!toggleBtn) return;
+
+    const options = toggleBtn.querySelectorAll('.toggle-btn__option');
+    const toggleId = '{{ toggle_id }}';
+
+    // Wait for global ToggleStateManager to be available
+    const initToggle = () => {
+      if (typeof window.ToggleStateManager === 'undefined') {
+        setTimeout(initToggle, 50);
+        return;
+      }
+
+      // Restore state from sessionStorage
+      const savedState = window.ToggleStateManager.get(toggleId);
+      if (savedState?.activeOption) {
+        options.forEach((opt) => {
+          const isActive = opt.dataset.option === savedState.activeOption;
+          opt.classList.toggle('toggle-btn__option--active', isActive);
+          opt.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+      }
+
+      // Handle click events
+      options.forEach((option) => {
+        option.addEventListener('click', function () {
+          const selectedOption = this.dataset.option;
+
+          // Update active state
+          options.forEach((opt) => {
+            const isActive = opt === option;
+            opt.classList.toggle('toggle-btn__option--active', isActive);
+            opt.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+          });
+
+          // Save to sessionStorage
+          const state = {
+            toggleId: toggleId,
+            activeOption: selectedOption,
+            option1Label: '{{ option_1 }}',
+            option2Label: '{{ option_2 }}',
+            timestamp: Date.now(),
+          };
+          window.ToggleStateManager.set(toggleId, state);
+
+          // Dispatch custom event
+          toggleBtn.dispatchEvent(new CustomEvent('toggle-change', { detail: state }));
+        });
+      });
+    };
+
+    initToggle();
+  })();
+</script>
+
+
