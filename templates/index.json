@@ -188,7 +188,7 @@
     "featured_collection_main_2": {
       "type": "featured-collection",
       "settings": {
-        "collection": "",
+        "collection": "sarees",
         "products_to_show": 4,
         "title": "Featured Collection",
         "heading_size": "h1",
