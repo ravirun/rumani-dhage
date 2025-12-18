@@ -1,0 +1,130 @@
+{{ 'rich-product.css' | asset_url | stylesheet_tag }}
+
+<div class="rich-product-details color-{{ section.settings.color_scheme }}">
+  <div class="rich-product__container">
+    <!-- Header -->
+    <div class="rich-product__header">
+      <span class="rich-product__vendor">{{ product.vendor }}</span>
+      <h1 class="rich-product__title">{{ product.title }}</h1>
+
+      <div class="rich-product__meta">
+        <div class="rich-product__rating">
+          {%- comment -%}Simple star rating rendering{%- endcomment -%}
+          ★★★★★
+          <span style="font-size:1.4rem; color:rgba(var(--color-foreground),0.7);">
+            {{- product.reviews_count | default: '1 review' -}}
+          </span>
+        </div>
+        <div class="rich-product__price">
+          {{ product.price | money }}
+        </div>
+      </div>
+
+      <div class="rich-product__stock">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="10" r="10" fill="#E6F4EA"/><path d="M6 10L9 13L14 8" stroke="#1E8E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        In stock
+      </div>
+    </div>
+
+    <!-- Helper: Icons Grid -->
+    <div class="rich-product__icons">
+      {%- comment -%}Loop through 6 possible icons{%- endcomment -%}
+      {%- for i in (1..6) -%}
+        {%- assign icon_key = 'icon_' | append: i | append: '_image' -%}
+        {%- assign label_key = 'icon_' | append: i | append: '_label' -%}
+        {%- assign custom_icon = product.metafields.custom[icon_key] -%}
+        {%- assign custom_label = product.metafields.custom[label_key] -%}
+
+        {%- if custom_icon != blank or custom_label != blank -%}
+          <div class="rich-product__icon-item">
+            {%- if custom_icon != blank -%}
+              <img
+                src="{{ custom_icon | image_url: width: 64 }}"
+                class="rich-product__icon-img"
+                alt=""
+                loading="lazy"
+                width="32"
+                height="32"
+              >
+            {%- endif -%}
+            <span class="rich-product__icon-label">{{ custom_label }}</span>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <!-- Description -->
+    <div class="rich-product__description">
+      {%- if product.metafields.custom.short_description != blank -%}
+        {{ product.metafields.custom.short_description | metafield_tag }}
+      {%- else -%}
+        {{ product.description }}
+      {%- endif -%}
+    </div>
+
+    <!-- Benefits Checklist -->
+    {%- if product.metafields.custom.benefits_list != blank -%}
+      <div class="rich-product__benefits">
+        <span class="rich-product__benefits-title">
+          {{ product.metafields.custom.benefits_heading | default: 'Helps you with :' }}
+        </span>
+        <div class="rich-product__benefits-grid">
+          {%- assign benefits = product.metafields.custom.benefits_list | newline_to_br | split: '<br />' -%}
+          {%- for benefit in benefits -%}
+            {%- assign b_stripped = benefit | strip -%}
+            {%- if b_stripped != blank -%}
+              <div class="rich-product__benefit-item">
+                <div class="rich-product__benefit-icon">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+                {{ b_stripped }}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <!-- Variant Pills (Visual Only for now, links to main form in real app) -->
+    {%- if product.variants.size > 1 -%}
+      <span class="rich-product__variants-label">Size: {{ product.selected_or_first_available_variant.title }}</span>
+      <div class="rich-product__variants">
+        {%- for variant in product.variants -%}
+          <button class="rich-product__pill {% if variant.id == product.selected_or_first_available_variant.id %}is-selected{% endif %}">
+            {{ variant.title }}
+          </button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Rich Product Details",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich Product Details"
+    }
+  ]
+}
+{% endschema %}

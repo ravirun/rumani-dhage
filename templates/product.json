@@ -242,10 +242,15 @@
     "sticky_atc_main": {
       "type": "sticky-atc",
       "settings": {}
+    },
+    "rich_product_details_main": {
+      "type": "rich-product-details",
+      "settings": {}
     }
   },
   "order": [
     "main",
+    "rich_product_details_main",
     "product_offer_widget_main",
     "image-with-text",
     "multicolumn",
