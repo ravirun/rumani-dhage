@@ -12,6 +12,11 @@ slideshow-component .slideshow.banner {
   overflow-y: hidden;
   width: 100%;
   aspect-ratio: 0.8; /* Mobile: 1080 / 1350 = 0.8 */
+  cursor: grab;
+}
+
+slideshow-component .slideshow.banner:active {
+  cursor: grabbing;
 }
 
 .slideshow__slide {
