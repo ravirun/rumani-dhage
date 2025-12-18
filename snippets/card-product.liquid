@@ -78,6 +78,9 @@
                 {% unless lazy_load == false %}
                   loading="lazy"
                 {% endunless %}
+                {% if fetch_priority == 'high' %}
+                  fetchpriority="high"
+                {% endif %}
                 width="{{ card_product.featured_media.width }}"
                 height="{{ card_product.featured_media.height }}"
               >
