@@ -132,7 +132,7 @@
                 assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
               endif
               assign fetch_priority = 'auto'
-              if section.index == 1
+              if section.index <= 2
                 assign fetch_priority = 'high'
               endif
             -%}

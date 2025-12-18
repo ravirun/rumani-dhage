@@ -46,7 +46,7 @@
     assign stacked_sizes = '(min-width: 750px) 50vw, 100vw'
   endif
   assign fetch_priority = 'auto'
-  if section.index == 1
+  if section.index <= 2
     assign fetch_priority = 'high'
   endif
 -%}
