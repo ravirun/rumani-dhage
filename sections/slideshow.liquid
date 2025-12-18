@@ -77,9 +77,7 @@
   <div
     class="slideshow banner banner--{{ section.settings.slide_height }} grid grid--1-col slider slider--everywhere{% if section.settings.show_text_below %} banner--mobile-bottom{% endif %}{% if section.blocks.first.settings.image == blank %} slideshow--placeholder{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
     id="Slider-{{ section.id }}"
-    {% if section.settings.slide_height == 'adapt_image' and section.blocks.first.settings.image != blank %}
-      style="--slide-aspect-ratio: {{ section.blocks.first.settings.image.aspect_ratio }};"
-    {% endif %}
+
     aria-live="polite"
     aria-atomic="true"
     data-autoplay="{{ section.settings.auto_rotate }}"
@@ -101,35 +99,61 @@
         tabindex="-1"
       >
         <div class="slideshow__media banner__media media global-media-settings{% if block.settings.image == blank %} placeholder{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}">
+          {%- liquid
+            # Common Image Settings
+            assign sizes = '100vw'
+            assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+            assign fetch_priority = 'auto'
+            if section.index <= 2
+              assign fetch_priority = 'high'
+            endif
+          -%}
+
           {%- if block.settings.image -%}
-            {%- liquid
-              assign height = block.settings.image.width | divided_by: block.settings.image.aspect_ratio | round
-              assign sizes = '100vw'
-              assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
-              # Optimized fetch_priority logic
-              assign fetch_priority = 'auto'
-              if section.index <= 2
-                assign fetch_priority = 'high'
-              endif
-            -%}
-            {%- if forloop.first %}
+            {%- comment -%} Desktop Image {%- endcomment -%}
+            <div class="slideshow__image-wrapper small-hide">
               {{
                 block.settings.image
                 | image_url: width: 3840
                 | image_tag:
-                  height: height,
-                  sizes: sizes,
+                  loading: 'lazy',
                   widths: widths,
+                  sizes: sizes,
                   fetchpriority: fetch_priority,
-                  loading: 'eager'
+                  class: 'slideshow__image'
               }}
+            </div>
+
+            {%- comment -%} Mobile Image {%- endcomment -%}
+            {%- if block.settings.image_mobile -%}
+              <div class="slideshow__image-wrapper medium-hide large-up-hide">
+                {{
+                  block.settings.image_mobile
+                  | image_url: width: 1080
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: widths,
+                    sizes: sizes,
+                    fetchpriority: fetch_priority,
+                    class: 'slideshow__image'
+                }}
+              </div>
             {%- else -%}
-              {{
-                block.settings.image
-                | image_url: width: 3840
-                | image_tag: loading: 'lazy', height: height, sizes: sizes, widths: widths
-              }}
+              {%- comment -%} Fallback: Show Desktop image on mobile if no mobile image is set, but crop it? Or just let it fill. {%- endcomment -%}
+              <div class="slideshow__image-wrapper medium-hide large-up-hide">
+                {{
+                  block.settings.image
+                  | image_url: width: 3840
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: widths,
+                    sizes: sizes,
+                    fetchpriority: fetch_priority,
+                    class: 'slideshow__image'
+                }}
+              </div>
             {%- endif -%}
+
           {%- else -%}
             {%- assign placeholder_slide = forloop.index | modulo: 2 -%}
             {%- if placeholder_slide == 1 -%}
@@ -375,6 +399,11 @@
           "type": "image_picker",
           "id": "image",
           "label": "t:sections.slideshow.blocks.slide.settings.image.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Mobile Image (1080x1350 recommended)"
         },
         {
           "type": "range",
