@@ -1,0 +1,40 @@
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    function interceptCartLinks() {
+      const cartLinks = document.querySelectorAll('a[href="{{ routes.cart_url }}"], a[href^="/cart"]');
+      cartLinks.forEach((link) => {
+        // Remove existing listener to avoid duplicates if re-initialized
+        link.removeEventListener('click', handleCartClick);
+        link.addEventListener('click', handleCartClick);
+      });
+    }
+
+    function handleCartClick(e) {
+      e.preventDefault();
+      const cartDrawer = document.querySelector('cart-drawer');
+
+      if (cartDrawer) {
+        // If drawer exists, open it
+        // The open() method might need an argument depending on implementation,
+        // but often works without or with the triggering element.
+        cartDrawer.open(e.currentTarget);
+      } else {
+        // Fallback: redirects to cart page if no drawer is found
+        window.location.href = '{{ routes.cart_url }}';
+      }
+    }
+
+    // Initial run
+    interceptCartLinks();
+
+    // Re-run on mutation (e.g., dynamic content loading)
+    const observer = new MutationObserver(() => {
+      interceptCartLinks();
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+  });
+</script>
