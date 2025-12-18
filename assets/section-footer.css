@@ -506,3 +506,24 @@
     }
   }
 }
+
+/* Accessibility: Improve contrast for footer elements */
+.footer-block__heading {
+  color: rgb(var(--color-foreground));
+}
+
+.footer .field__label {
+  opacity: 1;
+  color: rgb(var(--color-foreground));
+}
+
+.footer .field__input {
+  opacity: 1;
+  color: rgb(var(--color-foreground));
+  border-color: rgba(var(--color-foreground), 0.5);
+}
+
+.footer .field__input::placeholder {
+  opacity: 1;
+  color: rgba(var(--color-foreground), 0.75);
+}
