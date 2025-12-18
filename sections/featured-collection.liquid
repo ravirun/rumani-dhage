@@ -1,8 +1,12 @@
-{{ 'component-card.css' | asset_url | stylesheet_tag }}
-{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
+<noscript>{{ 'component-card.css' | asset_url | stylesheet_tag }}</noscript>
+{{ 'component-price.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
+<noscript>{{ 'component-price.css' | asset_url | stylesheet_tag }}</noscript>
 
-{{ 'component-slider.css' | asset_url | stylesheet_tag }}
-{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
+<noscript>{{ 'component-slider.css' | asset_url | stylesheet_tag }}</noscript>
+{{ 'template-collection.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
+<noscript>{{ 'template-collection.css' | asset_url | stylesheet_tag }}</noscript>
 
 {% if section.settings.image_shape == 'blob' %}
   {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}

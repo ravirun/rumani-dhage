@@ -257,7 +257,8 @@
       }
     {% endstyle %}
 
-    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ 'base.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
+    <noscript>{{ 'base.css' | asset_url | stylesheet_tag }}</noscript>
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
@@ -273,7 +274,8 @@
       <link rel="stylesheet" href="{{ 'component-discounts.css' | asset_url }}" media="print" onload="this.media='all'">
     {%- endif -%}
 
-    {{ 'mobile-bottom-nav.css' | asset_url | stylesheet_tag }}
+    {{ 'mobile-bottom-nav.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
+    <noscript>{{ 'mobile-bottom-nav.css' | asset_url | stylesheet_tag }}</noscript>
 
     {%- unless settings.type_body_font.system? -%}
       {% comment %}theme-check-disable AssetPreload{% endcomment %}
