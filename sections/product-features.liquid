@@ -108,6 +108,24 @@
       </div>
     </div>
   </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const observerIds = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in-view');
+            }
+          });
+        },
+        { threshold: 0.2 }
+      );
+
+      document.querySelectorAll('#shopify-section-{{ section.id }} .feature-item').forEach((el) => {
+        observerIds.observe(el);
+      });
+    });
+  </script>
 </div>
 
 {% schema %}

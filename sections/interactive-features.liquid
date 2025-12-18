@@ -1,0 +1,178 @@
+{{ 'interactive-features.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'interactive-features.js' | asset_url }}" defer="defer"></script>
+
+<div class="interactive-features color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width">
+    {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+      <div class="interactive-features__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="interactive-features__heading {{ section.settings.heading_size }}">
+            {{ section.settings.heading | escape }}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="interactive-features__subheading">
+            {{ section.settings.subheading | escape }}
+          </p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="interactive-features__grid">
+      {%- comment -%}
+        Priority 1: Check for Product Metafields
+        We look for a metafield 'custom.features' which should be a List of Metaobjects.
+        Each metaobject is expected to have: 'icon' (image), 'title' (text), 'description' (multi-line text).
+      {%- endcomment -%}
+
+      {%- assign has_metafields = false -%}
+      {%- if product and product.metafields.custom.features != blank -%}
+        {%- assign has_metafields = true -%}
+        {%- for feature in product.metafields.custom.features.value -%}
+          <div class="feature-card">
+            <div class="feature-card__icon-wrapper">
+              {%- if feature.icon != blank -%}
+                {{ feature.icon | image_url: width: 60 | image_tag: class: 'feature-card__icon', loading: 'lazy' }}
+              {%- else -%}
+                {% render 'icon-accordion', class: 'feature-card__icon' %}
+              {%- endif -%}
+            </div>
+            <div class="feature-card__content">
+              <h3 class="feature-card__title">{{ feature.title }}</h3>
+              <div class="feature-card__description rte">{{ feature.description | metafield_tag }}</div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+
+      {%- comment -%}
+        Priority 2: Fallback to Blocks
+      {%- endcomment -%}
+      {%- if has_metafields == false -%}
+        {%- for block in section.blocks -%}
+          <div class="feature-card" {{ block.shopify_attributes }}>
+            <div class="feature-card__icon-wrapper">
+              {%- if block.settings.image != blank -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 60
+                  | image_tag: class: 'feature-card__icon', loading: 'lazy'
+                }}
+              {%- else -%}
+                {%- comment -%} Placeholder Icon {%- endcomment -%}
+                <svg
+                  class="feature-card__icon"
+                  aria-hidden="true"
+                  focusable="false"
+                  role="presentation"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M10 2.5C5.85786 2.5 2.5 5.85786 2.5 10C2.5 14.1421 5.85786 17.5 10 17.5C14.1421 17.5 17.5 14.1421 17.5 10C17.5 5.85786 14.1421 2.5 10 2.5Z" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M10 6.25V10L12.5 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              {%- endif -%}
+            </div>
+            <div class="feature-card__content">
+              <h3 class="feature-card__title">{{ block.settings.title | escape }}</h3>
+              <div class="feature-card__description rte">{{ block.settings.description }}</div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Interactive Features",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Product Highlights",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Small"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h0",
+          "label": "Large"
+        }
+      ],
+      "default": "h1",
+      "label": "Heading Size"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "default": "Discover what makes this special.",
+      "label": "Subheading"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Icon/Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Feature Title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "default": "<p>Description of the feature.</p>",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Interactive Features",
+      "blocks": [
+        {
+          "type": "feature"
+        },
+        {
+          "type": "feature"
+        },
+        {
+          "type": "feature"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

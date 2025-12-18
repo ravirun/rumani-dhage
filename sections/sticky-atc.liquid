@@ -2,7 +2,7 @@
 <script src="{{ 'sticky-atc.js' | asset_url }}" defer="defer"></script>
 
 {%- if request.page_type == 'product' -%}
-  <div class="sticky-atc color-{{ section.settings.color_scheme }} gradient">
+  <div id="StickyATC-{{ section.id }}" class="sticky-atc color-{{ section.settings.color_scheme }} gradient">
     <div class="sticky-atc__inner">
       <div class="sticky-atc__product">
         {%- if product.featured_media -%}
