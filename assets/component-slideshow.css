@@ -13,6 +13,7 @@ slideshow-component .slideshow.banner {
   width: 100%;
   aspect-ratio: 0.8; /* Mobile: 1080 / 1350 = 0.8 */
   cursor: grab;
+  padding-top: 2rem;
 }
 
 slideshow-component .slideshow.banner:active {
