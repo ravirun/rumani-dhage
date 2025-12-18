@@ -43,9 +43,29 @@
         "content"
       ],
       "settings": {}
+    },
+    "highlight_offers_grid_global": {
+      "type": "highlight-offers-grid",
+      "settings": {}
+    },
+    "highlight_shipping_banner_global": {
+      "type": "highlight-shipping-banner",
+      "settings": {}
+    },
+    "highlight_bundle_grid_global": {
+      "type": "highlight-bundle-grid",
+      "settings": {}
+    },
+    "highlight_coupon_box_global": {
+      "type": "highlight-coupon-box",
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "highlight_offers_grid_global",
+    "highlight_shipping_banner_global",
+    "highlight_bundle_grid_global",
+    "highlight_coupon_box_global"
   ]
 }

@@ -1,0 +1,62 @@
+{{ 'highlight-offers.css' | asset_url | stylesheet_tag }}
+
+<div class="highlight-section color-{{ section.settings.color_scheme }} gradient">
+  <div class="coupon-box">
+    <h2 class="coupon-box__title">
+      {{ section.settings.title }}
+    </h2>
+    <div class="coupon-box__description">
+      {{ section.settings.description | replace: 'COMFY15', '<span class="coupon-box__code">“COMFY15”</span>' }}
+    </div>
+
+    {%- if section.settings.link_text != blank -%}
+      <a href="{{ section.settings.link }}" class="coupon-box__button">
+        {{ section.settings.link_text }}
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Highlight Coupon Box",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "ROYAL WEDDING SALE"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "Use code “QUEEN25” for 25% off on Kanjivaram Collection."
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Button Text",
+      "default": "Shop The Look"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Highlight Coupon Box"
+    }
+  ]
+}
+{% endschema %}

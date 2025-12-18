@@ -1,0 +1,113 @@
+{{ 'highlight-offers.css' | asset_url | stylesheet_tag }}
+
+<div class="highlight-section color-{{ section.settings.color_scheme }} gradient">
+  <div class="offers-grid">
+    {%- for block in section.blocks -%}
+      <div class="offer-card">
+        <div class="offer-card__header">
+          {%- if block.settings.icon != 'none' -%}
+            {% render 'icon-accordion', icon: block.settings.icon %}
+            {% comment %} Ideally we'd use a dynamic icon renderer or svg snippet, but using simple SVG fallback here for now {% endcomment %}
+            <svg
+              class="offer-card__icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+              <line x1="7" y1="7" x2="7.01" y2="7"></line>
+            </svg>
+          {%- endif -%}
+          <h3 class="offer-card__title">{{ block.settings.title }}</h3>
+        </div>
+        <div class="offer-card__text">
+          {{ block.settings.description }}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Highlight Offers Grid",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "offer",
+      "name": "Offer Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Welcome Gift"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Flat <strong>10% Off</strong> on your first handloom purchase.</p>"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "tag", "label": "Tag" }
+          ],
+          "default": "tag"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Highlight Offers Grid",
+      "blocks": [
+        {
+          "type": "offer",
+          "settings": {
+            "title": "Welcome Gift",
+            "description": "<p>Flat <strong>10% Off</strong> on your first handloom purchase.</p>"
+          }
+        },
+        {
+          "type": "offer",
+          "settings": {
+            "title": "Wedding Edit",
+            "description": "<p>Buy <strong>3 Silk Sarees</strong> & Get a Custom Blouse Styling Free.</p>"
+          }
+        },
+        {
+          "type": "offer",
+          "settings": {
+            "title": "Cotton Comforts",
+            "description": "<p>Bundle of <strong>2 Mulmul Cotton</strong> Sarees for just ₹2999.</p>"
+          }
+        },
+        {
+          "type": "offer",
+          "settings": {
+            "title": "Viraasat Loyalty",
+            "description": "<p>Earn <strong>Zari Points</strong> on every drape and redeem for discounts!</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

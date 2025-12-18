@@ -1,0 +1,78 @@
+{{ 'highlight-offers.css' | asset_url | stylesheet_tag }}
+
+<div class="highlight-section color-{{ section.settings.color_scheme }} gradient">
+  <div class="shipping-banner">
+    {%- if section.settings.image_left != blank -%}
+      {{
+        section.settings.image_left
+        | image_url: width: 300
+        | image_tag: class: 'shipping-banner__image shipping-banner__image--left', loading: 'lazy'
+      }}
+    {%- endif -%}
+
+    <div class="shipping-banner__content">
+      <div class="shipping-banner__text">
+        {{
+          section.settings.text_content
+          | replace: 'Free Shipping', '<span class="shipping-banner__highlight">Free Shipping</span>'
+        }}
+      </div>
+      {%- if section.settings.subtext != blank -%}
+        <div class="shipping-banner__subtext">
+          {{ section.settings.subtext }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.image_right != blank -%}
+      {{
+        section.settings.image_right
+        | image_url: width: 300
+        | image_tag: class: 'shipping-banner__image shipping-banner__image--right', loading: 'lazy'
+      }}
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Highlight Shipping Banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_left",
+      "label": "Left Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_right",
+      "label": "Right Image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "text_content",
+      "label": "Main Text",
+      "default": "Free Shipping on all domestic orders above 1,999 INR"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Hand-packed with care in sustainable packaging."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Highlight Shipping Banner"
+    }
+  ]
+}
+{% endschema %}

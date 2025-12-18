@@ -1,0 +1,103 @@
+{{ 'highlight-offers.css' | asset_url | stylesheet_tag }}
+
+<div class="highlight-section color-{{ section.settings.color_scheme }} gradient">
+  <div class="bundle-grid">
+    {%- for block in section.blocks -%}
+      <a href="{{ block.settings.link }}" class="bundle-card">
+        {%- if block.settings.image != blank -%}
+          <div class="bundle-card__image-container">
+            {{ block.settings.image | image_url: width: 600 | image_tag: class: 'bundle-card__image', loading: 'lazy' }}
+          </div>
+        {%- endif -%}
+
+        <div class="bundle-card__content">
+          <h3 class="bundle-card__title">
+            {{ block.settings.title }}
+          </h3>
+          <p class="bundle-card__subtitle">
+            {{ block.settings.subtitle }}
+          </p>
+          <div class="bundle-card__badge">
+            {{ block.settings.badge_text }}
+          </div>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Highlight Bundle Grid",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-4"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "bundle",
+      "name": "Bundle Card",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Power<br>Bundle"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "buy 2 & Get upto 50% off on"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text",
+          "default": "BUNDLE DEALS"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Highlight Bundle Grid",
+      "blocks": [
+        {
+          "type": "bundle",
+          "settings": {
+            "title": "Silk & Shine",
+            "subtitle": "Buy 2 Banarasi Sarees & Get 20% Off",
+            "badge_text": "Jashn Edit"
+          }
+        },
+        {
+          "type": "bundle",
+          "settings": {
+            "title": "Daily Drapes",
+            "subtitle": "Set of 3 Cotton Block Prints for ₹2499",
+            "badge_text": "Everyday Wear"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
