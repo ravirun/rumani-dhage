@@ -13,8 +13,8 @@
     id="Slider-{{ section.id }}"
     aria-live="polite"
     aria-atomic="true"
-    data-autoplay="true"
-    data-speed="{{ section.settings.change_slides_speed }}"
+    data-autoplay="{% if section.blocks.size > 1 %}true{% else %}false{% endif %}"
+    data-speed="3"
   >
     {%- for block in section.blocks -%}
       <style>
@@ -116,17 +116,6 @@
     "groups": ["header", "footer"]
   },
   "settings": [
-    {
-      "type": "range",
-      "id": "change_slides_speed",
-      "min": 3,
-      "max": 9,
-      "step": 2,
-      "unit": "s",
-      "label": "t:sections.slideshow.settings.change_slides_speed.label",
-      "default": 5
-    },
-
     {
       "type": "header",
       "content": "t:sections.slideshow.settings.accessibility.content"
