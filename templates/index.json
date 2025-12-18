@@ -472,8 +472,8 @@
     }
   },
   "order": [
-    "instagram_story_main",
     "slideshow_main",
+    "instagram_story_main",
     "tabbed_recommendations_main",
     "product_features_main",
     "featured_collection_main",
