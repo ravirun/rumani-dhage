@@ -1,0 +1,130 @@
+{{ 'advanced-product.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-widget.js' | asset_url }}" defer="defer"></script>
+
+<div class="highlight-section color-{{ section.settings.color_scheme }} gradient">
+  <div class="tabbed-recs">
+    <div class="tabbed-recs__header">
+      <h2 class="tabbed-recs__heading">{{ section.settings.heading }}</h2>
+      <ul class="tabbed-recs__tabs">
+        {%- for block in section.blocks -%}
+          <li>
+            <button
+              class="tabbed-recs__tab-btn {% if forloop.first %}is-active{% endif %}"
+              data-target="#tab-{{ block.id }}"
+            >
+              {{ block.settings.title }}
+            </button>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+
+    {%- for block in section.blocks -%}
+      <div id="tab-{{ block.id }}" class="tabbed-recs__grid {% if forloop.first %}is-active{% endif %}">
+        {%- assign collection = collections[block.settings.collection] -%}
+        {%- if collection != blank -%}
+          {%- for product in collection.products limit: 4 -%}
+            {% render 'card-product',
+              card_product: product,
+              media_aspect_ratio: section.settings.image_ratio,
+              show_secondary_image: section.settings.show_secondary_image,
+              show_vendor: section.settings.show_vendor,
+              show_rating: section.settings.show_rating,
+              section_id: section.id
+            %}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..4) -%}
+            <div style="background:#f4f4f4;height:300px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#999;">
+              Product Placeholder
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Tabbed Recommendations",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Curated for You"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Product Card Settings"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        { "value": "adapt", "label": "Adapt to image" },
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "portrait",
+      "label": "Image Ratio"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": true,
+      "label": "Show second image on hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "Show product rating"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_tab",
+      "name": "Collection Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Tab Title",
+          "default": "Accessories"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tabbed Recommendations",
+      "blocks": [
+        { "type": "collection_tab", "settings": { "title": "Banarasi" } },
+        { "type": "collection_tab", "settings": { "title": "Kanjivaram" } },
+        { "type": "collection_tab", "settings": { "title": "Chiffon" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

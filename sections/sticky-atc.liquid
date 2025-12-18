@@ -1,0 +1,66 @@
+{{ 'product-features.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'sticky-atc.js' | asset_url }}" defer="defer"></script>
+
+{%- if request.page_type == 'product' -%}
+  <div class="sticky-atc color-{{ section.settings.color_scheme }} gradient">
+    <div class="sticky-atc__inner">
+      <div class="sticky-atc__product">
+        {%- if product.featured_media -%}
+          <img
+            src="{{ product.featured_media | image_url: width: 100 }}"
+            loading="lazy"
+            class="sticky-atc__img"
+            alt="{{ product.title }}"
+            width="50"
+            height="50"
+          >
+        {%- endif -%}
+        <div class="sticky-atc__info">
+          <h3>{{ product.title }}</h3>
+          <span class="sticky-atc__price">{{ product.price | money }}</span>
+        </div>
+      </div>
+
+      <div class="sticky-atc__actions">
+        {%- if product.variants.size > 1 -%}
+          <select class="sticky-atc__select" name="id">
+            {%- for variant in product.variants -%}
+              <option
+                value="{{ variant.id }}"
+                data-price="{{ variant.price | money }}"
+                {% unless variant.available %}
+                  disabled
+                {% endunless %}
+              >
+                {{ variant.title }}
+              </option>
+            {%- endfor -%}
+          </select>
+        {%- endif -%}
+
+        <button class="sticky-atc__btn">
+          {{ 'products.product.add_to_cart' | t }}
+        </button>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Sticky Add to Cart",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sticky Add to Cart"
+    }
+  ]
+}
+{% endschema %}

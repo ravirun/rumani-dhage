@@ -2,3 +2,10 @@ MatchingTranslations:
   enabled: false
 TemplateLength:
   enabled: false
+
+ignore:
+  - temp/
+  - node_modules/
+  - .git/
+  - .data
+

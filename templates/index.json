@@ -416,11 +416,66 @@
     "highlight_coupon_box_global": {
       "type": "highlight-coupon-box",
       "settings": {}
+    },
+    "tabbed_recommendations_main": {
+      "type": "tabbed-recommendations",
+      "settings": {}
+    },
+    "product_features_main": {
+      "type": "product-features",
+      "blocks": {
+        "feature_1": {
+          "type": "feature",
+          "settings": {
+            "title": "Pure Silk",
+            "text": "Made from 100% authentic, hand-selected silk fibers.",
+            "icon": "shopify:\/\/shop_images\/silk-cocoon.png"
+          }
+        },
+        "feature_2": {
+          "type": "feature",
+          "settings": {
+            "title": "Zari Work",
+            "text": "Intricate gold and silver threads woven into perfection.",
+            "icon": "shopify:\/\/shop_images\/gold-thread.png"
+          }
+        },
+        "badge_1": {
+          "type": "badge",
+          "settings": {
+            "text": "Certified",
+            "icon_emoji": "📜",
+            "desktop_x": 15,
+            "desktop_y": 20
+          }
+        },
+        "badge_2": {
+          "type": "badge",
+          "settings": {
+            "text": "Best Seller",
+            "icon_emoji": "🌟",
+            "desktop_x": 80,
+            "desktop_y": 75
+          }
+        }
+      },
+      "block_order": [
+        "feature_1",
+        "feature_2",
+        "badge_1",
+        "badge_2"
+      ],
+      "settings": {
+        "heading": "The Art of Handloom",
+        "image": "shopify:\/\/shop_images\/crimson-glory-banarasi-silk-saree-hero-shot.png"
+      }
     }
   },
   "order": [
     "instagram_story_main",
     "slideshow_main",
+    "tabbed_recommendations_main",
+    "product_features_main",
     "featured_collection_main",
     "stack_banner_main",
     "featured_collection_main_2",

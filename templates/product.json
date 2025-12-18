@@ -234,16 +234,26 @@
     "highlight_coupon_box_global": {
       "type": "highlight-coupon-box",
       "settings": {}
+    },
+    "product_offer_widget_main": {
+      "type": "product-offer-widget",
+      "settings": {}
+    },
+    "sticky_atc_main": {
+      "type": "sticky-atc",
+      "settings": {}
     }
   },
   "order": [
     "main",
+    "product_offer_widget_main",
     "image-with-text",
     "multicolumn",
     "related-products",
     "highlight_offers_grid_global",
     "highlight_shipping_banner_global",
     "highlight_bundle_grid_global",
-    "highlight_coupon_box_global"
+    "highlight_coupon_box_global",
+    "sticky_atc_main"
   ]
 }
