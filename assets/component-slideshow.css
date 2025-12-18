@@ -10,8 +10,6 @@ slideshow-component .slideshow.banner {
   margin: 0;
   gap: 0;
   overflow-y: hidden;
-  /* Fix CLS: Ensure minimum height while loading */
-  min-height: 28rem; 
 }
 
 .slideshow__slide {
@@ -31,8 +29,6 @@ slideshow-component .slideshow.banner {
 
 @media screen and (min-width: 750px) {
   .slideshow.banner {
-    /* Fix CLS: Ensure minimum height while loading on desktop */
-    min-height: 56rem;
   }
 
   .slideshow--placeholder.banner--adapt_image {
