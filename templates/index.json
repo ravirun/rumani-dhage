@@ -143,6 +143,18 @@
     },
     "tabbed_recommendations_main": {
       "type": "tabbed-recommendations",
+      "blocks": {
+        "collection_tab_ULtDxe": {
+          "type": "collection_tab",
+          "settings": {
+            "title": "",
+            "collection": "dupattas-accessories"
+          }
+        }
+      },
+      "block_order": [
+        "collection_tab_ULtDxe"
+      ],
       "settings": {
         "heading": "Curated for You",
         "color_scheme": "",
