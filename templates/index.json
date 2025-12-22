@@ -333,7 +333,7 @@
     "featured_blog_main": {
       "type": "featured-blog",
       "settings": {
-        "blog": "",
+        "blog": "news",
         "post_limit": 4,
         "heading": "Latest Articles",
         "heading_size": "h1",
