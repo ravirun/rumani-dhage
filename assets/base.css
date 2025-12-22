@@ -1628,7 +1628,7 @@ details[open] > .share-button__fallback {
   font-style: var(--font-body-style);
   font-weight: var(--font-body-weight);
   font-size: 1.2rem;
-  color: rgba(var(--color-foreground), 0.75);
+  color: rgb(var(--color-foreground));
 }
 
 .field:hover.field:after,
@@ -1731,7 +1731,7 @@ details[open] > .share-button__fallback {
   pointer-events: none;
   position: absolute;
   transition: top var(--duration-short) ease, font-size var(--duration-short) ease;
-  color: rgba(var(--color-foreground), 0.75);
+  color: rgb(var(--color-foreground));
   letter-spacing: 0.1rem;
   line-height: 1.5;
 }
@@ -2460,6 +2460,8 @@ input[type='checkbox'] {
   width: 100%;
   display: inline-block;
   transition: width 0.3s cubic-bezier(0.52, 0, 0.61, 0.99);
+  /* Fix CLS: Reserve space for logo */
+  aspect-ratio: var(--ratio); 
 }
 
 @media screen and (max-width: 989px) {

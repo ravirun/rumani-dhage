@@ -10,6 +10,14 @@ slideshow-component .slideshow.banner {
   margin: 0;
   gap: 0;
   overflow-y: hidden;
+  width: 100%;
+  aspect-ratio: 0.8; /* Mobile: 1080 / 1350 = 0.8 */
+  cursor: grab;
+  padding-top: 2rem;
+}
+
+slideshow-component .slideshow.banner:active {
+  cursor: grabbing;
 }
 
 .slideshow__slide {
@@ -18,18 +26,22 @@ slideshow-component .slideshow.banner {
   display: flex;
   flex-direction: column;
   visibility: visible;
+  height: 100%;
 }
 
-@media screen and (max-width: 749px) {
-  .slideshow--placeholder.banner--mobile-bottom.banner--adapt_image .slideshow__media,
-  .slideshow--placeholder.banner--adapt_image:not(.banner--mobile-bottom) {
-    height: 28rem;
-  }
+.slideshow__media {
+  height: 100%;
+}
+
+.slideshow__media img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 
 @media screen and (min-width: 750px) {
-  .slideshow--placeholder.banner--adapt_image {
-    height: 56rem;
+  slideshow-component .slideshow.banner {
+    aspect-ratio: 2.4; /* Desktop: 1920 / 800 = 2.4 */
   }
 }
 
@@ -198,4 +210,11 @@ slideshow-component:not(.page-width) .slider-buttons {
   visibility: hidden;
   opacity: 0;
   transform: scale(0.8);
+}
+
+/* Fix CLS: Ensure announcement bar slider has reserved space */
+slideshow-component.announcement-bar .announcement-bar-slider {
+  min-height: 4rem;
+  display: flex;
+  align-items: center;
 }

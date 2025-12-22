@@ -11,10 +11,6 @@
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
     {%- endif -%}
 
-    {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}
-      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-    {%- endunless -%}
-
     <title>
       {{ page_title }}
       {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
@@ -48,11 +44,11 @@
     %}
 
     {% style %}
-      {{ settings.type_body_font | font_face: font_display: 'swap' }}
-      {{ body_font_bold | font_face: font_display: 'swap' }}
-      {{ body_font_italic | font_face: font_display: 'swap' }}
-      {{ body_font_bold_italic | font_face: font_display: 'swap' }}
-      {{ settings.type_header_font | font_face: font_display: 'swap' }}
+      {{ settings.type_body_font | font_face: font_display: 'optional' }}
+      {{ body_font_bold | font_face: font_display: 'optional' }}
+      {{ body_font_italic | font_face: font_display: 'optional' }}
+      {{ body_font_bold_italic | font_face: font_display: 'optional' }}
+      {{ settings.type_header_font | font_face: font_display: 'optional' }}
 
       {% assign scheme_classes = '' %}
       {% for scheme in settings.color_schemes -%}
@@ -235,6 +231,11 @@
         height: 100%;
       }
 
+      /* Fix CLS by ensuring main content has minimum height */
+      #MainContent {
+        min-height: 50vh;
+      }
+
       body {
         display: grid;
         grid-template-rows: auto auto 1fr auto;
@@ -256,18 +257,25 @@
       }
     {% endstyle %}
 
-    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ 'base.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
+    <noscript>{{ 'base.css' | asset_url | stylesheet_tag }}</noscript>
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
-      {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
-      {{ 'component-cart.css' | asset_url | stylesheet_tag }}
-      {{ 'component-totals.css' | asset_url | stylesheet_tag }}
-      {{ 'component-price.css' | asset_url | stylesheet_tag }}
-      {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+      <link
+        rel="stylesheet"
+        href="{{ 'component-cart-drawer.css' | asset_url }}"
+        media="print"
+        onload="this.media='all'"
+      >
+      <link rel="stylesheet" href="{{ 'component-cart.css' | asset_url }}" media="print" onload="this.media='all'">
+      <link rel="stylesheet" href="{{ 'component-totals.css' | asset_url }}" media="print" onload="this.media='all'">
+      <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
+      <link rel="stylesheet" href="{{ 'component-discounts.css' | asset_url }}" media="print" onload="this.media='all'">
     {%- endif -%}
 
-    {{ 'mobile-bottom-nav.css' | asset_url | stylesheet_tag }}
+    {{ 'mobile-bottom-nav.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
+    <noscript>{{ 'mobile-bottom-nav.css' | asset_url | stylesheet_tag }}</noscript>
 
     {%- unless settings.type_body_font.system? -%}
       {% comment %}theme-check-disable AssetPreload{% endcomment %}
@@ -378,5 +386,6 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
+    <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
   </body>
 </html>
