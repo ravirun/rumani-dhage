@@ -220,28 +220,30 @@
             "image": "shopify://shop_images/ultrawide-panoramic-lifestyle-saree-hero-image_f481a38f-65b4-484e-8d17-bc6c7ceeba2d.png"
           }
         },
+        "card_3": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/chanderi-suit-set-complete-set.png"
+          }
+        },
+        "card_4": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/lifestyle-image_dd65b307-8f61-444f-8c06-1281fa797203.png"
+          }
+        },
         "card_1": {
           "type": "card",
           "settings": {
             "image": "shopify://shop_images/ultrawide-panoramic-lifestyle-saree-hero-image.png"
           }
-        },
-        "card_3": {
-          "type": "card",
-          "disabled": true,
-          "settings": {}
-        },
-        "card_4": {
-          "type": "card",
-          "disabled": true,
-          "settings": {}
         }
       },
       "block_order": [
         "card_2",
-        "card_1",
         "card_3",
-        "card_4"
+        "card_4",
+        "card_1"
       ],
       "settings": {
         "sticky_top_desktop": 20,
