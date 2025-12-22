@@ -9,47 +9,6 @@
  */
 {
   "sections": {
-    "instagram_story_main": {
-      "type": "instagram-story",
-      "blocks": {
-        "instastory_1": {
-          "type": "instastory",
-          "settings": {
-            "image": "shopify://shop_images/indigo-block-print-cotton-saree-lifestyle-shot.png",
-            "product": "indigo-block-print-cotton-saree"
-          }
-        },
-        "instastory_2": {
-          "type": "instastory",
-          "settings": {
-            "image": "shopify://shop_images/amritsari-phulkari-dupatta-hero-shot.png",
-            "product": "amritsari-phulkari-dupatta"
-          }
-        },
-        "instastory_WpHcMF": {
-          "type": "instastory",
-          "settings": {
-            "image": "shopify://shop_images/teal-blue-georgette-anarkali-suit-set-hero-shot.png",
-            "product": "teal-blue-georgette-anarkali"
-          }
-        },
-        "instastory_3": {
-          "type": "instastory",
-          "settings": {
-            "image": "shopify://shop_images/crimson-glory-banarasi-silk-saree-hero-shot.png",
-            "product": "crimson-glory-banarasi-saree"
-          }
-        }
-      },
-      "block_order": [
-        "instastory_1",
-        "instastory_2",
-        "instastory_WpHcMF",
-        "instastory_3"
-      ],
-      "name": "Instagram Story",
-      "settings": {}
-    },
     "slideshow_main": {
       "type": "slideshow",
       "blocks": {
@@ -123,6 +82,47 @@
         "show_text_below": true,
         "accessibility_info": "Slideshow about our brand"
       }
+    },
+    "instagram_story_main": {
+      "type": "instagram-story",
+      "blocks": {
+        "instastory_1": {
+          "type": "instastory",
+          "settings": {
+            "image": "shopify://shop_images/indigo-block-print-cotton-saree-lifestyle-shot.png",
+            "product": "indigo-block-print-cotton-saree"
+          }
+        },
+        "instastory_2": {
+          "type": "instastory",
+          "settings": {
+            "image": "shopify://shop_images/amritsari-phulkari-dupatta-hero-shot.png",
+            "product": "amritsari-phulkari-dupatta"
+          }
+        },
+        "instastory_WpHcMF": {
+          "type": "instastory",
+          "settings": {
+            "image": "shopify://shop_images/teal-blue-georgette-anarkali-suit-set-hero-shot.png",
+            "product": "teal-blue-georgette-anarkali"
+          }
+        },
+        "instastory_3": {
+          "type": "instastory",
+          "settings": {
+            "image": "shopify://shop_images/crimson-glory-banarasi-silk-saree-hero-shot.png",
+            "product": "crimson-glory-banarasi-saree"
+          }
+        }
+      },
+      "block_order": [
+        "instastory_1",
+        "instastory_2",
+        "instastory_WpHcMF",
+        "instastory_3"
+      ],
+      "name": "Instagram Story",
+      "settings": {}
     },
     "tabbed_recommendations_main": {
       "type": "tabbed-recommendations",
@@ -500,8 +500,8 @@
     }
   },
   "order": [
-    "instagram_story_main",
     "slideshow_main",
+    "instagram_story_main",
     "tabbed_recommendations_main",
     "product_features_main",
     "featured_collection_main",
