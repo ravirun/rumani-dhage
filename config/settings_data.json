@@ -14,6 +14,7 @@
     "type_header_font": "poppins_n6",
     "type_body_font": "poppins_n4",
     "buttons_radius": 24,
+    "inputs_radius": 12,
     "media_border_thickness": 0,
     "media_border_opacity": 0,
     "media_radius": 24,
