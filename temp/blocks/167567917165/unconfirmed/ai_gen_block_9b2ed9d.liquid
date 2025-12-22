@@ -1,6 +1,84 @@
+{% doc %}
+  @prompt
+    empty space
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-empty-space-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+  }
+
+  @media screen and (min-width: 750px) {
+    .ai-empty-space-{{ ai_gen_id }} {
+      height: {{ block.settings.desktop_height }}px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-empty-space-{{ ai_gen_id }} {
+      height: {{ block.settings.mobile_height }}px;
+    }
+  }
+{% endstyle %}
+
+<empty-space-{{ ai_gen_id }}
+  class="ai-empty-space-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+</empty-space-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class EmptySpace{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+    }
+
+    customElements.define('empty-space-{{ ai_gen_id }}', EmptySpace{{ ai_gen_id }});
+  })();
+</script>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Empty space",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Desktop"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "label": "Height",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Height",
+      "min": 0,
+      "max": 150,
+      "step": 10,
+      "unit": "px",
+      "default": 30
+    }
+  ],
+  "presets": [
+    {
+      "name": "Empty space"
+    }
+  ]
+}
 {% endschema %}
