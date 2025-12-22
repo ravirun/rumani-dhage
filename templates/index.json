@@ -303,6 +303,7 @@
         "video_1": {
           "type": "video",
           "settings": {
+            "video": "shopify://files/videos/Video-715.mp4",
             "video_url": "",
             "product_link": "",
             "title": ""
@@ -311,6 +312,7 @@
         "video_2": {
           "type": "video",
           "settings": {
+            "video": "shopify://files/videos/Video-70.mp4",
             "video_url": "",
             "product_link": "",
             "title": ""
@@ -319,6 +321,7 @@
         "video_3": {
           "type": "video",
           "settings": {
+            "video": "shopify://files/videos/Video-500.mp4",
             "video_url": "",
             "product_link": "",
             "title": ""
@@ -327,6 +330,7 @@
         "video_4": {
           "type": "video",
           "settings": {
+            "video": "shopify://files/videos/Video-335.mp4",
             "video_url": "",
             "product_link": "",
             "title": ""
