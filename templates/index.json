@@ -9,6 +9,23 @@
  */
 {
   "sections": {
+    "1766394317b6774eea": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_9b2ed9d_nQzeF8": {
+          "type": "ai_gen_block_9b2ed9d",
+          "settings": {
+            "desktop_height": 10,
+            "mobile_height": 10
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_9b2ed9d_nQzeF8"
+      ],
+      "settings": {}
+    },
     "slideshow_main": {
       "type": "slideshow",
       "blocks": {
@@ -500,6 +517,7 @@
     }
   },
   "order": [
+    "1766394317b6774eea",
     "slideshow_main",
     "instagram_story_main",
     "tabbed_recommendations_main",
