@@ -9,18 +9,12 @@
     data-zoom-on-hover
   {% endif %}
 >
-  {{ 'section-main-product.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
-  <noscript>{{ 'section-main-product.css' | asset_url | stylesheet_tag }}</noscript>
-  {{ 'component-accordion.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
-  <noscript>{{ 'component-accordion.css' | asset_url | stylesheet_tag }}</noscript>
-  {{ 'component-price.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
-  <noscript>{{ 'component-price.css' | asset_url | stylesheet_tag }}</noscript>
-  {{ 'component-slider.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
-  <noscript>{{ 'component-slider.css' | asset_url | stylesheet_tag }}</noscript>
-  {{ 'component-rating.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
-  <noscript>{{ 'component-rating.css' | asset_url | stylesheet_tag }}</noscript>
-  {{ 'component-deferred-media.css' | asset_url | stylesheet_tag: media: 'print', onload: "this.media='all'" }}
-  <noscript>{{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}</noscript>
+  {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+  {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
+  {{ 'component-slider.css' | asset_url | stylesheet_tag }}
+  {{ 'component-rating.css' | asset_url | stylesheet_tag }}
+  {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
 
   {% unless product.has_only_default_variant %}
     {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
@@ -674,6 +668,7 @@
                   {{ 'component-complementary-products.css' | asset_url | stylesheet_tag }}
                   {%- if block.settings.enable_quick_add -%}
                     {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+                    <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
                   {%- endif -%}
                 </product-recommendations>
               {%- when 'icon-with-text' -%}
@@ -727,6 +722,7 @@
       </script>
       <script src="{{ 'product-model.js' | asset_url }}" defer></script>
     {%- endif -%}
+
 
     <script type="application/ld+json">
       {{ product | structured_data }}

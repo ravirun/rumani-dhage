@@ -46,7 +46,7 @@
     assign stacked_sizes = '(min-width: 750px) 50vw, 100vw'
   endif
   assign fetch_priority = 'auto'
-  if section.index <= 2
+  if section.index == 1
     assign fetch_priority = 'high'
   endif
 -%}
@@ -79,8 +79,7 @@
           class: image_class,
           sizes: sizes,
           widths: widths,
-          fetchpriority: fetch_priority,
-          loading: 'eager'
+          fetchpriority: fetch_priority
       }}
     </div>
   {%- elsif section.settings.image_2 == blank -%}
@@ -112,8 +111,7 @@
           class: image_class_2,
           sizes: sizes,
           widths: widths,
-          fetchpriority: fetch_priority,
-          loading: 'eager'
+          fetchpriority: fetch_priority
       }}
     </div>
   {%- endif -%}
@@ -334,7 +332,7 @@
       "id": "stack_images_on_mobile",
       "default": true,
       "label": "t:sections.image-banner.settings.stack_images_on_mobile.label"
-    },
+    },    
     {
       "type": "select",
       "id": "mobile_content_alignment",
@@ -443,8 +441,8 @@
       "limit": 1,
       "settings": [
         {
-          "type": "header",
-          "content": "t:sections.image-banner.blocks.buttons.settings.header_1.content"
+        "type": "header",
+        "content": "t:sections.image-banner.blocks.buttons.settings.header_1.content"
         },
         {
           "type": "text",
@@ -465,8 +463,8 @@
           "label": "t:sections.image-banner.blocks.buttons.settings.button_style_secondary_1.label"
         },
         {
-          "type": "header",
-          "content": "t:sections.image-banner.blocks.buttons.settings.header_2.content"
+        "type": "header",
+        "content": "t:sections.image-banner.blocks.buttons.settings.header_2.content"
         },
         {
           "type": "text",

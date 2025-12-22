@@ -64,8 +64,6 @@
               <img
                 srcset="
                   {%- if card_product.featured_media.width >= 165 -%}{{ card_product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
-                  {%- if card_product.featured_media.width >= 220 -%}{{ card_product.featured_media | image_url: width: 220 }} 220w,{%- endif -%}
-                  {%- if card_product.featured_media.width >= 270 -%}{{ card_product.featured_media | image_url: width: 270 }} 270w,{%- endif -%}
                   {%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
                   {%- if card_product.featured_media.width >= 533 -%}{{ card_product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
                   {%- if card_product.featured_media.width >= 720 -%}{{ card_product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
@@ -80,9 +78,6 @@
                 {% unless lazy_load == false %}
                   loading="lazy"
                 {% endunless %}
-                {% if fetch_priority == 'high' %}
-                  fetchpriority="high"
-                {% endif %}
                 width="{{ card_product.featured_media.width }}"
                 height="{{ card_product.featured_media.height }}"
               >

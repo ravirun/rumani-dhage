@@ -1,95 +1,6 @@
-<style>
-  .list-menu--right {
-    right: 0;
-  }
-  .list-menu--disclosure {
-    position: absolute;
-    min-width: 100%;
-    width: 20rem;
-    border: 1px solid rgba(var(--color-foreground), 0.2);
-  }
-  .list-menu--disclosure:focus {
-    outline: none;
-  }
-  .list-menu__item--active {
-    text-decoration: underline;
-    text-underline-offset: 0.3rem;
-  }
-  .list-menu__item--active:hover {
-    text-decoration-thickness: 0.2rem;
-  }
-  .list-menu--disclosure.localization-selector {
-    max-height: 18rem;
-    overflow: auto;
-    width: 10rem;
-    padding: 0.5rem;
-  }
-
-  .search__input.field__input {
-    padding-right: 9.8rem;
-  }
-  .search__button {
-    right: var(--inputs-border-width);
-    top: var(--inputs-border-width);
-  }
-  .reset__button {
-    right: calc(var(--inputs-border-width) + 4.4rem);
-    top: var(--inputs-border-width);
-  }
-  .reset__button:not(:focus-visible)::after {
-    border-right: 0.1rem solid rgba(var(--color-foreground), 0.08);
-    display: block;
-    height: calc(100% - 1.6rem);
-    content: '';
-    position: absolute;
-    right: 0;
-  }
-  .reset__button:not(:focus)::after {
-    border-right: 0.1rem solid rgba(var(--color-foreground), 0.08);
-    display: block;
-    height: calc(100% - 1.8rem);
-    content: '';
-    position: absolute;
-    right: 0;
-  }
-  .search__button:focus-visible,
-  .reset__button:focus-visible {
-    background-color: rgb(var(--color-background));
-    z-index: 4;
-  }
-  .search__button:focus,
-  .reset__button:focus {
-    background-color: rgb(var(--color-background));
-    z-index: 4;
-  }
-  .search__button:not(:focus-visible):not(.focused),
-  .reset__button:not(:focus-visible):not(.focused) {
-    box-shadow: inherit;
-    background-color: inherit;
-  }
-  .search__button:hover .icon,
-  .reset__button:hover .icon {
-    transform: scale(1.07);
-  }
-  .search__button .icon {
-    height: 1.8rem;
-    width: 1.8rem;
-  }
-  .reset__button .icon.icon-close {
-    height: 1.8rem;
-    width: 1.8rem;
-    stroke-width: 0.1rem;
-  }
-  /* Remove extra spacing for search inputs in Safari */
-  input::-webkit-search-decoration {
-    -webkit-appearance: none;
-  }
-  .template-search__results {
-    position: relative;
-  }
-</style>
+<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
-<noscript>{{ 'component-menu-drawer.css' | asset_url | stylesheet_tag }}</noscript>
 <link
   rel="stylesheet"
   href="{{ 'component-cart-notification.css' | asset_url }}"
@@ -294,7 +205,7 @@
         {%- endif -%}
         <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
           {%- if settings.logo != blank -%}
-            <div class="header__heading-logo-wrapper" style="--ratio: {{ settings.logo.aspect_ratio | default: 1 }};">
+            <div class="header__heading-logo-wrapper">
               {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
               {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
               {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
@@ -309,8 +220,7 @@
                   width: settings.logo_width,
                   alt: logo_alt,
                   sizes: sizes,
-                  preload: true,
-                  loading: 'eager'
+                  preload: true
               }}
             </div>
           {%- else -%}
