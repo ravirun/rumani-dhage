@@ -158,8 +158,9 @@ git commit -m "Resolve sync conflicts"
 We've created helper scripts to automate common sync operations:
 
 - `sync-pull.sh` - Pull latest from live store
-- `sync-push.sh` - Push local changes to live store
-- `sync-settings.sh` - Sync only settings file
+- `sync-push.sh` - Push local changes to live store (use `--include-settings` flag to ensure settings are pushed)
+- `sync-push-settings.sh` - Push only settings file explicitly
+- `sync-settings.sh` - Pull and sync settings file safely
 - `sync-safe.sh` - Safe sync with conflict checking
 
 See the `scripts/` directory for details.
@@ -184,6 +185,32 @@ This happens when Shopify auto-syncs. Solution:
 1. Pull settings before committing: `shopify theme pull --only config/settings_data.json`
 2. Commit immediately after making setting changes
 3. Consider using a development theme for testing
+
+### Settings not pushing?
+
+If `settings_data.json` isn't being pushed:
+
+1. **Push settings explicitly:**
+   ```bash
+   ./scripts/sync-push-settings.sh
+   # or
+   shopify theme push --only config/settings_data.json
+   ```
+
+2. **Use the include-settings flag:**
+   ```bash
+   ./scripts/sync-push.sh --include-settings
+   ```
+
+3. **Verify settings file exists:**
+   ```bash
+   ls -la config/settings_data.json
+   ```
+
+4. **Check if settings are in .shopifyignore:**
+   ```bash
+   grep -i settings .shopifyignore
+   ```
 
 ### Files not syncing?
 

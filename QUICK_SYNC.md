@@ -13,8 +13,14 @@ shopify theme pull
 
 ### Push to Live Store
 ```bash
+# Push everything including settings (recommended)
+./scripts/sync-push.sh --include-settings
+
 # Push everything (with safety check)
 ./scripts/sync-push.sh
+
+# Push only settings
+./scripts/sync-push-settings.sh
 
 # Or use Shopify CLI directly
 shopify theme push
