@@ -146,77 +146,6 @@
       "name": "Instagram Story",
       "settings": {}
     },
-    "tabbed_recommendations_main": {
-      "type": "tabbed-recommendations",
-      "blocks": {
-        "collection_tab_ULtDxe": {
-          "type": "collection_tab",
-          "settings": {
-            "title": "",
-            "collection": "dupattas-accessories"
-          }
-        }
-      },
-      "block_order": [
-        "collection_tab_ULtDxe"
-      ],
-      "settings": {
-        "heading": "Curated for You",
-        "color_scheme": "",
-        "image_ratio": "portrait",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false
-      }
-    },
-    "product_features_main": {
-      "type": "product-features",
-      "blocks": {
-        "feature_1": {
-          "type": "feature",
-          "settings": {
-            "title": "Pure Silk",
-            "text": "Made from 100% authentic, hand-selected silk fibers."
-          }
-        },
-        "feature_2": {
-          "type": "feature",
-          "settings": {
-            "title": "Zari Work",
-            "text": "Intricate gold and silver threads woven into perfection."
-          }
-        },
-        "badge_1": {
-          "type": "badge",
-          "settings": {
-            "text": "Certified",
-            "icon_emoji": "📜",
-            "desktop_x": 15,
-            "desktop_y": 20
-          }
-        },
-        "badge_2": {
-          "type": "badge",
-          "settings": {
-            "text": "Best Seller",
-            "icon_emoji": "🌟",
-            "desktop_x": 80,
-            "desktop_y": 75
-          }
-        }
-      },
-      "block_order": [
-        "feature_1",
-        "feature_2",
-        "badge_1",
-        "badge_2"
-      ],
-      "settings": {
-        "heading": "The Art of Handloom",
-        "image": "shopify://shop_images/crimson-glory-banarasi-silk-saree-hero-shot.png",
-        "color_scheme": ""
-      }
-    },
     "featured_collection_main": {
       "type": "featured-collection",
       "settings": {
@@ -506,53 +435,17 @@
         "padding_bottom": 36
       }
     },
-    "highlight_offers_grid_global": {
-      "type": "highlight-offers-grid",
-      "settings": {
-        "color_scheme": ""
-      }
-    },
-    "highlight_shipping_banner_global": {
-      "type": "highlight-shipping-banner",
-      "settings": {
-        "color_scheme": "",
-        "text_content": "Free Shipping on all domestic orders above 1,999 INR",
-        "subtext": "Hand-packed with care in sustainable packaging."
-      }
-    },
-    "highlight_bundle_grid_global": {
-      "type": "highlight-bundle-grid",
-      "settings": {
-        "color_scheme": ""
-      }
-    },
-    "highlight_coupon_box_global": {
-      "type": "highlight-coupon-box",
-      "settings": {
-        "color_scheme": "",
-        "title": "ROYAL WEDDING SALE",
-        "description": "Use code “QUEEN25” for 25% off on Kanjivaram Collection.",
-        "link_text": "Shop The Look",
-        "link": ""
-      }
-    }
   },
   "order": [
     "1766394317b6774eea",
     "slideshow_main",
     "instagram_story_main",
-    "tabbed_recommendations_main",
-    "product_features_main",
     "featured_collection_main",
     "stack_banner_main",
     "featured_collection_main_2",
     "shopable_video_reel_main",
     "featured_blog_main",
     "testimonials_main",
-    "collapsible_content_main",
-    "highlight_offers_grid_global",
-    "highlight_shipping_banner_global",
-    "highlight_bundle_grid_global",
-    "highlight_coupon_box_global"
+    "collapsible_content_main"
   ]
 }
