@@ -42,6 +42,25 @@ Preview this theme using Shopify CLI:
 shopify theme dev
 ```
 
+### Syncing with Live Store
+
+To sync your local theme with your live Shopify store, see our sync guides:
+
+- **[Quick Sync Reference](./QUICK_SYNC.md)** - Quick commands for daily use
+- **[Sync Workflow Guide](./SYNC_WORKFLOW.md)** - Detailed workflows and best practices
+
+**Quick start:**
+```bash
+# Pull latest from live store
+./scripts/sync-pull.sh
+
+# Push local changes to live store
+./scripts/sync-push.sh
+
+# Safe sync (recommended daily workflow)
+./scripts/sync-safe.sh
+```
+
 ## Theme architecture
 
 ```bash

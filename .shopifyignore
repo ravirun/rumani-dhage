@@ -1,13 +1,44 @@
-# This file contains a list of files that will be excluded from Shopify CLI
-# operations such as push, pull, dev, etc.
-#
-# Examples:
-#
-# Ignore a specific file:
-#   templates/product.json
-#
-# Ignore templates with a wildcard pattern:
-#   templates/*.json
-#
-# Ignore templates and sections with a regular expression:
-#   /(templates|sections)/.*\.json/
+# Files to ignore when syncing with Shopify
+# These files won't be pushed/pulled
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Git
+.git/
+.gitignore
+
+# Node modules (if you use build tools)
+node_modules/
+
+# Shopify CLI
+.shopify/
+
+# Documentation
+*.md
+README.md
+SYNC_WORKFLOW.md
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+LICENSE.md
+
+# Scripts
+scripts/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build artifacts
+*.zip
+release/
+
+# MCP settings (if not needed in theme)
+cline_mcp_settings.json
