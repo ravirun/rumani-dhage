@@ -34,17 +34,18 @@
           "settings": {
             "image": "shopify://shop_images/indigo-block-print-cotton-saree-lifestyle-shot.png",
             "image_overlay_opacity": 0,
-            "heading": "Welcome to our store",
-            "heading_size": "h1",
-            "subheading": "Discover our latest collection",
+            "heading": "Saree That Inspires",
+            "heading_size": "h0",
+            "subheading": "",
             "button_label": "Shop now",
             "link": "",
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "middle-center",
+            "mobile_box_align": "middle-center",
             "text_alignment": "center",
             "text_alignment_mobile": "center",
-            "color_scheme": "scheme-1"
+            "color_scheme": "scheme-5"
           }
         },
         "slide_2": {
@@ -60,6 +61,7 @@
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "middle-center",
+            "mobile_box_align": "middle-center",
             "text_alignment": "center",
             "text_alignment_mobile": "center",
             "color_scheme": "scheme-1"
@@ -78,6 +80,7 @@
             "button_style_secondary": false,
             "show_text_box": true,
             "box_align": "middle-center",
+            "mobile_box_align": "middle-center",
             "text_alignment": "center",
             "text_alignment_mobile": "center",
             "color_scheme": "scheme-1"
@@ -92,6 +95,8 @@
       "settings": {
         "layout": "grid",
         "slide_height": "adapt_image",
+        "desktop_height_ratio": 36,
+        "mobile_height_ratio": 125,
         "slider_visual": "counter",
         "auto_rotate": true,
         "change_slides_speed": 5,
