@@ -9,6 +9,22 @@
  */
 {
   "sections": {
+    "video_V47tUg": {
+      "type": "video",
+      "name": "t:sections.video.presets.name",
+      "settings": {
+        "heading": "",
+        "heading_size": "h1",
+        "enable_video_looping": false,
+        "video": "shopify://files/videos/grok-video-d4a6c807-c960-44ff-8909-60395f0b5a90.mp4",
+        "video_url": "",
+        "description": "",
+        "full_width": false,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "1766394317b6774eea": {
       "type": "_blocks",
       "blocks": {
@@ -24,6 +40,7 @@
       "block_order": [
         "ai_gen_block_9b2ed9d_nQzeF8"
       ],
+      "disabled": true,
       "settings": {}
     },
     "slideshow_main": {
@@ -434,9 +451,10 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
-    },
+    }
   },
   "order": [
+    "video_V47tUg",
     "1766394317b6774eea",
     "slideshow_main",
     "instagram_story_main",
