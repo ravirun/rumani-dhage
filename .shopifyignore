@@ -9,14 +9,14 @@
 .Trashes
 
 # Git
-.git/
+.git/*
 .gitignore
 
 # Node modules (if you use build tools)
-node_modules/
+node_modules/*
 
 # Shopify CLI
-.shopify/
+.shopify/*
 
 # Documentation
 *.md
@@ -27,18 +27,18 @@ CONTRIBUTING.md
 LICENSE.md
 
 # Scripts
-scripts/
+scripts/*
 
 # IDE files
-.vscode/
-.idea/
+.vscode/*
+.idea/*
 *.swp
 *.swo
 *~
 
 # Build artifacts
 *.zip
-release/
+release/*
 
 # MCP settings (if not needed in theme)
 cline_mcp_settings.json
