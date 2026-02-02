@@ -9,119 +9,6 @@
  */
 {
   "sections": {
-    "video_V47tUg": {
-      "type": "video",
-      "name": "t:sections.video.presets.name",
-      "settings": {
-        "heading": "",
-        "heading_size": "h1",
-        "enable_video_looping": false,
-        "video": "shopify://files/videos/grok-video-d4a6c807-c960-44ff-8909-60395f0b5a90.mp4",
-        "video_url": "",
-        "description": "",
-        "full_width": false,
-        "color_scheme": "",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "1766394317b6774eea": {
-      "type": "_blocks",
-      "blocks": {
-        "ai_gen_block_9b2ed9d_nQzeF8": {
-          "type": "ai_gen_block_9b2ed9d",
-          "settings": {
-            "desktop_height": 20,
-            "mobile_height": 10
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "ai_gen_block_9b2ed9d_nQzeF8"
-      ],
-      "disabled": true,
-      "settings": {}
-    },
-    "slideshow_main": {
-      "type": "slideshow",
-      "blocks": {
-        "slide_1": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/indigo-block-print-cotton-saree-lifestyle-shot.png",
-            "image_overlay_opacity": 0,
-            "heading": "Saree That Inspires",
-            "heading_size": "h0",
-            "subheading": "",
-            "button_label": "Shop now",
-            "link": "",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "middle-center",
-            "mobile_box_align": "middle-center",
-            "text_alignment": "center",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-5"
-          }
-        },
-        "slide_2": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/amritsari-phulkari-dupatta-lifestyle-image.png",
-            "image_overlay_opacity": 0,
-            "heading": "New arrivals",
-            "heading_size": "h1",
-            "subheading": "Check out what's new",
-            "button_label": "Explore",
-            "link": "",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "middle-center",
-            "mobile_box_align": "middle-center",
-            "text_alignment": "center",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-1"
-          }
-        },
-        "slide_D6Vihc": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/indigo-block-print-cotton-saree-pallu-flow.png",
-            "image_overlay_opacity": 0,
-            "heading": "Image slide",
-            "heading_size": "h1",
-            "subheading": "Tell your brand's story through images",
-            "button_label": "Button label",
-            "link": "",
-            "button_style_secondary": false,
-            "show_text_box": true,
-            "box_align": "middle-center",
-            "mobile_box_align": "middle-center",
-            "text_alignment": "center",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-1"
-          }
-        }
-      },
-      "block_order": [
-        "slide_1",
-        "slide_2",
-        "slide_D6Vihc"
-      ],
-      "settings": {
-        "layout": "grid",
-        "slide_height": "adapt_image",
-        "desktop_height_ratio": 36,
-        "mobile_height_ratio": 125,
-        "slider_visual": "counter",
-        "auto_rotate": true,
-        "change_slides_speed": 5,
-        "image_behavior": "none",
-        "show_text_below": false,
-        "accessibility_info": "Slideshow about our brand"
-      }
-    },
     "instagram_story_main": {
       "type": "instagram-story",
       "blocks": {
@@ -162,6 +49,102 @@
       ],
       "name": "Instagram Story",
       "settings": {}
+    },
+    "1766394317b6774eea": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_9b2ed9d_nQzeF8": {
+          "type": "ai_gen_block_9b2ed9d",
+          "settings": {
+            "desktop_height": 20,
+            "mobile_height": 10
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_9b2ed9d_nQzeF8"
+      ],
+      "settings": {}
+    },
+    "slideshow_main": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/indigo-block-print-cotton-saree-lifestyle-shot.png",
+            "image_overlay_opacity": 0,
+            "heading": "Saree That Inspires",
+            "heading_size": "h0",
+            "subheading": "",
+            "button_label": "Shop All",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "middle-center",
+            "mobile_box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-5"
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/amritsari-phulkari-dupatta-lifestyle-image.png",
+            "image_overlay_opacity": 0,
+            "heading": "New arrivals",
+            "heading_size": "h1",
+            "subheading": "Check out what's new",
+            "button_label": "Explore",
+            "link": "shopify://collections/sarees",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "middle-center",
+            "mobile_box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
+          }
+        },
+        "slide_D6Vihc": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/indigo-block-print-cotton-saree-pallu-flow.png",
+            "image_overlay_opacity": 0,
+            "heading": "Image slide",
+            "heading_size": "h1",
+            "subheading": "Tell your brand's story through images",
+            "button_label": "Button label",
+            "link": "shopify://products/benarasi-mango-silk-saree-purple",
+            "button_style_secondary": false,
+            "show_text_box": true,
+            "box_align": "middle-center",
+            "mobile_box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
+          }
+        }
+      },
+      "block_order": [
+        "slide_1",
+        "slide_2",
+        "slide_D6Vihc"
+      ],
+      "settings": {
+        "layout": "grid",
+        "slide_height": "large",
+        "desktop_height_ratio": 36,
+        "mobile_height_ratio": 125,
+        "slider_visual": "counter",
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "accessibility_info": "Slideshow about our brand"
+      }
     },
     "featured_collection_main": {
       "type": "featured-collection",
@@ -454,7 +437,6 @@
     }
   },
   "order": [
-    "video_V47tUg",
     "1766394317b6774eea",
     "slideshow_main",
     "instagram_story_main",
