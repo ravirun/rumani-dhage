@@ -110,6 +110,11 @@ slideshow-component .slideshow.banner {
 .slideshow__controls--top {
   order: 2;
   z-index: 1;
+  position: absolute;
+  bottom: 0;
+  border: none;
+  width: 100%;
+  filter: invert(1);
 }
 
 @media screen and (max-width: 749px) {
