@@ -10,6 +10,7 @@ slideshow-component .slideshow.banner {
   margin: 0;
   gap: 0;
   overflow-y: hidden;
+  scroll-snap-type: x mandatory;
 }
 
 .slideshow__slide {
@@ -17,7 +18,9 @@ slideshow-component .slideshow.banner {
   position: relative;
   display: flex;
   flex-direction: column;
+  flex-direction: column;
   visibility: visible;
+  scroll-snap-align: center;
 }
 
 @media screen and (max-width: 749px) {
