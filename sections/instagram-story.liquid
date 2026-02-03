@@ -6,10 +6,16 @@
         {% for block in section.blocks limit: 10 %}
           {% case block.type %}
             {% when 'instastory' %}
+              {% liquid
+                assign story_image = block.settings.image
+                if story_image == blank and block.settings.product != blank
+                  assign story_image = block.settings.product.featured_media
+                endif
+              %}
               <article
                 class="instagram-story__item"
                 data-story-index="{{ forloop.index0 }}"
-                data-story-image="{% if block.settings.image %}{{ block.settings.image | image_url: width: 1080 }}{% else %}{% endif %}"
+                data-story-image="{% if story_image %}{{ story_image | image_url: width: 1080 }}{% else %}{% endif %}"
                 data-story-video="{{ block.settings.video.id | default: '' }}"
                 data-story-product-url="{{ block.settings.product.url | default: '' }}"
                 data-story-product-title="{{ block.settings.product.title | default: '' }}"
@@ -21,7 +27,7 @@
                   aria-label="{% if block.settings.product != blank %}View story for {{ block.settings.product.title | escape }}{% else %}View Instagram story{% endif %}"
                 >
                   {% render 'insta-story-circle',
-                    image: block.settings.image,
+                    image: story_image,
                     video: block.settings.video,
                     product: block.settings.product
                   %}
@@ -63,8 +69,15 @@
 
   {% comment %} Full view modal {% endcomment %}
   {%- if section.blocks.size > 0 -%}
+    {% liquid
+      assign first_block = section.blocks.first
+      assign first_story_image = first_block.settings.image
+      if first_story_image == blank and first_block.settings.product != blank
+        assign first_story_image = first_block.settings.product.featured_media
+      endif
+    %}
     {% render 'insta-story-full-view',
-      image: section.blocks.first.settings.image,
+      image: first_story_image,
       video: section.blocks.first.settings.video,
       product: section.blocks.first.settings.product,
       index: 0,
