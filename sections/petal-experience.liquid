@@ -1,0 +1,724 @@
+<div
+  class="petal-experience-section"
+  style="
+    width: 100%;
+    height: {{ section.settings.height }}vh;
+    position: {{ section.settings.position_type }};
+    z-index: {{ section.settings.z_index }};
+    overflow: hidden;
+    background-color: {{ section.settings.bg_color }};
+  "
+>
+  <h1 style="position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;">
+    {{ section.settings.target_text }}
+  </h1>
+
+  <canvas
+    id="petal-canvas-{{ section.id }}"
+    style="position: absolute; inset: 0; width: 100%; height: 100%; display: block;"
+  ></canvas>
+
+  <div
+    class="floor-gradient"
+    style="position: absolute; bottom: 0; left: 0; width: 100%; height: 60px; background: linear-gradient(to top, rgba(0,0,0,0.05), transparent); pointer-events: none; z-index: 2;"
+  ></div>
+
+  {%- if section.settings.show_controls -%}
+    <div id="controls-{{ section.id }}" class="controls-panel">
+      <h2 style="font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">
+        Experience Controls
+      </h2>
+
+      <div class="control-group">
+        <label class="control-label">Interaction Mode</label>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="auto-mode-{{ section.id }}" value="manual" checked>
+            <span>Manual</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="auto-mode-{{ section.id }}" value="autopop">
+            <span>Auto-Pop</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="auto-mode-{{ section.id }}" value="autotext">
+            <span>Auto-Pulse Text</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Target Text</label>
+        <input
+          type="text"
+          id="text-input-{{ section.id }}"
+          value="{{ section.settings.target_text }}"
+          placeholder="Type here..."
+        >
+        <button id="mode-toggle-{{ section.id }}" class="toggle-btn">Form Text</button>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Petal Color</label>
+        <input type="color" id="color-control-{{ section.id }}" value="{{ section.settings.petal_color }}">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Float Speed</label>
+        <input
+          type="range"
+          id="speed-control-{{ section.id }}"
+          min="0.1"
+          max="3"
+          step="0.1"
+          value="{{ section.settings.float_speed }}"
+        >
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Density (Amount)</label>
+        <input
+          type="range"
+          id="density-control-{{ section.id }}"
+          min="50"
+          max="600"
+          step="10"
+          value="{{ section.settings.density }}"
+        >
+      </div>
+
+      <div style="border-top: 1px solid #eee; padding-top: 1rem; margin-top: 0.5rem;">
+        <h3 style="font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; color: #999;">
+          Spark Controls
+        </h3>
+        <div class="control-group">
+          <label class="control-label">Spark Color</label>
+          <input type="color" id="spark-color-control-{{ section.id }}" value="{{ section.settings.spark_color }}">
+        </div>
+      </div>
+
+      <div class="control-group" style="border-top: 1px solid #eee; padding-top: 1rem;">
+        <label class="control-label">Chime Volume</label>
+        <input
+          type="range"
+          id="volume-control-{{ section.id }}"
+          min="0"
+          max="1"
+          step="0.1"
+          value="{{ section.settings.chime_volume }}"
+        >
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@1,400&family=Inter:wght@300;400;600&display=swap');
+
+  /* Experience Controls */
+  #controls-{{ section.id }}.controls-panel {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    border: 1px solid #eee;
+    padding: 24px;
+    border-radius: 16px;
+    z-index: 100;
+    width: 260px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    font-family: 'Inter', sans-serif;
+    color: #1a1a1a;
+    text-align: left;
+  }
+
+  .control-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #666;
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .control-group {
+    margin-bottom: 16px;
+  }
+
+  input[type="range"] {
+    width: 100%;
+    accent-color: #1a1a1a;
+    cursor: pointer;
+  }
+
+  input[type="color"] {
+    -webkit-appearance: none;
+    border: none;
+    width: 100%;
+    height: 32px;
+    cursor: pointer;
+    background: none;
+    padding: 0;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Bodoni Moda', serif;
+    margin-bottom: 10px;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  /* Radio Group Styling */
+  .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #f9f9f9;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+  }
+
+  .radio-option {
+    display: flex;
+    align-items: center;
+    font-size: 11px;
+    cursor: pointer;
+    gap: 8px;
+  }
+
+  .radio-option input {
+    accent-color: #1a1a1a;
+  }
+
+  input[type="text"]:focus {
+    border-color: #1a1a1a;
+  }
+
+  input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+  input[type="color"]::-webkit-color-swatch { border: 1px solid #eee; border-radius: 4px; }
+
+  .toggle-btn {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #1a1a1a;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .toggle-btn.active {
+    background: #1a1a1a;
+    color: #fff;
+  }
+</style>
+
+<script>
+(function() {
+  const containerId = "{{ section.id }}";
+  const canvas = document.getElementById(`petal-canvas-${containerId}`);
+  const ctx = canvas.getContext('2d', { alpha: true });
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  
+  // Settings
+  const settings = {
+    speed: {{ section.settings.float_speed }},
+    density: {{ section.settings.density }},
+    volume: {{ section.settings.chime_volume }},
+    color: '{{ section.settings.petal_color }}',
+    sparkColor: '{{ section.settings.spark_color }}',
+    targetText: "{{ section.settings.target_text }}",
+    autoMode: "{{ section.settings.interaction_mode }}",
+    isFormingText: false
+  };
+
+  // Mobile optimization cap
+  const isMobile = window.innerWidth < 768;
+  if (isMobile) {
+    settings.density = Math.min(settings.density, 150);
+  }
+
+  // --- Offscreen Sprite Generation ---
+  let petalSprite = null;
+  
+  function createPetalSprite(color) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 64;
+    canvas.height = 64;
+    const ctx = canvas.getContext('2d');
+    
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    // Petal shape
+    ctx.moveTo(32, 0);
+    ctx.quadraticCurveTo(64, 32, 32, 64);
+    ctx.quadraticCurveTo(0, 32, 32, 0);
+    ctx.fill();
+    
+    return canvas;
+  }
+  
+  // Initialize sprite
+  petalSprite = createPetalSprite(settings.color);
+
+  // --- Audio ---
+  function playSparkleSound() {
+    if (settings.volume === 0) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    // On mobile, limiting polyphony might be needed, but minimal oscillator use is generally okay
+    const now = audioCtx.currentTime;
+    [880, 1320, 1760].forEach((freq, i) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + (i * 0.02));
+      gain.gain.setValueAtTime(0.05 * settings.volume, now + (i * 0.02));
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3 + (i * 0.1));
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now + (i * 0.02));
+      osc.stop(now + 0.5);
+    });
+  }
+
+  // --- Data Model ---
+  let petals = [];
+  let sparks = [];
+  let w = 0;
+  let h = 0;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap DPR at 2 for performance
+
+  function createPetal(i) {
+    return {
+      x: Math.random() * w,
+      y: -Math.random() * h * 1.5 - 50,
+      vx: 0,
+      vy: Math.random() * 0.5 + 0.3,
+      baseSpeed: Math.random() * 0.5 + 0.5,
+      rot: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.02,
+      size: Math.random() * 12 + 8,
+      opacity: Math.random() * 0.4 + 0.5,
+      waveOffset: Math.random() * Math.PI * 2,
+      settled: false,
+      settleTime: 0,
+      floorLevel: h - 15 - (Math.random() * 15),
+      targetX: null,
+      targetY: null,
+      tilt: 0
+    };
+  }
+
+  function spawnSparks(x, y) {
+    const count = isMobile ? 6 : 12;
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 3 + 1;
+      sparks.push({
+        x: x,
+        y: y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        life: 1.0,
+        color: settings.sparkColor
+      });
+    }
+  }
+
+  // --- Text Sampling ---
+  const samplingCanvas = document.createElement('canvas');
+  const samplingCtx = samplingCanvas.getContext('2d', { willReadFrequently: true });
+  let textPoints = [];
+  let lastCachedText = "";
+
+  function updateTextPoints() {
+    const text = settings.targetText || " ";
+    if (text === lastCachedText && w > 0) return;
+    lastCachedText = text;
+
+    // Use a fixed small size for sampling to keep it fast
+    const sampleW = 400;
+    const sampleH = 200;
+    samplingCanvas.width = sampleW;
+    samplingCanvas.height = sampleH;
+    samplingCtx.clearRect(0, 0, sampleW, sampleH);
+
+    samplingCtx.fillStyle = '#000';
+    samplingCtx.font = `italic 80px 'Bodoni Moda', serif`;
+    samplingCtx.textAlign = 'center';
+    samplingCtx.textBaseline = 'middle';
+    samplingCtx.fillText(text, sampleW / 2, sampleH / 2);
+
+    const imageData = samplingCtx.getImageData(0, 0, sampleW, sampleH).data;
+    const points = [];
+    const step = 6;
+
+    for (let y = 0; y < sampleH; y += step) {
+      for (let x = 0; x < sampleW; x += step) {
+        if (imageData[((y * sampleW) + x) * 4 + 3] > 128) {
+          points.push({ 
+            x: (x - sampleW / 2), 
+            y: (y - sampleH / 2) 
+          });
+        }
+      }
+    }
+    textPoints = points;
+  }
+
+  // --- Main Loop ---
+  let lastAutoPopTime = 0;
+  let lastAutoTextToggleTime = 0;
+  let isVisible = true;
+
+  // Visibility Optimization
+  document.addEventListener('visibilitychange', () => {
+    isVisible = !document.hidden;
+  });
+
+  function animate(now) {
+    requestAnimationFrame(animate);
+    if (!isVisible) return;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Auto Modes
+    if (settings.autoMode === 'autopop' && now - lastAutoPopTime > 400) {
+      // Find a non-settled petal to pop
+      const candidates = petals.filter(p => p.y > 0 && p.y < h && !p.settled);
+      if (candidates.length > 0) {
+        const p = candidates[Math.floor(Math.random() * candidates.length)];
+        spawnSparks(p.x, p.y);
+        playSparkleSound();
+        // Reset petal
+        p.y = -50;
+        p.x = Math.random() * w;
+        p.settled = false;
+      }
+      lastAutoPopTime = now;
+    }
+
+    if (settings.autoMode === 'autotext' && now - lastAutoTextToggleTime > 6000) {
+      settings.isFormingText = !settings.isFormingText;
+      if (typeof updateModeButton === 'function') updateModeButton();
+      lastAutoTextToggleTime = now;
+    }
+
+    // Update & Draw Petals
+    const cx = w / 2;
+    const cy = h / 2;
+    const hasTextPoints = settings.isFormingText && textPoints.length > 0;
+    // Scale text to fit screen
+    const textScale = Math.min(w / 400, h / 200, 3); 
+
+    for (let i = 0; i < petals.length; i++) {
+        const p = petals[i];
+        
+        // --- Update ---
+        if (hasTextPoints) {
+            const pt = textPoints[i % textPoints.length];
+            const tx = cx + pt.x * textScale;
+            const ty = cy + pt.y * textScale;
+            
+            p.x += (tx - p.x) * 0.05;
+            p.y += (ty - p.y) * 0.05;
+            p.rot += (0 - p.rot) * 0.05;
+            p.settled = false;
+        } else {
+            if (!p.settled) {
+                // Physics
+                p.y += p.vy * settings.speed * 2.0; 
+                p.x += Math.sin(p.y * 0.005 + p.waveOffset) * 0.5;
+                p.rot += p.rotSpeed * settings.speed;
+                p.tilt = Math.sin(p.y * 0.01) * 0.5; // Fake 3D tilt
+                
+                // Floor check
+                if (p.y >= p.floorLevel) {
+                    p.y = p.floorLevel;
+                    p.settled = true;
+                    p.settleTime = now;
+                }
+            } else {
+                // Settle logic
+                // Reset after delay
+                if (now - p.settleTime > (4000 + Math.random() * 3000)) {
+                    p.y = -50;
+                    p.x = Math.random() * w;
+                    p.settled = false;
+                    p.floorLevel = h - 15 - (Math.random() * 15);
+                }
+            }
+        }
+
+        // --- Draw ---
+        // Optimization: Don't draw if off-screen (mostly for top)
+        if (p.y < -100 || p.y > h + 100) continue;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        // Fake 3D scale
+        ctx.scale(1, 1 - Math.abs(p.tilt) * 0.3);
+        
+        ctx.globalAlpha = p.opacity;
+        // Draw pre-rendered sprite
+        ctx.drawImage(petalSprite, -p.size/2, -p.size/2, p.size, p.size);
+        ctx.restore();
+    }
+
+    // Update & Draw Sparks
+    for (let i = sparks.length - 1; i >= 0; i--) {
+        const s = sparks[i];
+        s.x += s.vx;
+        s.y += s.vy;
+        s.life -= 0.03;
+        
+        if (s.life <= 0) {
+            sparks.splice(i, 1);
+            continue;
+        }
+
+        ctx.globalAlpha = s.life;
+        ctx.fillStyle = s.color;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+    }
+  }
+
+  // --- Interaction ---
+  canvas.addEventListener('pointerdown', e => {
+    const rect = canvas.getBoundingClientRect();
+    // Adjust for High DPI canvas
+    const mx = (e.clientX - rect.left) * (canvas.width / rect.width);
+    const my = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+    // Simple hit test (iterate backwards to hit top ones first)
+    for (let i = petals.length - 1; i >= 0; i--) {
+        const p = petals[i];
+        const dx = mx - p.x;
+        const dy = my - p.y;
+        // Check distance (considering size)
+        if (dx*dx + dy*dy < (p.size * 2) * (p.size * 2)) {
+            spawnSparks(p.x, p.y);
+            playSparkleSound();
+            // Reset petal immediately
+            p.y = -50; 
+            p.x = Math.random() * w; 
+            p.settled = false;
+            break; // Only pop one per click
+        }
+    }
+  });
+
+  // --- Resizing ---
+  function resize() {
+    w = canvas.clientWidth * dpr;
+    h = canvas.clientHeight * dpr;
+    
+    if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+        // Normalize context for drawing usage, but we keep logic coordinates in pixel space
+        ctx.scale(dpr, dpr);
+        // Need to update w/h to logical CSS pixels for physics
+        w = canvas.clientWidth;
+        h = canvas.clientHeight;
+        
+        // Re-sourcing text points
+        updateTextPoints();
+        
+        // Re-seed petals floor levels
+        petals.forEach(p => {
+             p.floorLevel = h - 15 - (Math.random() * 15);
+             if (p.x > w) p.x = Math.random() * w;
+        });
+    }
+  }
+
+  // --- Initialization ---
+  function init() {
+    resize();
+    window.addEventListener('resize', resize);
+    
+    // Create petals
+    for (let i = 0; i < settings.density; i++) {
+      petals.push(createPetal(i));
+    }
+    
+    // Initial text points
+    updateTextPoints();
+    
+    // Start loop
+    requestAnimationFrame(animate);
+  }
+
+  // --- UI Control Wiring (Legacy Support for Controls) ---
+  const modeToggle = document.getElementById(`mode-toggle-${containerId}`);
+  const textInput = document.getElementById(`text-input-${containerId}`);
+  
+  if (modeToggle) {
+    window.updateModeButton = function() {
+        modeToggle.classList.toggle('active', settings.isFormingText);
+        modeToggle.innerText = settings.isFormingText ? "Release to Drift" : "Form Text";
+    };
+    modeToggle.onclick = () => {
+        settings.isFormingText = !settings.isFormingText;
+        updateModeButton();
+    };
+  }
+
+  if (textInput) {
+      textInput.oninput = (e) => {
+          settings.targetText = e.target.value;
+          updateTextPoints();
+      };
+  }
+  
+  // Wire up other inputs if present
+  document.querySelectorAll(`input[name="auto-mode-${containerId}"]`).forEach(r => {
+      r.onchange = (e) => settings.autoMode = e.target.value;
+  });
+  
+  const speedCtrl = document.getElementById(`speed-control-${containerId}`);
+  if(speedCtrl) speedCtrl.oninput = e => settings.speed = parseFloat(e.target.value);
+
+  const densityCtrl = document.getElementById(`density-control-${containerId}`);
+  if(densityCtrl) densityCtrl.onchange = e => {
+      const newDensity = parseInt(e.target.value);
+      while(petals.length < newDensity) petals.push(createPetal(petals.length));
+      while(petals.length > newDensity) petals.pop();
+      settings.density = newDensity;
+  };
+  
+  const colorCtrl = document.getElementById(`color-control-${containerId}`);
+  if(colorCtrl) colorCtrl.oninput = e => {
+      settings.color = e.target.value;
+      petalSprite = createPetalSprite(settings.color);
+  };
+
+  init();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Petal Experience",
+  "settings": [
+    {
+      "type": "select",
+      "id": "position_type",
+      "label": "Position Type",
+      "options": [
+        { "value": "relative", "label": "Relative" },
+        { "value": "fixed", "label": "Fixed (Fullscreen overlay)" },
+        { "value": "absolute", "label": "Absolute" }
+      ],
+      "default": "relative"
+    },
+    {
+      "type": "number",
+      "id": "z_index",
+      "label": "Z-Index",
+      "default": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "show_controls",
+      "label": "Show On-screen Controls",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "label": "Section Height (vh)",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "default": 100,
+      "unit": "vh"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "target_text",
+      "label": "Target Text (for Shape)",
+      "default": "Aranya"
+    },
+    {
+      "type": "color",
+      "id": "petal_color",
+      "label": "Petal Color",
+      "default": "#ffb7c5"
+    },
+    {
+      "type": "color",
+      "id": "spark_color",
+      "label": "Spark Color",
+      "default": "#ffd700"
+    },
+    {
+      "type": "range",
+      "id": "float_speed",
+      "label": "Float Speed",
+      "min": 0.1,
+      "max": 3.0,
+      "step": 0.1,
+      "default": 0.6
+    },
+    {
+      "type": "range",
+      "id": "density",
+      "label": "Petal Count",
+      "min": 50,
+      "max": 600,
+      "step": 10,
+      "default": 250
+    },
+    {
+      "type": "range",
+      "id": "chime_volume",
+      "label": "Chime Volume",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.5
+    },
+    {
+      "type": "select",
+      "id": "interaction_mode",
+      "label": "Interaction Mode",
+      "options": [
+        { "value": "manual", "label": "Manual (Touch/Click)" },
+        { "value": "autopop", "label": "Auto-Pop (Bubbles Burst)" },
+        { "value": "autotext", "label": "Auto-Pulse Text (Form Shape)" }
+      ],
+      "default": "manual"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Petal Experience"
+    }
+  ]
+}
+{% endschema %}

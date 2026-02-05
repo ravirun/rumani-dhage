@@ -1,0 +1,229 @@
+<section id="{{ section.id }}" class="collection-grid-hover page-width">
+  <div class="grid">
+    {%- for block in section.blocks -%}
+      {%- assign collection = block.settings.collection -%}
+      <a
+        href="{{ collection.url | default: '#' }}"
+        class="collection-grid-hover__item card"
+        data-card
+        {{ block.shopify_attributes }}
+      >
+        <div class="card__image-wrapper">
+          {%- liquid
+            assign card_image = collection.featured_image
+            if card_image == blank and collection.products.first != blank
+              assign card_image = collection.products.first.featured_image
+            endif
+          -%}
+          {%- if card_image != blank -%}
+            {{ card_image | image_url: width: 600 | image_tag: loading: 'lazy', width: '100%', height: '100%' }}
+          {%- else -%}
+            {%- capture placeholder_index -%}{% cycle 1, 2, 3, 4, 5, 6 %}{%- endcapture -%}
+            {{ 'collection-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+
+        <div class="arc"></div>
+
+        <div class="card__content">
+          <h3 class="card__title">
+            {%- if collection.title != blank -%}
+              {{- collection.title | escape -}}
+            {%- else -%}
+              {{ 'onboarding.collection_title' | t }}
+            {%- endif -%}
+          </h3>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+<style>
+  /* GRID */
+  #{{ section.id }} .grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    perspective: 1200px; /* Kept for potential future use or if rotation is re-added */
+  }
+
+  /* CARD */
+  #{{ section.id }} .card {
+    aspect-ratio: 2 / 3;
+    background: #eee;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    cursor: pointer;
+    display: block; /* Ensure anchor acts as block */
+    text-decoration: none; /* Remove underline from anchor */
+    color: inherit;
+  }
+
+  /* IMAGE */
+  #{{ section.id }} .card__image-wrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  #{{ section.id }} .card__image-wrapper img,
+  #{{ section.id }} .card__image-wrapper svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  #{{ section.id }} .card.hover .card__image-wrapper img,
+  #{{ section.id }} .card.hover .card__image-wrapper svg {
+    transform: scale(1.06);
+  }
+
+  /* ARC BASE (flat line) */
+  #{{ section.id }} .arc {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 4px;
+
+    border: 2px solid #111;
+    border-bottom: none;
+    border-radius: 0;
+
+    z-index: 2;
+
+    transition:
+      height 0.5s ease,
+      border-radius 0.5s ease,
+      transform 0.5s ease;
+  }
+
+  /* HOVER → ARC BECOMES SEMI CIRCLE */
+  #{{ section.id }} .card.hover .arc {
+    height: 35%;
+    border-radius: 999px 999px 0 0;
+  }
+
+  /* ===== DIRECTION CONTROL ===== */
+
+  /* from LEFT */
+  #{{ section.id }} .card.from-left .arc {
+    transform-origin: left bottom;
+  }
+
+  /* from RIGHT */
+  #{{ section.id }} .card.from-right .arc {
+    transform-origin: right bottom;
+  }
+
+  /* from TOP */
+  #{{ section.id }} .card.from-top .arc {
+    transform-origin: center top;
+  }
+
+  /* from BOTTOM */
+  #{{ section.id }} .card.from-bottom .arc {
+    transform-origin: center bottom;
+  }
+
+
+  /* TITLE */
+  #{{ section.id }} .card__content {
+    position: absolute;
+    bottom: 52px;
+    width: 100%;
+    text-align: center;
+    z-index: 3;
+    pointer-events: none;
+    transition: bottom 0.45s ease;
+  }
+
+  #{{ section.id }} .card.hover .card__content {
+    bottom: 66px;
+  }
+
+  #{{ section.id }} .card__title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #111;
+    text-shadow: 0 1px 4px rgba(255,255,255,0.8);
+  }
+</style>
+
+<script>
+  document.querySelectorAll('#{{ section.id }} [data-card]').forEach((card) => {
+    card.addEventListener('mouseenter', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const left = x;
+      const right = rect.width - x;
+      const top = y;
+      const bottom = rect.height - y;
+
+      const min = Math.min(left, right, top, bottom);
+
+      card.classList.remove('from-left', 'from-right', 'from-top', 'from-bottom');
+
+      if (min === left) card.classList.add('from-left');
+      else if (min === right) card.classList.add('from-right');
+      else if (min === top) card.classList.add('from-top');
+      else card.classList.add('from-bottom');
+
+      card.classList.add('hover');
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.classList.remove('hover', 'from-left', 'from-right', 'from-top', 'from-bottom');
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Collection Grid Hover",
+  "max_blocks": 10,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Grid Hover",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
