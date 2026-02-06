@@ -1,0 +1,19 @@
+<div class="product-saree-details">
+  <ul>
+    {% if product.metafields.custom.fabric_text != blank %}
+      <li><strong>Fabric:</strong> {{ product.metafields.custom.fabric_text }}</li>
+    {% endif %}
+
+    {% if product.metafields.custom.occasion_text != blank %}
+      <li><strong>Occasion:</strong> {{ product.metafields.custom.occasion_text }}</li>
+    {% endif %}
+
+    {% if product.metafields.custom.blouse_included %}
+      <li>Blouse Included</li>
+    {% endif %}
+
+    {% if product.metafields.custom.care != blank %}
+      <li><strong>Care:</strong> {{ product.metafields.custom.care }}</li>
+    {% endif %}
+  </ul>
+</div>
