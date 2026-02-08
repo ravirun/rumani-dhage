@@ -49,6 +49,27 @@
       max-width: calc((100% - 4.5rem) / 4);
     }
   }
+
+  {%- if section.settings.enable_grid_layout -%}
+    .blog__posts {
+      flex-wrap: wrap;
+      overflow-x: visible;
+      scroll-snap-type: none;
+    }
+
+    .blog__post {
+       width: calc(100% - 3rem - var(--grid-mobile-horizontal-spacing)); /* Match existing mobile logic or simpler */
+       width: 100%;
+       max-width: 100%;
+    }
+
+    @media screen and (min-width: 750px) {
+      .blog__post {
+         width: calc((100% - ({{ section.settings.columns_desktop | minus: 1 }} * 1.5rem)) / {{ section.settings.columns_desktop }});
+         max-width: none;
+      }
+    }
+  {%- endif -%}
 {%- endstyle -%}
 
 {%- liquid
@@ -265,6 +286,12 @@
       "step": 1,
       "default": 4,
       "label": "t:sections.featured-blog.settings.columns_desktop.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_grid_layout",
+      "default": false,
+      "label": "Enable Grid Layout (Flex Wrap)"
     },
     {
       "type": "checkbox",

@@ -1,0 +1,561 @@
+{% comment %}
+  Featured Collection Stack Banner
+
+  Displays products from a collection in a sticky stack effect similar to the stack banner.
+{% endcomment %}
+
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.quick_add == 'none' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- endunless -%}
+
+{%- if section.settings.quick_add == 'standard' -%}
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- if section.settings.quick_add == 'bulk' -%}
+  <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+<div class="featured-collection-stack section-{{ section.id }}-padding">
+  <div class="space space--small"></div>
+
+  <div class="page-width">
+    {%- if section.settings.title != blank -%}
+      <div class="title-wrapper title-wrapper--no-top-margin">
+        <h2 class="title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+          {{ section.settings.title }}
+        </h2>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.description != blank -%}
+      <div class="collection__description rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        {{ section.settings.description }}
+      </div>
+    {%- endif -%}
+
+    <div class="featured-collection-stack__cards" id="featured-collection-stack-{{ section.id }}">
+      {%- if section.settings.collection.products.size > 0 -%}
+        {%- for product in section.settings.collection.products limit: section.settings.products_to_show -%}
+          <div
+            class="featured-collection-stack__card"
+            data-index="{{ forloop.index0 }}"
+          >
+            <div class="featured-collection-stack__card-inner">
+              <div class="featured-collection-stack__image-container">
+                {%- if product.featured_media -%}
+                  <img
+                    class="featured-collection-stack__image"
+                    srcset="
+                      {%- if product.featured_media.width >= 400 -%}{{ product.featured_media | image_url: width: 400 }} 400w,{%- endif -%}
+                      {%- if product.featured_media.width >= 800 -%}{{ product.featured_media | image_url: width: 800 }} 800w,{%- endif -%}
+                      {%- if product.featured_media.width >= 1200 -%}{{ product.featured_media | image_url: width: 1200 }} 1200w,{%- endif -%}
+                      {%- if product.featured_media.width >= 1600 -%}{{ product.featured_media | image_url: width: 1600 }} 1600w,{%- endif -%}
+                      {{ product.featured_media | image_url }} {{ product.featured_media.width }}w
+                    "
+                    src="{{ product.featured_media | image_url: width: 1200 }}"
+                    sizes="100vw"
+                    alt="{{ product.featured_media.alt | escape }}"
+                    loading="lazy"
+                    width="{{ product.featured_media.width }}"
+                    height="{{ product.featured_media.height }}"
+                  >
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                {%- endif -%}
+
+                <div class="featured-collection-stack__content">
+                  {%- if section.settings.show_vendor and product.vendor != blank -%}
+                    <p class="featured-collection-stack__vendor">{{ product.vendor }}</p>
+                  {%- endif -%}
+
+                  {%- if product.title != blank -%}
+                    <h3 class="featured-collection-stack__heading">
+                      <a href="{{ product.url }}">{{ product.title }}</a>
+                    </h3>
+                  {%- endif -%}
+
+                  {%- if section.settings.show_price -%}
+                    <div class="featured-collection-stack__price">
+                      {% render 'price', product: product, price_class: '' %}
+                    </div>
+                  {%- endif -%}
+
+                  <a href="{{ product.url }}" class="button button--primary">
+                    {{ section.settings.button_label | default: 'View Product' }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- comment -%} Display placeholder cards if no collection is selected {%- endcomment -%}
+        {%- for i in (1..4) -%}
+          <div class="featured-collection-stack__card" data-index="{{ forloop.index0 }}">
+            <div class="featured-collection-stack__card-inner">
+              <div class="featured-collection-stack__image-container">
+                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                <div class="featured-collection-stack__content">
+                  <p class="featured-collection-stack__vendor">Vendor Name</p>
+                  <h3 class="featured-collection-stack__heading">Product Title</h3>
+                  <div class="featured-collection-stack__price">$29.99</div>
+                  <a href="#" class="button button--primary">View Product</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="space"></div>
+</div>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .featured-collection-stack {
+    background-color: {{ section.settings.bg_color }};
+    min-height: 100vh;
+  }
+
+  .featured-collection-stack__cards {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 40px 0;
+    box-sizing: border-box;
+  }
+
+  .featured-collection-stack__card {
+    position: sticky;
+    top: {{ section.settings.sticky_top_mobile }}%;
+    padding-top: 20px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    border-radius: var(--media-radius);
+    overflow: hidden;
+    background: transparent !important;
+  }
+
+  @media screen and (min-width: 750px) {
+    .featured-collection-stack__card {
+      top: {{ section.settings.sticky_top_desktop }}%;
+    }
+  }
+
+  .featured-collection-stack__card:nth-child(2) {
+    padding-top: 40px;
+  }
+
+  .featured-collection-stack__card:nth-child(3) {
+    padding-top: 60px;
+  }
+
+  .featured-collection-stack__card:nth-child(4) {
+    padding-top: 80px;
+  }
+
+  .featured-collection-stack__card:nth-child(5) {
+    padding-top: 100px;
+  }
+
+  .featured-collection-stack__card:nth-child(n+6) {
+    padding-top: 120px;
+  }
+
+  .featured-collection-stack__card-inner {
+    will-change: transform;
+    background: transparent !important;
+    background-color: transparent !important;
+    border-radius: var(--media-radius);
+    display: flex;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(var(--color-shadow), var(--text-boxes-shadow-opacity, 0.35));
+    transform-origin: center top;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    border: none;
+  }
+
+  /* Scale cards as they scroll - using scroll-driven animations */
+  .featured-collection-stack__card:not(:last-child) .featured-collection-stack__card-inner {
+    animation: featuredStackScale linear;
+    animation-timeline: scroll();
+    animation-range: entry 0% exit 100%;
+  }
+
+  @keyframes featuredStackScale {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(0.9);
+    }
+  }
+
+  /* Last card stays at full scale */
+  .featured-collection-stack__card:last-child .featured-collection-stack__card-inner {
+    transform: scale(1);
+  }
+
+  /* Progressive initial scale for visual depth */
+  .featured-collection-stack__card:nth-last-child(2) .featured-collection-stack__card-inner {
+    transform: scale(0.95);
+  }
+
+  .featured-collection-stack__card:nth-last-child(3) .featured-collection-stack__card-inner {
+    transform: scale(0.92);
+  }
+
+  .featured-collection-stack__card:nth-last-child(4) .featured-collection-stack__card-inner {
+    transform: scale(0.9);
+  }
+
+  .featured-collection-stack__card:nth-last-child(n+5) .featured-collection-stack__card-inner {
+    transform: scale(0.88);
+  }
+
+  .featured-collection-stack__image-container {
+    position: relative;
+    display: block;
+    width: 100%;
+    flex-shrink: 0;
+    border-radius: var(--media-radius);
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    line-height: 0;
+    background: transparent;
+  }
+
+  .featured-collection-stack__image,
+  .featured-collection-stack__image-container .placeholder-svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 3 / 2;
+    border-radius: var(--media-radius);
+    display: block;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    vertical-align: top;
+  }
+
+  .featured-collection-stack__image-container .placeholder-svg {
+    width: 100%;
+    height: auto;
+  }
+
+  .space {
+    height: 90vh;
+  }
+
+  .space--small {
+    height: 40vh;
+  }
+
+  @media screen and (max-width: 749px) {
+    .featured-collection-stack__image,
+    .featured-collection-stack__image-container .placeholder-svg {
+      aspect-ratio: 2 / 3;
+    }
+
+    .featured-collection-stack__cards {
+      padding: 0 1.5rem;
+    }
+  }
+
+  .featured-collection-stack__content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 2rem;
+    background: {% if section.settings.overlay_gradient != blank %}{{ section.settings.overlay_gradient }}{% else %}linear-gradient(180deg, transparent 0%, {{ section.settings.overlay_color }} 100%){% endif %};
+    color: {{ section.settings.text_color }};
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    height: 100%;
+    box-sizing: border-box;
+    pointer-events: none;
+  }
+
+  .featured-collection-stack__content > * {
+    pointer-events: auto;
+  }
+
+  .featured-collection-stack__vendor {
+    font-size: 1rem;
+    margin: 0 0 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.9;
+  }
+
+  .featured-collection-stack__heading {
+    font-size: 2.5rem;
+    margin: 0 0 1rem;
+    font-weight: 600;
+  }
+
+  .featured-collection-stack__heading a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .featured-collection-stack__heading a:hover {
+    text-decoration: underline;
+  }
+
+  .featured-collection-stack__price {
+    margin: 0 0 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+
+  .featured-collection-stack__price .price {
+    color: {{ section.settings.text_color }};
+  }
+
+  .featured-collection-stack__quick-add {
+    margin-bottom: 1rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .featured-collection-stack__heading {
+      font-size: 1.8rem;
+    }
+
+    .featured-collection-stack__price {
+      font-size: 1.2rem;
+    }
+  }
+
+  .title-wrapper {
+    margin-bottom: 2rem;
+  }
+
+  .collection__description {
+    margin-bottom: 3rem;
+    max-width: 600px;
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "Featured Collection Stack",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4,
+      "label": "Products to show"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Featured Collection",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Small"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h0",
+          "label": "Large"
+        },
+        {
+          "value": "hxl",
+          "label": "Extra large"
+        }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "View Product"
+    },
+    {
+      "type": "header",
+      "content": "Product card settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "default": true,
+      "label": "Show price"
+    },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "default": "none",
+      "label": "Quick add",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "bulk",
+          "label": "Bulk"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Sticky positioning"
+    },
+    {
+      "type": "range",
+      "id": "sticky_top_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Sticky top (desktop)",
+      "default": 20,
+      "info": "Distance from top of viewport when sticky on desktop (percentage)"
+    },
+    {
+      "type": "range",
+      "id": "sticky_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Sticky top (mobile)",
+      "default": 15,
+      "info": "Distance from top of viewport when sticky on mobile (percentage)"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Content overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "color_background",
+      "id": "overlay_gradient",
+      "label": "Content overlay gradient",
+      "default": "linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%)"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collection Stack"
+    }
+  ]
+}
+{% endschema %}
