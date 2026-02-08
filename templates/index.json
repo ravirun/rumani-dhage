@@ -97,7 +97,7 @@
       ],
       "settings": {
         "layout": "grid",
-        "slide_height": "adapt_image",
+        "slide_height": "medium",
         "desktop_height_ratio": 36,
         "mobile_height_ratio": 125,
         "slider_visual": "dots",
@@ -145,11 +145,13 @@
         "instastory_WpHcMF",
         "instastory_3"
       ],
+      "disabled": true,
       "name": "Instagram Story",
       "settings": {}
     },
     "featured_collection_main": {
       "type": "featured-collection",
+      "disabled": true,
       "settings": {
         "collection": "sarees",
         "products_to_show": 4,
