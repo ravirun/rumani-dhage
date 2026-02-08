@@ -62,12 +62,12 @@
         "height": 100,
         "bg_color": "rgba(0,0,0,0)",
         "target_text": "Aranya",
-        "petal_color": "#ffb7c5",
-        "spark_color": "#ffd700",
+        "petal_color": "#b91e4c",
+        "spark_color": "#b91e4c",
         "float_speed": 0.6,
         "density": 250,
         "chime_volume": 0.5,
-        "interaction_mode": "manual"
+        "interaction_mode": "autotext"
       }
     }
   },
