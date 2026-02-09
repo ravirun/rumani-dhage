@@ -9,23 +9,6 @@
  */
 {
   "sections": {
-    "1766394317b6774eea": {
-      "type": "_blocks",
-      "blocks": {
-        "ai_gen_block_9b2ed9d_nQzeF8": {
-          "type": "ai_gen_block_9b2ed9d",
-          "settings": {
-            "desktop_height": 20,
-            "mobile_height": 10
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "ai_gen_block_9b2ed9d_nQzeF8"
-      ],
-      "settings": {}
-    },
     "slideshow_main": {
       "type": "slideshow",
       "blocks": {
@@ -96,16 +79,39 @@
         "slide_D6Vihc"
       ],
       "settings": {
-        "layout": "grid",
-        "slide_height": "medium",
+        "layout": "full_bleed",
+        "slide_height": "adapt_image",
         "desktop_height_ratio": 36,
         "mobile_height_ratio": 125,
         "slider_visual": "dots",
         "auto_rotate": true,
-        "change_slides_speed": 5,
-        "image_behavior": "none",
+        "change_slides_speed": 3,
+        "image_behavior": "ambient",
         "show_text_below": false,
         "accessibility_info": "Slideshow about our brand"
+      }
+    },
+    "featured_collection_stack_8wxHxW": {
+      "type": "featured-collection-stack",
+      "name": "Featured Collection Stack",
+      "settings": {
+        "collection": "shop-all",
+        "products_to_show": 4,
+        "title": "Featured Collection",
+        "heading_size": "h1",
+        "description": "",
+        "button_label": "View Product",
+        "show_vendor": false,
+        "show_price": true,
+        "quick_add": "none",
+        "sticky_top_desktop": 20,
+        "sticky_top_mobile": 15,
+        "bg_color": "rgba(0,0,0,0)",
+        "overlay_color": "#000000",
+        "overlay_gradient": "linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.7) 100%)",
+        "text_color": "#ffffff",
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     },
     "instagram_story_main": {
@@ -184,25 +190,45 @@
         "card_2": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/ultrawide-panoramic-lifestyle-saree-hero-image_f481a38f-65b4-484e-8d17-bc6c7ceeba2d.png"
+            "image": "shopify://shop_images/ultrawide-panoramic-lifestyle-saree-hero-image_f481a38f-65b4-484e-8d17-bc6c7ceeba2d.png",
+            "heading": "Card Heading",
+            "subheading": "Subheading",
+            "text": "<p>Share information about your brand with your customers.</p>",
+            "link": "",
+            "link_label": "Button"
           }
         },
         "card_3": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/chanderi-suit-set-complete-set.png"
+            "image": "shopify://shop_images/chanderi-suit-set-complete-set.png",
+            "heading": "Card Heading",
+            "subheading": "Subheading",
+            "text": "<p>Share information about your brand with your customers.</p>",
+            "link": "",
+            "link_label": "Button"
           }
         },
         "card_4": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/lifestyle-image_dd65b307-8f61-444f-8c06-1281fa797203.png"
+            "image": "shopify://shop_images/lifestyle-image_dd65b307-8f61-444f-8c06-1281fa797203.png",
+            "heading": "Card Heading",
+            "subheading": "Subheading",
+            "text": "<p>Share information about your brand with your customers.</p>",
+            "link": "",
+            "link_label": "Button"
           }
         },
         "card_1": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/ultrawide-panoramic-lifestyle-saree-hero-image.png"
+            "image": "shopify://shop_images/ultrawide-panoramic-lifestyle-saree-hero-image.png",
+            "heading": "Card Heading",
+            "subheading": "Subheading",
+            "text": "<p>Share information about your brand with your customers.</p>",
+            "link": "",
+            "link_label": "Button"
           }
         }
       },
@@ -212,6 +238,7 @@
         "card_4",
         "card_1"
       ],
+      "disabled": true,
       "settings": {
         "sticky_top_desktop": 15,
         "sticky_top_mobile": 15,
@@ -221,6 +248,7 @@
     },
     "featured_collection_main_2": {
       "type": "featured-collection",
+      "disabled": true,
       "settings": {
         "collection": "sarees",
         "products_to_show": 4,
@@ -311,6 +339,7 @@
         "heading": "Latest Articles",
         "heading_size": "h1",
         "columns_desktop": 4,
+        "enable_grid_layout": false,
         "show_view_all": true,
         "show_image": true,
         "show_date": true,
@@ -441,8 +470,8 @@
     }
   },
   "order": [
-    "1766394317b6774eea",
     "slideshow_main",
+    "featured_collection_stack_8wxHxW",
     "instagram_story_main",
     "featured_collection_main",
     "stack_banner_main",
