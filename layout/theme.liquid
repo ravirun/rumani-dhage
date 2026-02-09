@@ -35,6 +35,10 @@
     <script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
 
+    {%- if settings.enable_interactive_audio -%}
+      <script src="{{ 'global-audio.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
+
     {%- if settings.animations_reveal_on_scroll -%}
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
@@ -366,6 +370,16 @@
         recipientFormCollapsed: `{{ 'recipient.form.collapsed' | t }}`,
         countrySelectorSearchCount: `{{ 'localization.country_results_count' | t: count: '[count]' }}`,
       };
+
+      {%- if settings.enable_interactive_audio -%}
+      window.themeAudioSettings = {
+        enabled: {{ settings.enable_interactive_audio | json }},
+        volume: {{ settings.audio_volume | default: 50 | divided_by: 100.0 }},
+        scrollSounds: {{ settings.audio_on_scroll | default: true | json }},
+        hoverSounds: {{ settings.audio_on_hover | default: true | json }},
+        clickSounds: {{ settings.audio_on_click | default: true | json }}
+      };
+      {%- endif -%}
     </script>
 
     {%- if settings.predictive_search_enabled -%}
@@ -374,6 +388,10 @@
 
     {% render 'mobile-bottom-nav' %}
     {% render 'cart-interceptor' %}
+
+    {%- if settings.show_audio_toggle and settings.enable_interactive_audio -%}
+      {% render 'audio-toggle' %}
+    {%- endif -%}
 
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>

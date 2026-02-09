@@ -277,6 +277,8 @@
 
   // --- Audio ---
   function playSparkleSound() {
+    // Check global audio state first
+    if (window.ThemeAudio && !window.ThemeAudio.isEnabled()) return;
     if (settings.volume === 0) return;
     if (audioCtx.state === 'suspended') audioCtx.resume();
     // On mobile, limiting polyphony might be needed, but minimal oscillator use is generally okay
@@ -294,6 +296,15 @@
       osc.stop(now + 0.5);
     });
   }
+
+  // Listen for global audio state changes
+  document.addEventListener('audioStateChanged', (e) => {
+    if (!e.detail.enabled && audioCtx.state === 'running') {
+      audioCtx.suspend();
+    } else if (e.detail.enabled && audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+  });
 
   // --- Data Model ---
   let petals = [];

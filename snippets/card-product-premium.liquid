@@ -1,0 +1,165 @@
+{% comment %}
+  Renders a premium product card with an image slider and interactive features.
+
+  Accepts:
+  - card_product: {Object} Product Liquid object
+  - section_id: {String} ID of the section containing the card
+  - lazy_load: {Boolean}
+  - skip_styles: {Boolean}
+
+  Usage:
+  {% render 'card-product-premium', card_product: product %}
+{% endcomment %}
+
+{%- unless skip_styles -%}
+  {{ 'component-card-premium.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'card-product-premium.js' | asset_url }}" defer="defer"></script>
+{%- endunless -%}
+
+{%- if card_product and card_product != empty -%}
+  {%- liquid
+    assign product_form_id = 'quick-add-' | append: section_id | append: card_product.id
+
+    # Logic for dynamic badges
+    assign badge_list = ''
+
+    # 1st Badge: New Arrival or Custom Tag
+    assign seven_days_ago = 'now' | date: '%s' | minus: 604800 | plus: 0
+    assign published_at_timestamp = card_product.published_at | date: '%s' | plus: 0
+
+    if card_product.tags contains 'New' or published_at_timestamp > seven_days_ago
+      assign badge_list = badge_list | append: '"New Arrival",'
+    endif
+
+    # 2nd Badge: Bestseller or Inventory
+    if card_product.tags contains 'Bestseller'
+      assign badge_list = badge_list | append: '"Bestseller",'
+    elsif card_product.available and card_product.variants.first.inventory_quantity > 0 and card_product.variants.first.inventory_quantity < 5
+      assign badge_list = badge_list | append: '"Only ' | append: card_product.variants.first.inventory_quantity | append: ' Left",'
+    endif
+
+    # 3rd Badge: Fabric or Type
+    if card_product.type != blank
+      assign badge_list = badge_list | append: '"' | append: card_product.type | append: '",'
+    endif
+
+    # Fallback if empty
+    if badge_list == ''
+      assign badge_list = '"View Details",'
+    endif
+
+    # Remove trailing comma and wrap in brackets
+    assign badge_json = badge_list | split: ',' | join: ',' | prepend: '[' | append: ']' | replace: ',]', ']'
+  -%}
+
+  <div class="premium-product-card" data-badges="{{ badge_json }}">
+    <div class="premium-image-section">
+      <div class="premium-heart-icon">
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </div>
+
+      <div class="premium-image-slider">
+        {%- if card_product.media.size > 0 -%}
+          {%- for media in card_product.media limit: 3 -%}
+            <img
+              srcset="
+                {%- if media.width >= 165 -%}{{ media | image_url: width: 165 }} 165w,{%- endif -%}
+                {%- if media.width >= 360 -%}{{ media | image_url: width: 360 }} 360w,{%- endif -%}
+                {%- if media.width >= 533 -%}{{ media | image_url: width: 533 }} 533w,{%- endif -%}
+                {%- if media.width >= 720 -%}{{ media | image_url: width: 720 }} 720w,{%- endif -%}
+                {{ media | image_url }} {{ media.width }}w
+              "
+              src="{{ media | image_url: width: 533 }}"
+              sizes="(min-width: 1200px) 400px, (min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw"
+              alt="{{ media.alt | escape }}"
+              class="premium-product-img"
+              loading="lazy"
+              width="{{ media.width }}"
+              height="{{ media.height }}"
+            >
+          {%- endfor -%}
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'premium-product-img' }}
+        {%- endif -%}
+      </div>
+
+      {%- if card_product.media.size > 1 -%}
+        <div class="premium-dots-overlay">
+          {%- for media in card_product.media limit: 3 -%}
+            <div class="premium-dot{% if forloop.first %} active{% endif %}"></div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      <div class="premium-badge">
+        {%- if card_product.vendor != blank -%}
+          {%- comment -%} Using a placeholder for avatar or maybe branding icon {%- endcomment -%}
+          <img
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100"
+            class="premium-badge-avatar"
+            alt="Brand Logo"
+            width="24"
+            height="24"
+          >
+        {%- endif -%}
+        <span class="premium-badge-text">
+          {%- if card_product.tags contains 'New' -%}
+            New Arrival
+          {%- else -%}
+            {{ card_product.tags.first | default: 'Collection' }}
+          {%- endif -%}
+        </span>
+      </div>
+    </div>
+
+    <div class="premium-content">
+      <a href="{{ card_product.url }}" class="premium-title">
+        {{ card_product.title | escape }}
+      </a>
+
+      <div class="premium-price-container">
+        <span class="premium-current-price">{{ card_product.price | money }}</span>
+        {%- if card_product.compare_at_price > card_product.price -%}
+          <span class="premium-old-price">{{ card_product.compare_at_price | money }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- if card_product.available -%}
+        <product-form data-section-id="{{ section_id }}">
+          {%- form 'product',
+            card_product,
+            id: product_form_id,
+            class: 'form',
+            novalidate: 'novalidate',
+            data-type: 'add-to-cart-form'
+          -%}
+            <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}">
+            <button type="submit" name="add" class="premium-add-btn">Add To Cart</button>
+          {%- endform -%}
+        </product-form>
+      {%- else -%}
+        <button class="premium-add-btn" disabled>Sold Out</button>
+      {%- endif -%}
+    </div>
+  </div>
+{%- else -%}
+  {%- comment -%} Placeholder Card {%- endcomment -%}
+  <div class="premium-product-card">
+    <div class="premium-image-section">
+      {{ 'product-1' | placeholder_svg_tag: 'premium-product-img' }}
+      <div class="premium-badge">
+        <span class="premium-badge-text">New Arrival</span>
+      </div>
+    </div>
+    <div class="premium-content">
+      <h1 class="premium-title">Example Product Title</h1>
+      <div class="premium-price-container">
+        <span class="premium-current-price">₹10,999</span>
+        <span class="premium-old-price">₹12,999</span>
+      </div>
+      <button class="premium-add-btn">Add To Cart</button>
+    </div>
+  </div>
+{%- endif -%}

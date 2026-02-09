@@ -1,0 +1,475 @@
+{% comment %}
+  Blog Cards Section - Weaver's Journal Edition
+  This section uses a custom design independent of the primary theme styles.
+{% endcomment %}
+
+{%- liquid
+  assign section_id = 'section-' | append: section.id
+-%}
+
+<div id="{{ section_id }}" class="weaver-journal-section">
+  <main class="stage">
+    <div class="card-arc">
+      {%- for block in section.blocks limit: 5 -%}
+        {%- liquid
+          assign card_blog = block.settings.blog
+          assign card_title = card_blog.title
+          assign card_url = card_blog.url
+
+          assign card_image = blank
+          if card_blog.articles.size > 0
+            assign card_image = card_blog.articles.first.image
+          endif
+
+          assign card_category = blank
+          if card_blog.articles.size > 0
+            assign first_article = card_blog.articles.first
+            if first_article.tags.size > 0
+              assign card_category = first_article.tags.first
+            endif
+          endif
+        -%}
+
+        <a
+          href="{{ card_url | default: '#' }}"
+          class="card c{{ forloop.index }}"
+          {{ block.shopify_attributes }}
+          data-index="{{ forloop.index0 }}"
+        >
+          {%- if card_image != blank -%}
+            <img
+              src="{{ card_image | image_url: width: 600 }}"
+              alt="{{ card_title | escape }}"
+              class="card-img"
+              loading="lazy"
+              width="{{ card_image.width }}"
+              height="{{ card_image.height }}"
+            >
+          {%- else -%}
+            <div class="card-img-placeholder"></div>
+          {%- endif -%}
+          <div class="card-overlay"></div>
+          <div class="card-content">
+            <div>
+              <span class="category-tag">{{ card_category | default: 'Journal' }}</span>
+              <span class="font-serif-luxury italic">{{ card_title }}</span>
+            </div>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.heading != blank -%}
+      <h1 class="headline">
+        {{ section.settings.heading | replace: ' ', '<br>' }}
+      </h1>
+    {%- endif -%}
+
+    {%- if section.settings.show_buttons -%}
+      <div class="btn-group">
+        {%- if section.settings.button_1_label != blank -%}
+          <a href="{{ section.settings.button_1_url | default: '#' }}" class="pill-btn pill-btn-primary">
+            {{ section.settings.button_1_label }}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.button_2_label != blank -%}
+          <a href="{{ section.settings.button_2_url | default: '#' }}" class="pill-btn pill-btn-secondary">
+            {{ section.settings.button_2_label }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </main>
+</div>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&family=Instrument+Serif:ital@0;1&display=swap"
+  rel="stylesheet"
+>
+
+{% style %}
+  #{{ section_id }} {
+    --accent-primary: #b91e4c;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: {{ section.settings.section_height }}vh;
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #{{ section_id }} .stage {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    perspective: 1200px;
+  }
+
+  #{{ section_id }} .card-arc {
+    position: relative;
+    height: 280px; /* Reduced to fit smaller cards */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin-bottom: 2.5rem;
+    transition: height 0.5s;
+  }
+
+  @media screen and (min-width: 750px) {
+    #{{ section_id }} .card-arc {
+      height: 350px;
+    }
+  }
+
+  #{{ section_id }} .card {
+    position: absolute;
+    width: auto;
+    height: 100%;
+    border-radius: 8px;
+    padding: 1.5rem;
+    font-weight: 600;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transform-origin: bottom center;
+    box-shadow: 0 10px 30px var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid rgba(185, 30, 76, 0.1);
+    background: transparent;
+    overflow: hidden;
+    text-decoration: none;
+    aspect-ratio: 2 / 3;
+    max-height: 200px;
+  }
+
+  @media screen and (min-width: 750px) {
+    #{{ section_id }} .card {
+      max-height: 260px;
+      padding: 1.5rem;
+    }
+  }
+
+  #{{ section_id }} .card-img,
+  #{{ section_id }} .card-img-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    z-index: 0;
+  }
+
+  #{{ section_id }} .card-img-placeholder {
+    background: linear-gradient(135deg, var(--bg-color) 0%, var(--accent-primary) 100%);
+  }
+
+  #{{ section_id }} .card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(185, 30, 76, 0.05) 0%, rgba(185, 30, 76, 0.85) 100%);
+    z-index: 1;
+  }
+
+  #{{ section_id }} .card-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: white;
+  }
+
+  #{{ section_id }} .card:hover {
+    z-index: 100 !important;
+    transform: translateY(-35px) scale(1.1) translateX(-50%) !important; /* Adjust since it's centered */
+    border-color: var(--accent-primary);
+    box-shadow: 0 15px 40px rgba(185, 30, 76, 0.4);
+  }
+
+  /* Arc logic using same transformations but with center positioning */
+  #{{ section_id }} .c1 { z-index: 1; left: 50%; transform: translateX(calc(-50% - 120px)) translateY(40px) rotate(-15deg); }
+  #{{ section_id }} .c2 { z-index: 2; left: 50%; transform: translateX(calc(-50% - 60px)) translateY(10px) rotate(-7deg); }
+  #{{ section_id }} .c3 { z-index: 3; left: 50%; transform: translateX(-50%) translateY(0) rotate(0deg); }
+  #{{ section_id }} .c4 { z-index: 2; left: 50%; transform: translateX(calc(-50% + 60px)) translateY(10px) rotate(7deg); }
+  #{{ section_id }} .c5 { z-index: 1; left: 50%; transform: translateX(calc(-50% + 120px)) translateY(40px) rotate(15deg); }
+
+  @media screen and (min-width: 750px) {
+    #{{ section_id }} .c1 { transform: translateX(calc(-50% - 240px)) translateY(80px) rotate(-20deg); }
+    #{{ section_id }} .c2 { transform: translateX(calc(-50% - 120px)) translateY(20px) rotate(-10deg); }
+    #{{ section_id }} .c3 { transform: translateX(-50%) translateY(0) rotate(0deg); }
+    #{{ section_id }} .c4 { transform: translateX(calc(-50% + 120px)) translateY(20px) rotate(10deg); }
+    #{{ section_id }} .c5 { transform: translateX(calc(-50% + 240px)) translateY(80px) rotate(20deg); }
+  }
+
+  #{{ section_id }} .headline {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 2rem;
+    color: var(--accent-primary);
+    text-align: center;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  @media screen and (min-width: 750px) {
+    #{{ section_id }} .headline {
+      font-size: 5.5rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 3rem;
+    }
+  }
+
+  #{{ section_id }} .btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    width: 75%;
+    max-width: 400px;
+  }
+
+  @media screen and (min-width: 750px) {
+    #{{ section_id }} .btn-group {
+      flex-direction: row;
+      width: auto;
+      max-width: none;
+      gap: 1.5rem;
+    }
+  }
+
+  #{{ section_id }} .pill-btn {
+    padding: 0.75rem 1.8rem;
+    text-align: center;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-decoration: none;
+    transition: 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    border-radius: 50px;
+    border: 1.5px solid var(--accent-primary);
+  }
+
+  #{{ section_id }} .pill-btn-primary {
+    background: var(--accent-primary);
+    color: white;
+  }
+
+  #{{ section_id }} .pill-btn-secondary {
+    background: transparent;
+    color: var(--accent-primary);
+  }
+
+  @media screen and (min-width: 750px) {
+    #{{ section_id }} .pill-btn {
+      font-size: 0.7rem;
+      padding: 0.9rem 2.5rem;
+    }
+  }
+
+  #{{ section_id }} .category-tag {
+    font-size: 0.45rem;
+    color: #fff;
+    margin-bottom: 0.4rem;
+    display: block;
+    letter-spacing: 1.5px;
+    opacity: 1;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  #{{ section_id }} .font-serif-luxury {
+    font-family: var(--font-serif);
+  }
+
+  @media screen and (min-width: 750px) {
+    #{{ section_id }} .font-serif-luxury {
+      font-size: 1.8em;
+    }
+  }
+{% endstyle %}
+
+<script>
+  (function() {
+    const section = document.querySelector('#{{ section_id }}');
+    const cards = section.querySelectorAll('.card');
+
+    {% if section.settings.enable_audio -%}
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    function isAudioEnabled() {
+      if (window.ThemeAudio && typeof window.ThemeAudio.isEnabled === 'function') {
+        return window.ThemeAudio.isEnabled();
+      }
+      return true;
+    }
+
+    function playChime(freq) {
+      if (!isAudioEnabled()) return;
+      initAudio();
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.6);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.6);
+    }
+
+    const frequencies = [261.63, 293.66, 329.63, 392.00, 440.00];
+    cards.forEach((card, index) => {
+      const playFreq = frequencies[index] || 329.63;
+      card.addEventListener('mouseenter', () => playChime(playFreq));
+      card.addEventListener('focus', () => playChime(playFreq));
+    });
+
+    document.body.addEventListener('click', () => initAudio(), { once: true });
+    {%- endif %}
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Blog Cards",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Aesthetic"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Weaver's Journal"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "min": 60,
+      "max": 120,
+      "step": 5,
+      "unit": "vh",
+      "label": "Section height",
+      "default": 100
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_audio",
+      "label": "Enable audio interaction",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_buttons",
+      "label": "Show buttons",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_1_label",
+      "label": "Primary button label",
+      "default": "Explore Library"
+    },
+    {
+      "type": "url",
+      "id": "button_1_url",
+      "label": "Primary button URL"
+    },
+    {
+      "type": "text",
+      "id": "button_2_label",
+      "label": "Secondary button label",
+      "default": "Bespoke Consult"
+    },
+    {
+      "type": "url",
+      "id": "button_2_url",
+      "label": "Secondary button URL"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "blog_card",
+      "name": "Blog card",
+      "settings": [
+        {
+          "type": "blog",
+          "id": "blog",
+          "label": "Blog to feature"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog cards",
+      "blocks": [
+        { "type": "blog_card" },
+        { "type": "blog_card" },
+        { "type": "blog_card" },
+        { "type": "blog_card" },
+        { "type": "blog_card" }
+      ]
+    }
+  ]
+}
+{% endschema %}

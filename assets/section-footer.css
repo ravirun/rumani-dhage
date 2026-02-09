@@ -1,3 +1,29 @@
+/* Animated Footer Canvas */
+.footer--animated {
+  position: relative;
+  overflow: hidden;
+}
+
+.footer__canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.footer-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Premium Footer Enhancement */
+.footer--animated.color-scheme-1 {
+  background: linear-gradient(180deg, rgba(var(--color-background), 1) 0%, rgba(var(--color-background), 0.98) 100%);
+}
+
 .footer {
   border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
 }
@@ -12,14 +38,23 @@
 }
 
 @media screen and (max-width: 749px) {
+  /* 2-column grid for mobile footer link lists */
   .footer .grid {
-    display: block;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem 3rem;
   }
 
   .footer-block.grid__item {
     padding: 0;
-    margin: 4rem 0;
+    margin: 0;
     width: 100%;
+  }
+
+  /* Full width for text blocks (like "Our mission") */
+  .footer-block.grid__item:not(.footer-block--menu) {
+    grid-column: 1 / -1;
+    margin-top: 3rem;
   }
 
   .footer-block.grid__item:first-child {

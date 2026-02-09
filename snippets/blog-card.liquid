@@ -1,0 +1,84 @@
+{% comment %}
+  Renders a single blog card with image, category, and title
+
+  Accepts:
+  - card_blog: blog object (optional, auto-fills fields)
+  - card_title: string (optional, defaults to blog title)
+  - card_category: string (optional, defaults to first article tag)
+  - card_url: string (optional, defaults to blog url)
+  - card_image: image object (optional, defaults to first article image)
+  - card_index: number (for audio frequency)
+  - block_id: string (for block attributes)
+
+  Usage:
+  {% render 'blog-card',
+    card_blog: block.settings.blog
+  %}
+{% endcomment %}
+
+{%- liquid
+  if card_blog != blank
+    if card_title == blank
+      assign card_title = card_blog.title
+    endif
+    if card_url == blank
+      assign card_url = card_blog.url
+    endif
+    if card_category == blank and card_blog.articles.size > 0
+      assign first_article = card_blog.articles.first
+      if first_article.tags.size > 0
+        assign card_category = first_article.tags.first
+      endif
+    endif
+    if card_image == blank and card_blog.articles.size > 0
+      assign first_article = card_blog.articles.first
+      if first_article.image != blank
+        assign card_image = first_article.image
+      endif
+    endif
+  endif
+-%}
+
+<a
+  href="{{ card_url | default: '#' }}"
+  class="blog-card-item card-wrapper"
+  data-index="{{ card_index }}"
+  {% if block_id %}
+    {{- block_id -}}
+  {% endif %}
+>
+  <div class="card card--card card--media">
+    {%- if card_image != blank -%}
+      <div class="card__inner">
+        <div class="media media--transparent media--hover-effect">
+          <img
+            srcset="
+              {%- if card_image.width >= 165 -%}{{ card_image | image_url: width: 165 }} 165w,{%- endif -%}
+              {%- if card_image.width >= 360 -%}{{ card_image | image_url: width: 360 }} 360w,{%- endif -%}
+              {%- if card_image.width >= 533 -%}{{ card_image | image_url: width: 533 }} 533w,{%- endif -%}
+              {{ card_image | image_url }} {{ card_image.width }}w
+            "
+            src="{{ card_image | image_url: width: 533 }}"
+            sizes="(min-width: 750px) 180px, 110px"
+            alt="{{ card_title | escape }}"
+            class="motion-reduce"
+            loading="lazy"
+            width="{{ card_image.width }}"
+            height="{{ card_image.height }}"
+          >
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="card__content">
+      <div class="card__information">
+        {%- if card_category != blank -%}
+          <span class="caption-with-letter-spacing light">{{ card_category }}</span>
+        {%- endif -%}
+        <h3 class="card__heading h5">
+          <span class="blog-card-title-serif">{{ card_title }}</span>
+        </h3>
+      </div>
+    </div>
+  </div>
+</a>

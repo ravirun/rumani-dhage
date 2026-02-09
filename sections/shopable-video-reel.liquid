@@ -1,9 +1,3 @@
-{% comment %}
-  Shopable Video Reel Section
-
-  Displays a grid of videos with play buttons that can link to products.
-{% endcomment %}
-
 {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
@@ -76,12 +70,11 @@
     position: relative;
     border-radius: var(--media-radius, 14px);
     overflow: hidden;
-    aspect-ratio: 9 / 16;
     background-color: rgba(var(--color-foreground), 0.04);
     flex-shrink: 0;
     scroll-snap-align: start;
-    width: calc(50vw - 2rem);
-    max-width: 300px;
+    aspect-ratio: 2 / 3;
+    max-height: 400px;
   }
 
   @media screen and (max-width: 749px) {

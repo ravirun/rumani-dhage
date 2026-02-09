@@ -1400,6 +1400,84 @@
     ]
   },
   {
+    "name": "Interactive Audio",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Global Audio Experience"
+      },
+      {
+        "type": "paragraph",
+        "content": "Control the scroll-driven musical journey and interaction sounds throughout your theme"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_interactive_audio",
+        "label": "Enable Interactive Audio",
+        "default": true,
+        "info": "Master control for all audio experiences including scroll-driven Raga and interaction sounds"
+      },
+      {
+        "type": "range",
+        "id": "audio_volume",
+        "label": "Master Volume",
+        "min": 0,
+        "max": 100,
+        "step": 10,
+        "default": 50,
+        "unit": "%"
+      },
+      {
+        "type": "header",
+        "content": "Interaction Sounds"
+      },
+      {
+        "type": "checkbox",
+        "id": "audio_on_scroll",
+        "label": "Scroll Sounds",
+        "default": true,
+        "info": "Enable scroll-driven musical progression"
+      },
+      {
+        "type": "checkbox",
+        "id": "audio_on_hover",
+        "label": "Hover Sounds",
+        "default": true,
+        "info": "Gentle tones when hovering interactive elements"
+      },
+      {
+        "type": "checkbox",
+        "id": "audio_on_click",
+        "label": "Click Sounds",
+        "default": true,
+        "info": "Feedback sounds on button clicks"
+      },
+      {
+        "type": "header",
+        "content": "Audio Toggle Button"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_audio_toggle",
+        "label": "Show Audio Toggle Button",
+        "default": true,
+        "info": "Display floating button for users to control audio"
+      },
+      {
+        "type": "select",
+        "id": "audio_toggle_position",
+        "label": "Toggle Button Position",
+        "options": [
+          { "value": "bottom-right", "label": "Bottom Right" },
+          { "value": "bottom-left", "label": "Bottom Left" },
+          { "value": "top-right", "label": "Top Right" },
+          { "value": "top-left", "label": "Top Left" }
+        ],
+        "default": "bottom-right"
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.cart.name",
     "settings": [
       {

@@ -1,0 +1,274 @@
+{%- liquid
+  assign position = settings.audio_toggle_position | default: 'bottom-right'
+  assign position_classes = ''
+
+  case position
+    when 'bottom-right'
+      assign position_classes = 'audio-toggle--bottom-right'
+    when 'bottom-left'
+      assign position_classes = 'audio-toggle--bottom-left'
+    when 'top-right'
+      assign position_classes = 'audio-toggle--top-right'
+    when 'top-left'
+      assign position_classes = 'audio-toggle--top-left'
+  endcase
+-%}
+
+<button
+  type="button"
+  class="audio-toggle {{ position_classes }}"
+  id="audio-toggle-btn"
+  aria-label="Toggle interactive audio"
+  aria-pressed="true"
+>
+  <svg
+    class="audio-toggle__icon audio-toggle__icon--on"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path class="audio-toggle__wave audio-toggle__wave-1" d="M15.54 8.46C16.4774 9.39764 17.0039 10.6692 17.0039 11.995C17.0039 13.3208 16.4774 14.5924 15.54 15.53" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path class="audio-toggle__wave audio-toggle__wave-2" d="M19.07 4.93C20.9447 6.80528 21.9979 9.34836 21.9979 12C21.9979 14.6516 20.9447 17.1947 19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+
+  <svg
+    class="audio-toggle__icon audio-toggle__icon--off"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="23" y1="9" x2="17" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <line x1="17" y1="9" x2="23" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+</button>
+
+<script>
+  (function () {
+    const toggleBtn = document.getElementById('audio-toggle-btn');
+    if (!toggleBtn || !window.ThemeAudio) return;
+
+    // Set initial state
+    function updateButtonState(enabled) {
+      toggleBtn.classList.toggle('audio-toggle--enabled', enabled);
+      toggleBtn.classList.toggle('audio-toggle--disabled', !enabled);
+      toggleBtn.setAttribute('aria-pressed', enabled.toString());
+      toggleBtn.setAttribute('aria-label', enabled ? 'Disable interactive audio' : 'Enable interactive audio');
+    }
+
+    // Initialize button state
+    updateButtonState(window.ThemeAudio.isEnabled());
+
+    // Handle button click
+    toggleBtn.addEventListener('click', function () {
+      const newState = window.toggleThemeAudio();
+      updateButtonState(newState);
+    });
+
+    // Listen for audio state changes from other sources
+    document.addEventListener('audioStateChanged', function (e) {
+      updateButtonState(e.detail.enabled);
+    });
+
+    // Keyboard accessibility
+    toggleBtn.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleBtn.click();
+      }
+    });
+  })();
+</script>
+
+<style>
+  .audio-toggle {
+    /* Remove default button styles */
+    border: none;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+
+    /* Positioning */
+    position: fixed;
+    z-index: 9999;
+    width: 56px;
+    height: 56px;
+
+    /* Design */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 8px 32px rgba(0, 0, 0, 0.06);
+
+    /* Layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Animation */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: audioToggleFadeIn 0.5s ease 0.5s both;
+  }
+
+  /* Position variants */
+  .audio-toggle--bottom-right {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .audio-toggle--bottom-left {
+    bottom: 20px;
+    left: 20px;
+  }
+
+  .audio-toggle--top-right {
+    top: 20px;
+    right: 20px;
+  }
+
+  .audio-toggle--top-left {
+    top: 20px;
+    left: 20px;
+  }
+
+  /* Mobile positioning adjustments */
+  @media (max-width: 750px) {
+    .audio-toggle {
+      width: 48px;
+      height: 48px;
+    }
+
+    .audio-toggle--bottom-right,
+    .audio-toggle--bottom-left {
+      bottom: calc(80px + env(safe-area-inset-bottom));
+    }
+
+    .audio-toggle__icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  /* Hover state */
+  .audio-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12), 0 12px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Active/pressed state */
+  .audio-toggle:active {
+    transform: scale(0.95);
+  }
+
+  /* Focus state for accessibility */
+  .audio-toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1), 0 4px 16px rgba(0, 0, 0, 0.08), 0 8px 32px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Icon states */
+  .audio-toggle__icon {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    color: #1a1a1a;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .audio-toggle__icon--on {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+
+  .audio-toggle__icon--off {
+    opacity: 0;
+    transform: scale(0.8) rotate(-10deg);
+  }
+
+  .audio-toggle--disabled .audio-toggle__icon--on {
+    opacity: 0;
+    transform: scale(0.8) rotate(10deg);
+  }
+
+  .audio-toggle--disabled .audio-toggle__icon--off {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+
+  /* Pulsing wave animation when enabled */
+  .audio-toggle--enabled::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    color: rgba(0, 0, 0, 0.15);
+    animation: audioPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    pointer-events: none;
+  }
+
+  .audio-toggle--enabled .audio-toggle__wave {
+    animation: waveAnimation 1.5s ease-in-out infinite;
+  }
+
+  .audio-toggle--enabled .audio-toggle__wave-2 {
+    animation-delay: 0.15s;
+  }
+
+  /* Animations */
+  @keyframes audioToggleFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes audioPulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+    50% {
+      transform: scale(1.4);
+      opacity: 0;
+    }
+  }
+
+  @keyframes waveAnimation {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .audio-toggle,
+    .audio-toggle__icon,
+    .audio-toggle::before {
+      animation: none;
+      transition: none;
+    }
+
+    .audio-toggle:hover {
+      transform: none;
+    }
+  }
+</style>

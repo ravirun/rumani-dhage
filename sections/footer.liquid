@@ -27,7 +27,14 @@
   }
 {%- endstyle -%}
 
-<footer class="footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+<footer
+  id="mainFooter"
+  class="footer {% if section.settings.enable_canvas_animation %}footer--animated{% endif %} color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
+>
+  {%- if section.settings.enable_canvas_animation -%}
+    <canvas id="threadCanvas" class="footer__canvas"></canvas>
+  {%- endif -%}
+
   {%- liquid
     assign has_social_icons = true
     if settings.social_facebook_link == blank and settings.social_instagram_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_twitter_link == blank and settings.social_pinterest_link == blank and settings.social_snapchat_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank
@@ -42,6 +49,7 @@
       assign only_empty_brand = true
     endif
   -%}
+
   {%- if section.blocks.size > 0
     or section.settings.newsletter_enable
     or section.settings.show_social
@@ -49,7 +57,7 @@
     or section.settings.enable_follow_on_shop
   -%}
     {%- unless only_empty_brand -%}
-      <div class="footer__content-top page-width">
+      <div class="footer__content-top page-width footer-content">
         {%- if section.blocks.size > 0 -%}
           {%- liquid
             if section.blocks.size == 9
@@ -61,7 +69,7 @@
             endif
           -%}
           <div
-            class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet {{ footer_grid_class }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            class="footer__blocks-wrapper grid grid--2-col grid--4-col-tablet {{ footer_grid_class }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
             {% if settings.animations_reveal_on_scroll %}
               data-cascade
             {% endif %}
@@ -251,7 +259,7 @@
   {%- endif -%}
 
   <div
-    class="footer__content-bottom{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+    class="footer__content-bottom footer-content{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
     {% if settings.animations_reveal_on_scroll %}
       data-cascade
     {% endif %}
@@ -320,6 +328,135 @@
     </div>
   </div>
 </footer>
+
+{%- if section.settings.enable_canvas_animation -%}
+  <script>
+    if (!window.footerAnimationLoaded) {
+      window.footerAnimationLoaded = true;
+
+      (function () {
+        const canvas = document.getElementById('threadCanvas');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        const footer = document.getElementById('mainFooter');
+
+        let width, height;
+        let strings = [];
+        let lastScrollY = window.scrollY;
+        let scrollVelocity = 0;
+
+        // Settings from Shopify customizer
+        const STRING_COUNT = {{ section.settings.thread_count }};
+        const SEGMENT_COUNT = 40;
+        const ANIMATION_SPEED = {{ section.settings.animation_speed | divided_by: 100.0 }};
+        const STIFFNESS = 0.05 * ANIMATION_SPEED;
+        const DAMPING = 0.9;
+        const SCROLL_SENSITIVITY = {{ section.settings.scroll_sensitivity | divided_by: 100.0 }};
+        const THREAD_OPACITY = {{ section.settings.thread_opacity | divided_by: 100.0 }};
+
+        class ThreadNode {
+          constructor(x, y) {
+            this.x = x;
+            this.y = y;
+            this.originX = x;
+            this.originY = y;
+            this.vx = 0;
+            this.vy = 0;
+          }
+          update() {
+            let dx = this.originX - this.x;
+            let dy = this.originY - this.y;
+            this.vx += dx * STIFFNESS;
+            this.vy += dy * STIFFNESS;
+            this.vy -= scrollVelocity * SCROLL_SENSITIVITY;
+            this.vx *= DAMPING;
+            this.vy *= DAMPING;
+            this.x += this.vx;
+            this.y += this.vy;
+          }
+        }
+
+        class SilkThread {
+          constructor(yOffset, color, thickness) {
+            this.nodes = [];
+            this.color = color;
+            this.thickness = thickness;
+            const step = (width + 400) / SEGMENT_COUNT;
+            for (let i = 0; i <= SEGMENT_COUNT; i++) {
+              let x = -200 + i * step;
+              let y = height * 0.5 + yOffset + Math.sin(i * 0.3) * 40 + Math.cos(i * 0.1) * 20;
+              this.nodes.push(new ThreadNode(x, y));
+            }
+          }
+          update() {
+            this.nodes.forEach((n) => n.update());
+          }
+          draw() {
+            ctx.beginPath();
+            ctx.moveTo(this.nodes[0].x, this.nodes[0].y);
+            for (let i = 1; i < this.nodes.length - 2; i++) {
+              const xc = (this.nodes[i].x + this.nodes[i + 1].x) / 2;
+              const yc = (this.nodes[i].y + this.nodes[i + 1].y) / 2;
+              ctx.quadraticCurveTo(this.nodes[i].x, this.nodes[i].y, xc, yc);
+            }
+            ctx.strokeStyle = this.color;
+            ctx.lineWidth = this.thickness;
+            ctx.globalAlpha = THREAD_OPACITY;
+            ctx.stroke();
+          }
+        }
+
+        function init() {
+          width = footer.offsetWidth;
+          height = footer.offsetHeight;
+          canvas.width = width;
+          canvas.height = height;
+          strings = [];
+          const colors = [
+            '{{ section.settings.thread_color_1 }}',
+            '{{ section.settings.thread_color_2 }}',
+            '{{ section.settings.thread_color_3 }}',
+            '{{ section.settings.thread_color_4 }}'
+          ];
+          for (let i = 0; i < STRING_COUNT; i++) {
+            let offset = (i - STRING_COUNT / 2) * 35;
+            strings.push(new SilkThread(offset, colors[i % colors.length], 1 + Math.random() * 2));
+          }
+        }
+
+        function animate() {
+          let currentScrollY = window.scrollY;
+          scrollVelocity = Math.max(-20, Math.min(20, currentScrollY - lastScrollY));
+          lastScrollY = currentScrollY;
+          scrollVelocity *= 0.95;
+          ctx.clearRect(0, 0, width, height);
+          strings.forEach((s) => {
+            s.update();
+            s.draw();
+          });
+          requestAnimationFrame(animate);
+        }
+
+        let resizeTimeout;
+        window.addEventListener('resize', function () {
+          clearTimeout(resizeTimeout);
+          resizeTimeout = setTimeout(init, 250);
+        });
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            init();
+            animate();
+          });
+        } else {
+          init();
+          animate();
+        }
+      })();
+    }
+  </script>
+{%- endif -%}
 
 {% schema %}
 {
@@ -491,6 +628,83 @@
       "default": true,
       "label": "t:sections.footer.settings.show_policy.label",
       "info": "t:sections.footer.settings.show_policy.info"
+    },
+    {
+      "type": "header",
+      "content": "Canvas Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_canvas_animation",
+      "default": true,
+      "label": "Enable silk thread animation",
+      "info": "Animated canvas background with flowing silk threads"
+    },
+    {
+      "type": "range",
+      "id": "thread_count",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "label": "Number of threads",
+      "default": 15,
+      "info": "More threads create a denser pattern"
+    },
+    {
+      "type": "range",
+      "id": "animation_speed",
+      "min": 50,
+      "max": 200,
+      "step": 10,
+      "unit": "%",
+      "label": "Animation speed",
+      "default": 100,
+      "info": "How quickly threads return to position"
+    },
+    {
+      "type": "range",
+      "id": "scroll_sensitivity",
+      "min": 0,
+      "max": 150,
+      "step": 10,
+      "unit": "%",
+      "label": "Scroll sensitivity",
+      "default": 80,
+      "info": "How much threads react to scrolling"
+    },
+    {
+      "type": "range",
+      "id": "thread_opacity",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Thread opacity",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "thread_color_1",
+      "label": "Thread color 1",
+      "default": "#d4af37"
+    },
+    {
+      "type": "color",
+      "id": "thread_color_2",
+      "label": "Thread color 2",
+      "default": "#e5c07b"
+    },
+    {
+      "type": "color",
+      "id": "thread_color_3",
+      "label": "Thread color 3",
+      "default": "#f3e5ab"
+    },
+    {
+      "type": "color",
+      "id": "thread_color_4",
+      "label": "Thread color 4",
+      "default": "#c5a059"
     },
     {
       "type": "header",
