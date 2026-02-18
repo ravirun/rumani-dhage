@@ -1,0 +1,173 @@
+{% comment %}
+  Trust Badges Strip
+
+  Displays trust indicators like ratings, certifications, and key benefits
+  in a horizontal strip format.
+{% endcomment %}
+
+{%- style -%}
+  .trust-strip-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .trust-strip-{{ section.id }} .trust-container {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-top: 0.1rem solid rgba(var(--color-foreground), 0.1);
+    border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3rem;
+  }
+
+  .trust-strip-{{ section.id }} .trust-item {
+    font-size: {{ section.settings.font_size }}px;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: rgb(var(--color-foreground));
+    font-family: var(--font-heading-family);
+  }
+
+  .trust-strip-{{ section.id }} .trust-icon {
+    color: rgba(var(--color-foreground), 0.7);
+    font-size: 2rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .trust-strip-{{ section.id }} .trust-container {
+      gap: 2rem;
+    }
+  }
+{%- endstyle -%}
+
+<section class="trust-strip-{{ section.id }} color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width">
+    <div class="trust-container">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'trust_item' -%}
+          <div class="trust-item" {{ block.shopify_attributes }}>
+            {%- if block.settings.icon != blank -%}
+              <span class="trust-icon">{{ block.settings.icon }}</span>
+            {%- endif -%}
+            {{ block.settings.text }}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Trust Badges",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 12
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_item",
+      "name": "Trust Badge",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon",
+          "default": "★",
+          "info": "Use emoji or symbol (★, ✓, ✦, etc.)"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "4.9 Trustscore"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust Badges",
+      "blocks": [
+        {
+          "type": "trust_item",
+          "settings": {
+            "icon": "★",
+            "text": "4.9 Trustscore"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "icon": "✓",
+            "text": "Verified Artisans"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "icon": "✦",
+            "text": "Global Shipping"
+          }
+        },
+        {
+          "type": "trust_item",
+          "settings": {
+            "icon": "❁",
+            "text": "Authentic Handloom"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

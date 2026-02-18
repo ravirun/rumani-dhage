@@ -1,0 +1,173 @@
+{% comment %}
+  Renders a video card for the Shoppable Video Reel section.
+  Accepts:
+  - product: {Object} Shopify product object.
+  - video: {Object} Shopify video object.
+  - discount_label: {String} Text for the discount badge.
+  - discount_color: {String} Color for the discount badge background.
+  - block_id: {String} Unique ID for the block (for specific styling if needed).
+{% endcomment %}
+
+{%- liquid
+  assign qty_rules = false
+  if product.selected_or_first_available_variant.quantity_rule.min > 1 or product.selected_or_first_available_variant.quantity_rule.max != null or product.selected_or_first_available_variant.quantity_rule.increment > 1
+    assign qty_rules = true
+  endif
+
+  assign product_form_id = 'quick-add-' | append: section.id | append: '-' | append: product.id
+  assign quick_add_modal_id = 'QuickAdd-' | append: product.id | append: '-' | append: section.id
+-%}
+
+<div class="card-wrapper product-card-wrapper underline-links-hover">
+  <div
+    class="card card--{{ settings.card_style }} card--media color-{{ settings.card_color_scheme }} gradient"
+    data-block-id="{{ block_id }}"
+  >
+    <div
+      class="card__inner {% if settings.card_style == 'standard' %}color-{{ settings.card_color_scheme }} gradient{% endif %} ratio"
+      style="--ratio-percent: 172%;"
+    >
+      <div class="card__media">
+        {%- if video -%}
+          {{
+            video
+            | video_tag:
+              autoplay: true,
+              loop: true,
+              muted: true,
+              controls: false,
+              playsinline: true,
+              class: 'reel-card__video'
+          }}
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'reel-card__placeholder' }}
+        {%- endif -%}
+        <div class="reel-card__overlay-gradient"></div>
+
+        {%- if discount_label != blank -%}
+          <span
+            class="badge"
+            style="position: absolute; top: 1rem; left: 1rem; background-color: {{ discount_color | default: '#ef4444' }}; color: #fff; z-index: 2;"
+          >
+            {{ discount_label }}
+          </span>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="card__content">
+      <div class="card__information">
+        {%- if product != blank -%}
+          <h3 class="card__heading h5">
+            <a href="{{ product.url }}" class="full-unstyled-link">
+              {{ product.title | truncate: 30 }}
+            </a>
+          </h3>
+          <div class="price">
+            {% render 'price', product: product, price_class: '', show_badges: false %}
+          </div>
+        {%- else -%}
+          <h3 class="card__heading h5">{{ 'onboarding.product_title' | t }}</h3>
+          <div class="price">
+            <span class="price-item price-item--regular">{{ 1999 | money }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="quick-add no-js-hidden">
+        {%- if product != blank -%}
+          {%- if product.variants.size > 1 or qty_rules -%}
+            <modal-opener data-modal="#{{ quick_add_modal_id }}">
+              <button
+                id="{{ product_form_id }}-submit"
+                type="button"
+                class="quick-add__submit button button--full-width button--secondary"
+                aria-haspopup="dialog"
+                aria-labelledby="{{ product_form_id }}-submit"
+                data-product-url="{{ product.url }}"
+              >
+                {%- if product.available -%}
+                  {{ 'products.product.choose_options' | t }}
+                {%- else -%}
+                  {{ 'products.product.sold_out' | t }}
+                {%- endif -%}
+                {%- render 'loading-spinner' -%}
+              </button>
+            </modal-opener>
+          {%- else -%}
+            <product-form class="product-form" data-section-id="{{ section.id }}">
+              {%- form 'product',
+                product,
+                id: product_form_id,
+                class: 'form',
+                novalidate: 'novalidate',
+                data-type: 'add-to-cart-form'
+              -%}
+                <input
+                  type="hidden"
+                  name="id"
+                  value="{{ product.selected_or_first_available_variant.id }}"
+                  class="product-variant-id"
+                  {% if product.selected_or_first_available_variant.available == false %}
+                    disabled
+                  {% endif %}
+                >
+                <button
+                  id="{{ product_form_id }}-submit"
+                  type="submit"
+                  name="add"
+                  class="quick-add__submit button button--full-width button--secondary"
+                  aria-haspopup="dialog"
+                  aria-labelledby="{{ product_form_id }}-submit"
+                  aria-live="polite"
+                  data-sold-out-message="true"
+                  {% if product.selected_or_first_available_variant.available == false %}
+                    disabled
+                  {% endif %}
+                >
+                  <span>
+                    {%- if product.selected_or_first_available_variant.available -%}
+                      {{ 'products.product.add_to_cart' | t }}
+                    {%- else -%}
+                      {{ 'products.product.sold_out' | t }}
+                    {%- endif -%}
+                  </span>
+                  <span class="sold-out-message hidden">
+                    {{ 'products.product.sold_out' | t }}
+                  </span>
+                  {%- render 'loading-spinner' -%}
+                </button>
+              {%- endform -%}
+            </product-form>
+          {%- endif -%}
+        {%- else -%}
+          <button class="button button--full-width button--secondary" disabled>
+            {{ 'products.product.sold_out' | t }}
+          </button>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- if product != blank and product.variants.size > 1 or qty_rules -%}
+    <quick-add-modal id="{{ quick_add_modal_id }}" class="quick-add-modal">
+      <div
+        role="dialog"
+        aria-label="{{ 'products.product.choose_product_options' | t: product_name: product.title | escape }}"
+        aria-modal="true"
+        class="quick-add-modal__content global-settings-popup"
+        tabindex="-1"
+      >
+        <button
+          id="ModalClose-{{ quick_add_modal_id }}"
+          type="button"
+          class="quick-add-modal__toggle"
+          aria-label="{{ 'accessibility.close' | t }}"
+        >
+          {{- 'icon-close.svg' | inline_asset_content -}}
+        </button>
+        <div id="QuickAddInfo-{{ quick_add_modal_id }}" class="quick-add-modal__content-info"></div>
+      </div>
+    </quick-add-modal>
+  {%- endif -%}
+</div>

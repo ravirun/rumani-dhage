@@ -19,13 +19,17 @@
 
   .testimonials {
     width: 100%;
-    background-color: #F8F8F8;
+
+  }
+  .testimonial-container{
+    background-color: #b91d4c;
+    border-radius: 16px;
   }
 
   .testimonials__header {
-    background-color: #C42B6A;
-    border-radius: 20px 20px 0 0;
-    padding: 2rem 2rem 1.5rem;
+
+
+    padding: 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -35,23 +39,17 @@
 
   @media screen and (max-width: 749px) {
     .testimonials__header {
-      padding: 1.5rem 1.5rem 1rem;
-      border-radius: 16px 16px 0 0;
+      padding: 1.5rem ;
+      border-radius: 16px ;
     }
   }
 
   .testimonials__title {
     color: #FFFFFF;
-    margin: 0;
-    font-size: 2.5rem;
-    font-weight: 700;
-    line-height: 1.2;
+
   }
 
   @media screen and (max-width: 749px) {
-    .testimonials__title {
-      font-size: 1.75rem;
-    }
   }
 
   .testimonials__read-all {
@@ -73,7 +71,6 @@
     padding: 2rem;
     overflow: hidden;
     position: relative;
-    background-color: #C42B6A;
   }
 
   @media screen and (max-width: 749px) {
@@ -146,23 +143,8 @@
     }
   }
 
-  .testimonials__text {
-    color: #C42B6A;
-    font-style: italic;
-    font-size: 1.125rem;
-    line-height: 1.6;
-    margin: 0 0 1rem 0;
-    font-family: var(--font-body-family);
-  }
-
-  @media screen and (max-width: 749px) {
-    .testimonials__text {
-      font-size: 1rem;
-    }
-  }
-
   .testimonials__product-link {
-    color: #C42B6A;
+    color: #b91d4c;
     text-decoration: none;
     font-style: italic;
     font-size: 1rem;
@@ -190,88 +172,92 @@
 {%- endstyle -%}
 
 <div class="testimonials section-{{ section.id }}-padding">
-  <div class="page-width">
-    <div class="testimonials__header">
-      {%- if section.settings.title != blank -%}
-        <h2 class="testimonials__title {{ section.settings.heading_size }}">
-          {{ section.settings.title }}
-        </h2>
-      {%- endif -%}
-      {%- if section.settings.read_all_text != blank and section.settings.read_all_link != blank -%}
-        <a href="{{ section.settings.read_all_link }}" class="testimonials__read-all">
-          {{ section.settings.read_all_text }}
-          <span>→</span>
-        </a>
-      {%- endif -%}
-    </div>
+  <div class="page-width ">
+    <div class="testimonial-container">
+      <div class="testimonials__header">
+        {%- if section.settings.title != blank -%}
+          <h2 class="testimonials__title heading heading--h1">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.read_all_text != blank and section.settings.read_all_link != blank -%}
+          <a href="{{ section.settings.read_all_link }}" class="testimonials__read-all">
+            {{ section.settings.read_all_text }}
+            <span>→</span>
+          </a>
+        {%- endif -%}
+      </div>
 
-    <div class="testimonials__container">
-      {%- if section.blocks.size > 0 -%}
-        <div class="testimonials__track">
-          {%- for block in section.blocks -%}
-            {% case block.type %}
-              {% when 'testimonial' %}
-                <div class="testimonials__card" {{ block.shopify_attributes }}>
-                  {%- if block.settings.testimonial_text != blank -%}
-                    <p class="testimonials__text">
-                      {{ block.settings.testimonial_text }}
-                    </p>
-                  {%- endif -%}
-                  {%- if block.settings.product_link != blank -%}
-                    <a href="{{ block.settings.product_link }}" class="testimonials__product-link">
-                      Product Link
-                      <span>→</span>
-                    </a>
-                  {%- endif -%}
-                </div>
-            {% endcase %}
-          {%- endfor -%}
-          {%- comment -%} Duplicate items for seamless loop {%- endcomment -%}
-          {%- for block in section.blocks -%}
-            {% case block.type %}
-              {% when 'testimonial' %}
-                <div class="testimonials__card">
-                  {%- if block.settings.testimonial_text != blank -%}
-                    <p class="testimonials__text">
-                      {{ block.settings.testimonial_text }}
-                    </p>
-                  {%- endif -%}
-                  {%- if block.settings.product_link != blank -%}
-                    <a href="{{ block.settings.product_link }}" class="testimonials__product-link">
-                      Product Link
-                      <span>→</span>
-                    </a>
-                  {%- endif -%}
-                </div>
-            {% endcase %}
-          {%- endfor -%}
-        </div>
-      {%- else -%}
-        <div class="testimonials__track">
-          {%- for i in (1..4) -%}
-            <div class="testimonials__card">
-              <p class="testimonials__text">
-                Superb quality! I'm very happy with this purchase and would highly recommend it to anyone
-              </p>
-              <a href="#" class="testimonials__product-link">
-                Product Link
-                <span>→</span>
-              </a>
-            </div>
-          {%- endfor -%}
-          {%- for i in (1..4) -%}
-            <div class="testimonials__card">
-              <p class="testimonials__text">
-                Superb quality! I'm very happy with this purchase and would highly recommend it to anyone
-              </p>
-              <a href="#" class="testimonials__product-link">
-                Product Link
-                <span>→</span>
-              </a>
-            </div>
-          {%- endfor -%}
-        </div>
-      {%- endif -%}
+      <div class="testimonials__container">
+        {%- if section.blocks.size > 0 -%}
+          <div class="testimonials__track">
+            {%- for block in section.blocks -%}
+              {% case block.type %}
+                {% when 'testimonial' %}
+                  <div class="testimonials__card" {{ block.shopify_attributes }}>
+                    {%- if block.settings.testimonial_text != blank -%}
+                      <p class="testimonials__text">
+                        <i>
+                          {{ block.settings.testimonial_text }}
+                        </i>
+                      </p>
+                    {%- endif -%}
+                    {%- if block.settings.product_link != blank -%}
+                      <a href="{{ block.settings.product_link }}" class="testimonials__product-link">
+                        Product Link
+                        <span>→</span>
+                      </a>
+                    {%- endif -%}
+                  </div>
+              {% endcase %}
+            {%- endfor -%}
+            {%- comment -%} Duplicate items for seamless loop {%- endcomment -%}
+            {%- for block in section.blocks -%}
+              {% case block.type %}
+                {% when 'testimonial' %}
+                  <div class="testimonials__card">
+                    {%- if block.settings.testimonial_text != blank -%}
+                      <p class="testimonials__text">
+                        {{ block.settings.testimonial_text }}
+                      </p>
+                    {%- endif -%}
+                    {%- if block.settings.product_link != blank -%}
+                      <a href="{{ block.settings.product_link }}" class="testimonials__product-link">
+                        Product Link
+                        <span>→</span>
+                      </a>
+                    {%- endif -%}
+                  </div>
+              {% endcase %}
+            {%- endfor -%}
+          </div>
+        {%- else -%}
+          <div class="testimonials__track">
+            {%- for i in (1..4) -%}
+              <div class="testimonials__card">
+                <p class="testimonials__text">
+                  Superb quality! I'm very happy with this purchase and would highly recommend it to anyone
+                </p>
+                <a href="#" class="testimonials__product-link">
+                  Product Link
+                  <span>→</span>
+                </a>
+              </div>
+            {%- endfor -%}
+            {%- for i in (1..4) -%}
+              <div class="testimonials__card">
+                <p class="testimonials__text">
+                  Superb quality! I'm very happy with this purchase and would highly recommend it to anyone
+                </p>
+                <a href="#" class="testimonials__product-link">
+                  Product Link
+                  <span>→</span>
+                </a>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
     </div>
   </div>
 </div>

@@ -1,0 +1,62 @@
+{% comment %}
+  Renders a single blog folder card with photos and stickers
+
+  Accepts:
+  - blog: {Object} Blog object from Shopify
+  - block_attributes: {String} Shopify block attributes for theme editor
+
+  Usage:
+  {% render 'blog-folder-card', blog: block.settings.blog, block_attributes: block.shopify_attributes %}
+{% endcomment %}
+
+{%- liquid
+  assign selected_blog = blog
+
+  if selected_blog != blank
+    assign folder_title = selected_blog.title
+    assign folder_link = selected_blog.url
+    assign folder_subtitle = selected_blog.articles_count | append: ' articles'
+
+    assign sticker_1 = selected_blog.title | slice: 0, 1
+    assign sticker_2 = selected_blog.title | slice: -1, 1
+
+  else
+    assign folder_title = 'Blog Name'
+    assign folder_subtitle = '0 articles'
+    assign folder_link = '#'
+
+    assign sticker_1 = '🇯🇵'
+    assign sticker_2 = '⛩️'
+  endif
+-%}
+
+<a href="{{ folder_link | default: '#' }}" class="folder-container" {{ block_attributes }}>
+  <div class="folder-stack">
+    {%- assign photo_count = 0 -%}
+    {%- for article in selected_blog.articles -%}
+      {%- if article.image != blank and photo_count < 3 -%}
+        {%- assign photo_count = photo_count | plus: 1 -%}
+        <img
+          class="folder-photo photo-{{ photo_count }}"
+          width="80"
+          height="100"
+          src="{{ article.image | image_url: width: 300 }}"
+          alt="{{ article.title }}"
+          loading="lazy"
+        >
+      {%- endif -%}
+    {%- endfor -%}
+    <div class="folder-front">
+      <div class="folder-accent-lines"></div>
+    </div>
+
+    {%- if sticker_1 != blank -%}
+      <div class="folder-sticker sticker-left h3">{{ sticker_1 }}</div>
+    {%- endif -%}
+    {%- if sticker_2 != blank -%}
+      <div class="folder-sticker sticker-right h3">{{ sticker_2 }}</div>
+    {%- endif -%}
+  </div>
+  <h3 class="folder-title">{{ folder_title }}</h3>
+  <p class="folder-subtitle">{{ folder_subtitle }}</p>
+</a>

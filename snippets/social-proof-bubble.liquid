@@ -1,0 +1,21 @@
+{% comment %}
+  Renders a social proof bubble.
+  Accepts:
+  - title: {String}
+  - subtitle: {String}
+  - badge: {String}
+  - brand_name: {String}
+{% endcomment %}
+
+<div class="bubble">
+  <div class="content-inner">
+    {%- if brand_name != blank -%}
+      <div class="brand-name">{{ brand_name }}</div>
+    {%- endif -%}
+    <div class="user-tag">{{ title }}</div>
+    <div class="stat-line">{{ subtitle }}</div>
+    {%- if badge != blank -%}
+      <div class="proof-badge">{{ badge }}</div>
+    {%- endif -%}
+  </div>
+</div>

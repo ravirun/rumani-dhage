@@ -333,11 +333,7 @@
           >
         {%- endfor -%}
       {%- else -%}
-        <img
-          src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&q=80&w=800"
-          class="product-img-static"
-          alt="Primary View"
-        >
+        {{ 'product-1' | placeholder_svg_tag: 'product-img-static' }}
       {%- endif -%}
     </div>
 

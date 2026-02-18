@@ -1,19 +1,11 @@
-{% doc %}
-  Renders a full-screen Instagram story viewer modal
-
-  @param {object} [image] - Image object (default: null)
-  @param {object} [video] - Video/media object (default: null)
-  @param {object} [product] - Product object for ATC button (default: null)
-  @param {number} [index] - Current story index (default: 0)
-  @param {number} [total] - Total number of stories (default: 0)
-{% enddoc %}
+{% comment %}
+  Full-screen Instagram Story Viewer Modal
+  Expects:
+  - blocks: section blocks
+{% endcomment %}
 
 {% liquid
-  assign image = image | default: null
-  assign video = video | default: null
-  assign product = product | default: null
-  assign index = index | default: 0
-  assign total = total | default: 0
+
 %}
 
 <modal-dialog id="InstaStoryModal" class="insta-story-full-view-modal">
@@ -24,302 +16,104 @@
     class="insta-story-full-view"
     tabindex="-1"
   >
-    {% comment %} Top right close icon {% endcomment %}
-    <button
-      id="ModalClose-InstaStoryModal"
-      type="button"
-      class="insta-story-full-view__close"
-      aria-label="{{ 'accessibility.close' | t }}"
-      data-close-modal
-    >
-      {{- 'icon-close.svg' | inline_asset_content -}}
-    </button>
-
-    {% comment %} Center left/right navigation chevrons {% endcomment %}
-    {% liquid
-      assign next_index = index | plus: 1
-      assign is_last = false
-      if next_index >= total
-        assign is_last = true
-      endif
-    %}
-    <button
-      type="button"
-      class="insta-story-full-view__nav insta-story-full-view__nav--prev"
-      aria-label="{{ 'general.pagination.previous' | t }}"
-      data-story-prev
-      {% if index == 0 %}
-        style="display: none;"
-        aria-hidden="true"
-        tabindex="-1"
-      {% endif %}
-    >
-      <span class="icon icon-arrow icon-arrow--left" aria-hidden="true">
-        {{- 'icon-arrow.svg' | inline_asset_content -}}
-      </span>
-    </button>
-
-    <button
-      type="button"
-      class="insta-story-full-view__nav insta-story-full-view__nav--next"
-      aria-label="{{ 'general.pagination.next' | t }}"
-      data-story-next
-      {% if is_last %}
-        style="display: none;"
-        aria-hidden="true"
-        tabindex="-1"
-      {% endif %}
-    >
-      <span class="icon icon-arrow icon-arrow--right" aria-hidden="true">
-        {{- 'icon-arrow.svg' | inline_asset_content -}}
-      </span>
-    </button>
-
-    {% comment %} Story media content {% endcomment %}
-    {% liquid
-      assign media_alt = 'Instagram story'
-      if product != blank
-        assign media_alt = product.title | append: ' - Instagram story'
-      elsif image != blank and image.alt != blank
-        assign media_alt = image.alt
-      endif
-    %}
-    <div class="insta-story-full-view__media">
-      {% if image != blank %}
-        <img
-          src="{{ image | image_url: width: 1080 }}"
-          alt="{{ media_alt | escape }}"
-          width="1080"
-          height="1080"
-          loading="eager"
-          fetchpriority="high"
-          class="insta-story-full-view__image"
-          {% if product != blank %}
-            itemprop="image"
-          {% endif %}
-        >
-      {% elsif video != blank %}
-        {{
-          video
-          | media_tag:
-            image_size: '1080x1080',
-            autoplay: true,
-            loop: true,
-            muted: true,
-            playsinline: true,
-            controls: false,
-            preload: 'auto',
-            class: 'insta-story-full-view__video'
-        }}
-        {% comment %} Add track element via JavaScript for accessibility {% endcomment %}
-        <script>
-          (function() {
-            const video = document.currentScript.previousElementSibling;
-            if (video && video.tagName === 'VIDEO' && !video.querySelector('track')) {
-              const track = document.createElement('track');
-              track.kind = 'captions';
-              track.src = '';
-              track.srclang = 'en';
-              track.label = 'English';
-              track.default = true;
-              video.appendChild(track);
-              video.setAttribute('aria-label', {{ media_alt | json }});
-            }
-          })();
-        </script>
-      {% endif %}
+    {% comment %} Top Progress Bars {% endcomment %}
+    <div class="insta-story-full-view__progress-container">
+      {% for block in blocks %}
+        <div class="insta-story-full-view__progress-segment" data-segment-index="{{ forloop.index0 }}">
+          <div class="insta-story-full-view__progress-fill"></div>
+        </div>
+      {% endfor %}
     </div>
 
-    {% comment %} Bottom center ATC button {% endcomment %}
-    {% if product != blank %}
-      <div class="insta-story-full-view__actions">
-        <button
-          type="button"
-          class="button insta-story-full-view__atc"
-          data-product-url="{{ product.url }}"
-          data-open-quick-add
-          aria-label="{{ 'products.product.add_to_cart' | t: product: product.title }}"
-        >
-          <span>{{ 'products.product.add_to_cart' | t }}</span>
-        </button>
+    {% comment %} Top Bar (User Info & Close) {% endcomment %}
+    <div class="insta-story-full-view__top-bar">
+      <div class="insta-story-full-view__user-info">
+        <span class="insta-story-full-view__user-title" data-story-title></span>
+        <span class="insta-story-full-view__time">JUST NOW</span>
       </div>
-    {% endif %}
+      <button
+        id="ModalClose-InstaStoryModal"
+        type="button"
+        class="insta-story-full-view__close-btn"
+        aria-label="{{ 'accessibility.close' | t }}"
+        data-close-modal
+      >
+        {% render 'icon-close' %}
+      </button>
+    </div>
+
+    <div class="insta-story-full-view__content-wrapper">
+      {% comment %} Side navigation (Desktop) {% endcomment %}
+      <button
+        type="button"
+        class="insta-story-full-view__nav-side insta-story-full-view__nav-side--prev"
+        data-story-prev
+        aria-label="{{ 'general.pagination.previous' | t }}"
+      >
+        <span class="icon-arrow-left">{% render 'icon-arrow' %}</span>
+      </button>
+
+      {% comment %} Main Media and Product Overlay Container {% endcomment %}
+      <div class="insta-story-full-view__media-container">
+        <div class="insta-story-full-view__media">
+          {% comment %} Content dynamically injected via JS {% endcomment %}
+        </div>
+
+        {% comment %} LUXURY QUICK BUY PANEL {% endcomment %}
+        <div class="insta-story-full-view__quick-buy-panel" data-quick-buy-panel>
+          <div class="quick-buy-panel__header">
+            <h3 class="quick-buy-panel__title serif" data-pb-title>Product Name</h3>
+            <span class="quick-buy-panel__price" data-pb-price>₹0.00</span>
+          </div>
+
+          <div class="quick-buy-panel__highlights" data-pb-fabric>
+            {% comment %} Fabric/Highlights content {% endcomment %}
+          </div>
+
+          <div class="quick-buy-panel__actions">
+            <button type="button" class="button button--primary quick-buy-panel__atc-btn" data-pb-atc>
+              <span>Add to Bag</span>
+              <div class="loading-overlay__spinner hidden">
+                <svg
+                  aria-hidden="true"
+                  focusable="false"
+                  class="spinner"
+                  viewBox="0 0 66 66"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                </svg>
+              </div>
+            </button>
+            <a href="#" class="quick-buy-panel__details-link" data-pb-details-link> View Details &rarr; </a>
+          </div>
+        </div>
+
+        {% comment %} Mobile Mini Trigger (to open Quick Buy panel) {% endcomment %}
+        <div class="insta-story-full-view__mobile-trigger">
+          <button type="button" class="insta-story-full-view__shop-btn" data-toggle-quick-buy>Shop Now</button>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="insta-story-full-view__nav-side insta-story-full-view__nav-side--next"
+        data-story-next
+        aria-label="{{ 'general.pagination.next' | t }}"
+      >
+        <span class="icon-arrow-right">{% render 'icon-arrow' %}</span>
+      </button>
+    </div>
+
+    {% comment %} Bottom Bar {% endcomment %}
+    <div class="insta-story-full-view__bottom-bar">
+      <div class="insta-story-full-view__views">
+        <span>&copy; Rumani Dhage</span>
+      </div>
+      <div class="insta-story-full-view__next-label" data-story-next>
+        <span class="icon-play">{% render 'icon-play' %}</span>
+        <span>NEXT</span>
+      </div>
+    </div>
   </div>
 </modal-dialog>
-
-{% style %}
-  .insta-story-full-view-modal {
-    opacity: 0;
-    position: fixed;
-    visibility: hidden;
-    z-index: -1;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.95);
-  }
-
-  .insta-story-full-view-modal[open] {
-    opacity: 1;
-    visibility: visible;
-    z-index: 1000;
-  }
-
-  .insta-story-full-view {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .insta-story-full-view__close {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    border-radius: 50%;
-    width: 3rem;
-    height: 3rem;
-    min-width: 44px; /* Accessibility: minimum touch target */
-    min-height: 44px; /* Accessibility: minimum touch target */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.2s ease;
-    color: white;
-  }
-
-  .insta-story-full-view__close:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
-
-  .insta-story-full-view__close .icon {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-
-  .insta-story-full-view__nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    border-radius: 50%;
-    width: 3.5rem;
-    height: 3.5rem;
-    min-width: 44px; /* Accessibility: minimum touch target */
-    min-height: 44px; /* Accessibility: minimum touch target */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.2s ease;
-    color: white;
-  }
-
-  .insta-story-full-view__nav:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
-
-  .insta-story-full-view__nav--prev {
-    left: 1.5rem;
-  }
-
-  .insta-story-full-view__nav--next {
-    right: 1.5rem;
-  }
-
-  .insta-story-full-view__nav .icon {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-
-  .icon-arrow--left {
-    transform: rotate(180deg);
-  }
-
-  .icon-arrow--right {
-    transform: rotate(0deg);
-  }
-
-  .insta-story-full-view__media {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-width: 1080px;
-    max-height: 100vh;
-  }
-
-  .insta-story-full-view__image,
-  .insta-story-full-view__video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    max-width: 100%;
-    max-height: 100vh;
-    /* Prevent layout shift */
-    display: block;
-    aspect-ratio: 1 / 1;
-  }
-
-  .insta-story-full-view__actions {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-  }
-
-  .insta-story-full-view__atc {
-    background: rgb(var(--color-button));
-    color: rgb(var(--color-button-text));
-    padding: 1rem 2rem;
-    border-radius: 0.4rem;
-    font-weight: 500;
-    min-width: 200px;
-  }
-
-  .insta-story-full-view__atc:hover {
-    opacity: 0.9;
-  }
-
-  @media screen and (max-width: 749px) {
-    .insta-story-full-view__nav {
-      width: 2.5rem;
-      height: 2.5rem;
-    }
-
-    .insta-story-full-view__nav--prev {
-      left: 0.5rem;
-    }
-
-    .insta-story-full-view__nav--next {
-      right: 0.5rem;
-    }
-
-    .insta-story-full-view__close {
-      top: 1rem;
-      right: 1rem;
-      width: 2.5rem;
-      height: 2.5rem;
-    }
-
-    .insta-story-full-view__actions {
-      bottom: 1rem;
-    }
-
-    .insta-story-full-view__atc {
-      min-width: 150px;
-      padding: 0.75rem 1.5rem;
-    }
-  }
-{% endstyle %}

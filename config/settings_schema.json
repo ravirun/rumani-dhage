@@ -1478,6 +1478,83 @@
     ]
   },
   {
+    "name": "Instagram Stories",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Story Circles"
+      },
+      {
+        "type": "range",
+        "id": "insta_story_circle_size",
+        "min": 60,
+        "max": 120,
+        "step": 2,
+        "unit": "px",
+        "label": "Circle Size",
+        "default": 80
+      },
+      {
+        "type": "color",
+        "id": "insta_story_border_color",
+        "label": "Border Color",
+        "default": "#B91E4C"
+      },
+      {
+        "type": "color",
+        "id": "insta_story_active_color",
+        "label": "Active State Color",
+        "default": "#E1306C"
+      },
+      {
+        "type": "range",
+        "id": "insta_story_circle_padding",
+        "min": 1,
+        "max": 8,
+        "step": 1,
+        "unit": "px",
+        "label": "Circle Padding",
+        "default": 2
+      },
+      {
+        "type": "header",
+        "content": "Layout"
+      },
+      {
+        "type": "range",
+        "id": "insta_story_gap",
+        "min": 8,
+        "max": 32,
+        "step": 2,
+        "unit": "px",
+        "label": "Story Gap",
+        "default": 12
+      },
+      {
+        "type": "checkbox",
+        "id": "insta_story_show_product_titles",
+        "label": "Show Product Titles",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "insta_story_alignment",
+        "label": "Layout Alignment",
+        "options": [
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "flex-start",
+            "label": "Left"
+          }
+        ],
+        "default": "center"
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.cart.name",
     "settings": [
       {

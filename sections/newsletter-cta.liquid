@@ -1,0 +1,265 @@
+{% comment %}
+  Newsletter CTA Section
+
+  Final call-to-action section with newsletter signup form.
+  Designed for high contrast and conversion.
+{% endcomment %}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .newsletter-cta-{{ section.id }} {
+    text-align: center;
+  }
+
+  .newsletter-cta-{{ section.id }} .container {
+    max-width: {{ section.settings.container_width }}px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .newsletter-cta-{{ section.id }} h2 {
+    color: rgb(var(--color-foreground));
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3rem;
+    font-weight: normal;
+    font-family: var(--font-heading-family);
+  }
+
+  .newsletter-cta-{{ section.id }} .subheading {
+    margin-bottom: 2.5rem;
+    opacity: 0.9;
+    font-family: var(--font-body-family);
+    color: rgb(var(--color-foreground));
+  }
+
+  .newsletter-cta-{{ section.id }} .cta-form {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .newsletter-cta-{{ section.id }} .cta-form input {
+    padding: 1.2rem 1.8rem;
+    width: 100%;
+    max-width: 32rem;
+    border: 0.1rem solid rgba(var(--color-foreground), 0.2);
+    background: rgb(var(--color-background));
+    color: rgb(var(--color-foreground));
+    font-family: var(--font-body-family);
+    font-size: 1.4rem;
+    border-radius: var(--inputs-radius);
+  }
+
+  .newsletter-cta-{{ section.id }} .cta-form button {
+    background: rgb(var(--color-button));
+    color: rgb(var(--color-button-text));
+    border: none;
+    padding: 1.2rem 3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    cursor: pointer;
+    font-family: var(--font-body-family);
+    font-size: 1.3rem;
+    font-weight: bold;
+    transition: opacity 0.3s;
+    border-radius: var(--buttons-radius);
+  }
+
+  .newsletter-cta-{{ section.id }} .cta-form button:hover {
+    opacity: 0.9;
+  }
+
+  @media screen and (max-width: 749px) {
+    .newsletter-cta-{{ section.id }} .cta-form {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .newsletter-cta-{{ section.id }} .cta-form input,
+    .newsletter-cta-{{ section.id }} .cta-form button {
+      width: 100%;
+      max-width: 32rem;
+    }
+  }
+
+  .newsletter-cta-{{ section.id }} .success-message {
+    display: none;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: rgba(var(--color-foreground), 0.05);
+    color: rgb(var(--color-foreground));
+    border-radius: 0.4rem;
+  }
+
+  .newsletter-cta-{{ section.id }} .success-message.show {
+    display: block;
+  }
+{%- endstyle -%}
+
+<div class="newsletter-cta-{{ section.id }} color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="container">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="h1">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.subheading != blank -%}
+      <p class="subheading">{{ section.settings.subheading }}</p>
+    {%- endif -%}
+
+    <form
+      class="cta-form"
+      id="newsletter-form-{{ section.id }}"
+      action="/contact#newsletter-{{ section.id }}"
+      method="post"
+      accept-charset="UTF-8"
+    >
+      <input type="hidden" name="form_type" value="customer">
+      <input type="hidden" name="utf8" value="✓">
+      <input type="hidden" name="contact[tags]" value="newsletter">
+
+      <input
+        type="email"
+        name="contact[email]"
+        placeholder="{{ section.settings.input_placeholder }}"
+        required
+        aria-label="Email address"
+      >
+
+      <button type="submit">
+        {{ section.settings.button_text }}
+      </button>
+    </form>
+
+    <div class="success-message" id="success-{{ section.id }}">
+      {{ section.settings.success_message }}
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const form = document.getElementById('newsletter-form-{{ section.id }}');
+    const successMsg = document.getElementById('success-{{ section.id }}');
+
+    if (window.location.hash === '#newsletter-{{ section.id }}') {
+      successMsg.classList.add('show');
+      setTimeout(() => {
+        successMsg.classList.remove('show');
+      }, 5000);
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Newsletter CTA",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Inner Circle"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Join for exclusive previews and artisan stories."
+    },
+    {
+      "type": "text",
+      "id": "input_placeholder",
+      "label": "Email input placeholder",
+      "default": "Email address"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Subscribe"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thank you for subscribing!"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "min": 600,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "label": "Container width",
+      "default": 800
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-4"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter CTA"
+    }
+  ]
+}
+{% endschema %}

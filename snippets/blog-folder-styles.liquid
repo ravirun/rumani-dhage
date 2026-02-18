@@ -1,0 +1,181 @@
+{% comment %}
+  Renders scoped styles for the blog folder section
+
+  Accepts:
+  - section: {Object} Section object containing settings and id
+
+  Usage:
+  {% render 'blog-folder-styles', section: section %}
+{% endcomment %}
+
+{%- style -%}
+  .folder-section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+
+
+  .folders-grid-{{ section.id }} {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 60px 40px;
+    justify-content: center;
+  }
+
+  .folder-container {
+    width: calc((100% - ({{ section.settings.columns_mobile | minus: 1 }} * 40px)) / {{ section.settings.columns_mobile }});
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+  }
+
+  @media screen and (min-width: 750px) {
+    .folder-container {
+       width: calc((100% - ({{ section.settings.columns_desktop | minus: 1 }} * 40px)) / {{ section.settings.columns_desktop }});
+    }
+  }
+
+  .folder-container:hover {
+    transform: translateY(-5px);
+  }
+
+  .folder-stack {
+    position: relative;
+    width: 160px;
+    height: 120px;
+    margin-bottom: 15px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .folder-stack {
+      width: 220px;
+      height: 160px;
+      margin-bottom: 20px;
+    }
+  }
+
+  .folder-photo {
+    position: absolute;
+    width: 55px;
+    height: 70px;
+    border-radius: 6px;
+    border: 2px solid white;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+    background-color: rgba(var(--color-foreground), 0.05);
+    overflow: hidden;
+  }
+
+  @media screen and (min-width: 750px) {
+    .folder-photo {
+      width: 80px;
+      height: 100px;
+      border-radius: 8px;
+      border: 3px solid white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+  }
+
+  .folder-photo img,
+  .folder-photo svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Mobile positioning */
+  .photo-1 { top: -15px; left: 10px; transform: rotate(-10deg); z-index: -2; }
+  .photo-2 { top: -25px; left: 50px; transform: rotate(0deg); z-index: -1; }
+  .photo-3 { top: -15px; left: 90px; transform: rotate(10deg); z-index: -2; }
+
+  /* Desktop positioning */
+  @media screen and (min-width: 750px) {
+    .photo-1 { top: -20px; left: 20px; }
+    .photo-2 { top: -35px; left: 70px; }
+    .photo-3 { top: -20px; left: 120px; }
+  }
+
+  .folder-container:hover .photo-1 { transform: rotate(-15deg) translate(-5px, -5px); }
+  .folder-container:hover .photo-2 { transform: translateY(-10px); }
+  .folder-container:hover .photo-3 { transform: rotate(15deg) translate(5px, -5px); }
+
+  .folder-front {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  @media screen and (min-width: 750px) {
+    .folder-front {
+      height: 140px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    }
+  }
+
+
+  .folder-sticker {
+    position: absolute;
+    z-index: 1;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    background: rgb(var(--color-button));
+    color: rgb(var(--color-button-text));
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    pointer-events: none;
+  }
+
+  .sticker-left { top: 50px; left: 15px; transform: rotate(-8deg); }
+  .sticker-right { top: 75px; right: 15px; transform: rotate(8deg); }
+
+  .folder-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: rgb(var(--color-foreground));
+    font-family: var(--font-heading-family);
+    margin-top: 4px;
+    text-align: center;
+  }
+
+  .folder-subtitle {
+    font-size: 0.85rem;
+    color: rgba(var(--color-foreground), 0.75);
+    font-family: var(--font-body-family);
+    margin-top: 2px;
+    text-align: center;
+  }
+  .folder-section-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .folder-section-header h2 {
+    margin: 0 0 10px;
+    color: rgb(var(--color-foreground));
+  }
+
+  .folder-section-header .folder-section-subtitle {
+     color: rgba(var(--color-foreground), 0.75);
+     max-width: 600px;
+     margin: 0 auto;
+     font-size: 1.1rem;
+     line-height: 1.5;
+  }
+{%- endstyle -%}

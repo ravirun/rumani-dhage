@@ -1,0 +1,439 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* Container */
+  .reel-stage {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .reel-stage__bg-pattern {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: radial-gradient(rgb(var(--color-foreground)) 1.5px, transparent 1.5px);
+    background-size: 20px 20px;
+    z-index: 0;
+  }
+
+  /* List / Track */
+  .reel-track {
+    display: flex;
+    gap: 1.5rem;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    z-index: 1;
+    cursor: grab;
+  }
+
+  .reel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .reel-track.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+  }
+
+  /* Layout Modes */
+  .reel-track--stacked {
+    overflow-x: hidden;
+    justify-content: center;
+  }
+
+  .reel-track--grid {
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow: visible;
+  }
+
+  /* Card Styling (Reel Specific Overrides) */
+  .reel-section-wrapper .card-wrapper {
+    flex-shrink: 0;
+    scroll-snap-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .reel-section-wrapper .card {
+    width: 220px;
+    height: 380px;
+    position: relative;
+    background-color: transparent;
+  }
+
+  .reel-track--grid .card {
+    width: 180px;
+    margin-bottom: 1rem;
+  }
+
+  .reel-track--stacked .card-wrapper {
+    margin-left: -160px;
+  }
+
+  .reel-track--stacked .card-wrapper:first-child {
+    margin-left: 0;
+  }
+
+  .reel-section-wrapper .card-wrapper:hover {
+    transform: translateY(-8px) scale(1.02);
+    z-index: 10;
+  }
+
+  /* Media & Video */
+  .reel-card__video,
+  .reel-card__placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--media-radius);
+  }
+
+  .reel-card__overlay-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Badge */
+  .reel-card__badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    font-style: italic;
+    z-index: 2;
+  }
+
+  /* Content Adjustments */
+  .reel-section-wrapper .card__content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    z-index: 2;
+  }
+
+  .reel-section-wrapper .card__heading,
+  .reel-section-wrapper .price {
+    color: #ffffff;
+  }
+
+  /* Navigation Buttons */
+  .reel-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4rem;
+    height: 4rem;
+    background-color: rgb(var(--color-background));
+    border-radius: 50%;
+    box-shadow: var(--shadow-horizontal-offset) var(--shadow-vertical-offset) var(--shadow-blur-radius) rgba(var(--color-shadow), var(--shadow-opacity));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    cursor: pointer;
+    z-index: 1;
+    transition: all 0.2s;
+    opacity: 0.9;
+    color: rgb(var(--color-foreground));
+  }
+
+  .reel-nav-btn:hover {
+    background-color: rgba(var(--color-background), 0.9);
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .reel-nav-btn--prev { left: 1rem; }
+  .reel-nav-btn--next { right: 1rem; }
+
+  .reel-nav-btn svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .reel-nav-btn--prev svg {
+    transform: rotate(180deg);
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes bounceIn {
+    0% { opacity: 0; transform: scale(0.3); }
+    50% { opacity: 1; transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+  }
+
+  .anim-fade .card-wrapper {
+    animation: fadeUp 0.6s ease-out forwards;
+    animation-delay: calc(var(--index) * 0.1s);
+    opacity: 0;
+  }
+
+  .anim-bounce .card-wrapper {
+    animation: bounceIn 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards;
+    animation-delay: calc(var(--index) * 0.1s);
+    opacity: 0;
+  }
+{%- endstyle -%}
+
+<div class="section-{{ section.id }}-padding">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <div class="title-wrapper-with-link title-wrapper--self-padded-mobile title-wrapper--no-top-margin text-{{ section.settings.heading_alignment }}">
+        <h2 class="title inline-richtext {{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
+        {%- if section.settings.subheading != blank -%}
+          <div class="subheading rte">{{ section.settings.subheading }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="reel-section-wrapper" id="reel-section-{{ section.id }}">
+      <div class="reel-stage">
+        <div
+          class="reel-track reel-track--{{ section.settings.layout_style }} anim-{{ section.settings.animation_type }}"
+          id="Track-{{ section.id }}"
+        >
+          {%- for block in section.blocks -%}
+            <div class="reel-card-wrapper" style="--index: {{ forloop.index0 }};">
+              {% render 'video-card',
+                product: block.settings.product,
+                video: block.settings.video,
+                discount_label: block.settings.discount_label,
+                discount_color: block.settings.discount_color,
+                block_id: block.id
+              %}
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- if section.settings.show_navigation -%}
+          <button class="reel-nav-btn reel-nav-btn--prev" aria-label="Previous">
+            {{- 'icon-arrow.svg' | inline_asset_content -}}
+          </button>
+          <button class="reel-nav-btn reel-nav-btn--next" aria-label="Next">
+            {{- 'icon-arrow.svg' | inline_asset_content -}}
+          </button>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ 'quick-add.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const sectionId = '{{ section.id }}';
+    const track = document.getElementById(`Track-${sectionId}`);
+    const prevBtn = document.querySelector(`#reel-section-${sectionId} .reel-nav-btn--prev`);
+    const nextBtn = document.querySelector(`#reel-section-${sectionId} .reel-nav-btn--next`);
+
+    if (!track) return;
+
+    // Drag to scroll functionality
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    track.addEventListener('mousedown', (e) => {
+      isDown = true;
+      track.classList.add('is-dragging');
+      startX = e.pageX - track.offsetLeft;
+      scrollLeft = track.scrollLeft;
+    });
+
+    track.addEventListener('mouseleave', () => {
+      isDown = false;
+      track.classList.remove('is-dragging');
+    });
+
+    track.addEventListener('mouseup', () => {
+      isDown = false;
+      track.classList.remove('is-dragging');
+    });
+
+    track.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - track.offsetLeft;
+      const walk = (x - startX) * 2; // Scroll-fast
+      track.scrollLeft = scrollLeft - walk;
+    });
+
+    // Navigation Buttons
+    if (prevBtn && nextBtn) {
+      prevBtn.addEventListener('click', () => {
+        track.scrollBy({ left: -240, behavior: 'smooth' });
+      });
+      nextBtn.addEventListener('click', () => {
+        track.scrollBy({ left: 240, behavior: 'smooth' });
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Shoppable Video Reel",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Watch & Shop"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "layout_style",
+      "label": "Layout Style",
+      "options": [
+        { "value": "slide", "label": "Slide" },
+        { "value": "stacked", "label": "Stacked" },
+        { "value": "grid", "label": "Grid" }
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "select",
+      "id": "animation_type",
+      "label": "Entry Animation",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "fade", "label": "Fade Up" },
+        { "value": "bounce", "label": "Bounce" }
+      ],
+      "default": "fade"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "Show Navigation Buttons",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video_card",
+      "name": "Video Card",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "discount_label",
+          "label": "Discount Label",
+          "info": "e.g. 25% OFF"
+        },
+        {
+          "type": "color",
+          "id": "discount_color",
+          "label": "Discount Badge Color",
+          "default": "#ef4444"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shoppable Video Reel",
+      "blocks": [{ "type": "video_card" }, { "type": "video_card" }, { "type": "video_card" }]
+    }
+  ]
+}
+{% endschema %}

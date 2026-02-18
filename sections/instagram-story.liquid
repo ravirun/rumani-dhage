@@ -1,772 +1,200 @@
-<section class="page-width" aria-labelledby="instagram-story-heading">
-  <h2 id="instagram-story-heading" class="visually-hidden">Instagram Stories</h2>
-  <div class="instagram-story">
-    <div class="instagram-story__container" aria-label="Instagram stories">
-      {%- if section.blocks.size > 0 -%}
-        {% for block in section.blocks limit: 10 %}
-          {% case block.type %}
-            {% when 'instastory' %}
-              {% liquid
-                assign story_image = block.settings.image
-                if story_image == blank and block.settings.product != blank
-                  assign story_image = block.settings.product.featured_media
-                endif
-              %}
-              <article
-                class="instagram-story__item"
-                data-story-index="{{ forloop.index0 }}"
-                data-story-image="{% if story_image %}{{ story_image | image_url: width: 1080 }}{% else %}{% endif %}"
-                data-story-video="{{ block.settings.video.id | default: '' }}"
-                data-story-product-url="{{ block.settings.product.url | default: '' }}"
-                data-story-product-title="{{ block.settings.product.title | default: '' }}"
-                data-open-story
-              >
-                <button
-                  type="button"
-                  class="instagram-story__button"
-                  aria-label="{% if block.settings.product != blank %}View story for {{ block.settings.product.title | escape }}{% else %}View Instagram story{% endif %}"
-                >
-                  {% render 'insta-story-circle',
-                    image: story_image,
-                    video: block.settings.video,
-                    product: block.settings.product
-                  %}
-                </button>
-                {% if block.settings.product != blank %}
-                  <h3 class="instagram-story__product-title">
-                    <a href="{{ block.settings.product.url }}" class="instagram-story__product-link">
-                      {{ block.settings.product.title }}
-                    </a>
-                  </h3>
-                {% endif %}
-              </article>
-          {% endcase %}
-        {% endfor %}
-      {%- else -%}
-        {%- comment -%} Placeholder content when no blocks exist {%- endcomment -%}
-        {%- for i in (1..3) -%}
-          <article
-            class="instagram-story__item"
-            data-story-index="{{ forloop.index0 }}"
-            data-story-image=""
-            data-story-video=""
-            data-story-product-url=""
-            data-story-product-title=""
-            data-open-story
-          >
-            <button
-              type="button"
-              class="instagram-story__button"
-              aria-label="View Instagram story"
-            >
-              {% render 'insta-story-circle' %}
-            </button>
-          </article>
-        {%- endfor -%}
-      {%- endif -%}
-    </div>
-  </div>
+{{ 'component-instagram-story.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'instagram-stories.js' | asset_url }}" defer="defer"></script>
 
-  {% comment %} Full view modal {% endcomment %}
-  {%- if section.blocks.size > 0 -%}
-    {% liquid
-      assign first_block = section.blocks.first
-      assign first_story_image = first_block.settings.image
-      if first_story_image == blank and first_block.settings.product != blank
-        assign first_story_image = first_block.settings.product.featured_media
-      endif
-    %}
-    {% render 'insta-story-full-view',
-      image: first_story_image,
-      video: section.blocks.first.settings.video,
-      product: section.blocks.first.settings.product,
-      index: 0,
-      total: section.blocks.size
-    %}
-  {%- endif -%}
-
-  {% comment %} Quick-add modal for products {% endcomment %}
-  <quick-add-modal id="QuickAdd-InstaStory" class="quick-add-modal">
-    <div
-      role="dialog"
-      aria-label="{{ 'products.product.choose_product_options' | t }}"
-      aria-modal="true"
-      class="quick-add-modal__content global-settings-popup"
-      tabindex="-1"
-    >
-      <button
-        id="ModalClose-QuickAdd-InstaStory"
-        type="button"
-        class="quick-add-modal__toggle"
-        aria-label="{{ 'accessibility.close' | t }}"
-      >
-        {{- 'icon-close.svg' | inline_asset_content -}}
-      </button>
-      <div id="QuickAddInfo-InstaStory" class="quick-add-modal__content-info"></div>
-    </div>
-  </quick-add-modal>
-</section>
-
-{% comment %} Load quick-add assets - defer loading until needed {% endcomment %}
-{{ 'quick-add.css' | asset_url | stylesheet_tag: preload: true }}
-<script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
-
-{% comment %} Structured data for SEO {% endcomment %}
-{% liquid
-  assign product_stories = section.blocks | where: 'type', 'instastory'
-  assign has_products = false
-  for block in product_stories limit: 10
-    if block.settings.product != blank
-      assign has_products = true
-      break
-    endif
-  endfor
-%}
-{% if has_products %}
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": "Instagram Stories",
-      "description": "Featured products in Instagram story format",
-      "itemListElement": [
-        {% assign item_count = 0 %}
-        {% for block in product_stories limit: 10 %}
-          {% if block.settings.product != blank %}
-            {% assign item_count = item_count | plus: 1 %}
-            {
-              "@type": "ListItem",
-              "position": {{ item_count }},
-              "item": {
-                "@type": "Product",
-                "@id": {{ request.origin | append: block.settings.product.url | json }},
-                "name": {{ block.settings.product.title | json }},
-                "url": {{ request.origin | append: block.settings.product.url | json }}{% if block.settings.product.featured_image %},
-                "image": {{ block.settings.product.featured_image | image_url: width: 1080 | prepend: 'https:' | json }}{% endif %}{% if block.settings.product.vendor %},
-                "brand": {
-                  "@type": "Brand",
-                  "name": {{ block.settings.product.vendor | json }}
-                }{% endif %},
-                "offers": {
-                  "@type": "Offer",
-                  "url": {{ request.origin | append: block.settings.product.url | json }},
-                  "priceCurrency": {{ cart.currency.iso_code | default: shop.currency | json }},
-                  "price": "{{ block.settings.product.price | money_without_currency | remove: ',' }}",
-                  "availability": "https://schema.org/{% if block.settings.product.available %}InStock{% else %}OutOfStock{% endif %}"
-                }
-              }
-            }{% if forloop.last == false %},{% endif %}
-          {% endif %}
-        {% endfor %}
-      ]
-    }
-  </script>
-{% endif %}
-
-{% style %}
-  .instagram-story {
-    padding: 1rem 0;
-    /* Prevent layout shift */
-    min-height: 120px;
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
-  .instagram-story__container {
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: thin;
-    -webkit-overflow-scrolling: touch;
-    content-visibility: auto;
-    contain: layout style paint;
-    /* Prevent CLS - reserve space for content */
-    min-height: 120px;
-    width: 100%;
+
+  :root {
+    --rd-story-size: {{ section.settings.circle_size_desktop }}px;
+    --rd-story-size-mobile: {{ section.settings.circle_size_mobile }}px;
   }
 
   @media screen and (min-width: 750px) {
-    .instagram-story__container {
-      justify-content: center;
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
-
-  /* Prevent layout shift during load */
-  .instagram-story__item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-shrink: 0;
-    scroll-snap-align: start;
-    /* Reserve space to prevent CLS */
-    min-width: 80px;
-    width: 80px;
-    min-height: 120px;
-    height: auto;
-  }
-
-  .instagram-story__button {
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-    min-width: 44px; /* Accessibility: minimum touch target */
-    min-height: 44px; /* Accessibility: minimum touch target */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .instagram-story__button:focus-visible {
-    outline: 2px solid rgb(var(--color-foreground));
-    outline-offset: 2px;
-    border-radius: 4px;
-  }
-
-  .instagram-story__product-title {
-    margin: 0;
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-
-  .instagram-story__product-link {
-    color: rgb(var(--color-foreground));
-    text-decoration: none;
-    transition: opacity 0.2s ease;
-    min-height: 44px; /* Accessibility: minimum touch target */
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.5rem;
-    /* margin: -0.25rem -0.5rem; Compensate for padding to maintain layout */
-  }
-
-  .instagram-story__product-link:hover {
-    opacity: 0.8;
-    text-decoration: underline;
-  }
-
-  .instagram-story__product-link:focus-visible {
-    outline: 2px solid rgb(var(--color-foreground));
-    outline-offset: 2px;
-    border-radius: 2px;
-  }
-
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-  }
-{% endstyle %}
-
-{% javascript %}
-  class InstaStoryViewer {
-    // Constants
-    static SWIPE_THRESHOLD = 50;
-    static QUICK_ADD_DELAY = 100;
-    static VIDEO_OBSERVER_THRESHOLD = 0.5;
-    static SELECTORS = {
-      modal: '#InstaStoryModal',
-      container: '.instagram-story__container',
-      storyItem: '[data-open-story]',
-      closeBtn: '[data-close-modal]',
-      prevBtn: '[data-story-prev]',
-      nextBtn: '[data-story-next]',
-      atcBtn: '[data-open-quick-add]',
-      mediaContainer: '.insta-story-full-view__media',
-      dialog: '[role="dialog"]',
-      video: '.insta-story-video',
-      liveRegion: '#insta-story-announcements',
-    };
-
-    constructor() {
-      this.modal = document.querySelector(InstaStoryViewer.SELECTORS.modal);
-      this.stories = Array.from(document.querySelectorAll(InstaStoryViewer.SELECTORS.storyItem));
-      this.currentIndex = 0;
-      this.touchStartX = 0;
-      this.touchEndX = 0;
-      this.openedBy = null;
-      this.videoObserver = null;
-      this.boundHandlers = {};
-
-      if (!this.modal || this.stories.length === 0) return;
-
-      this.init();
-      this.initVideoObserver();
-    }
-
-    initVideoObserver() {
-      if (!('IntersectionObserver' in window)) return;
-
-      this.videoObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            const video = entry.target;
-            if (!(video instanceof HTMLVideoElement)) return;
-
-            if (entry.isIntersecting) {
-              video.play().catch(() => {
-                // Autoplay blocked or error - silently fail
-              });
-            } else {
-              video.pause();
-            }
-          });
-        },
-        { threshold: InstaStoryViewer.VIDEO_OBSERVER_THRESHOLD }
-      );
-
-      const videos = document.querySelectorAll(InstaStoryViewer.SELECTORS.video);
-      videos.forEach((video) => this.videoObserver.observe(video));
-    }
-
-    destroy() {
-      // Cleanup event listeners
-      Object.values(this.boundHandlers).forEach(({ element, event, handler }) => {
-        if (element && handler) {
-          element.removeEventListener(event, handler);
-        }
-      });
-      this.boundHandlers = {};
-
-      // Cleanup video observer
-      if (this.videoObserver) {
-        this.videoObserver.disconnect();
-        this.videoObserver = null;
-      }
-    }
-
-    bindHandler(element, event, handler, options = {}) {
-      if (!element) return;
-      const boundHandler = handler.bind(this);
-      element.addEventListener(event, boundHandler, options);
-      const key = `${event}-${Date.now()}`;
-      this.boundHandlers[key] = { element, event, handler: boundHandler };
-      return boundHandler;
-    }
-
-    init() {
-      if (!this.modal || this.stories.length === 0) return;
-
-      // Open story on circle click - Use event delegation
-      const container = document.querySelector(InstaStoryViewer.SELECTORS.container);
-      if (container) {
-        this.bindHandler(container, 'click', this.handleContainerClick);
-      }
-
-      // Close modal
-      const closeBtn = this.modal.querySelector(InstaStoryViewer.SELECTORS.closeBtn);
-      if (closeBtn) {
-        this.bindHandler(closeBtn, 'click', this.closeStory);
-      }
-
-      // Navigation buttons
-      const prevBtn = this.modal.querySelector(InstaStoryViewer.SELECTORS.prevBtn);
-      const nextBtn = this.modal.querySelector(InstaStoryViewer.SELECTORS.nextBtn);
-
-      if (prevBtn) {
-        this.bindHandler(prevBtn, 'click', this.prevStory);
-      }
-
-      if (nextBtn) {
-        this.bindHandler(nextBtn, 'click', this.nextStory);
-      }
-
-      // Keyboard navigation
-      this.bindHandler(this.modal, 'keydown', this.handleKeyDown);
-
-      // Swipe navigation (touch)
-      this.bindHandler(this.modal, 'touchstart', this.handleTouchStart, { passive: true });
-      this.bindHandler(this.modal, 'touchend', this.handleTouchEnd, { passive: true });
-
-      // Quick add modal trigger
-      const atcBtn = this.modal.querySelector(InstaStoryViewer.SELECTORS.atcBtn);
-      if (atcBtn) {
-        this.bindHandler(atcBtn, 'click', this.handleAtcClick);
-      }
-    }
-
-    handleContainerClick(e) {
-      // Don't open story if clicking on product link
-      if (e.target.closest('.instagram-story__product-link')) {
-        return;
-      }
-
-      // Check if click is on button or circle
-      const button = e.target.closest('.instagram-story__button');
-      const storyItem = button
-        ? button.closest(InstaStoryViewer.SELECTORS.storyItem)
-        : e.target.closest(InstaStoryViewer.SELECTORS.storyItem);
-
-      if (!storyItem) return;
-
-      const index = parseInt(storyItem.getAttribute('data-story-index'), 10);
-      if (!isNaN(index) && index >= 0 && index < this.stories.length) {
-        this.openStory(index);
-      }
-    }
-
-    handleKeyDown(e) {
-      if (!this.modal.hasAttribute('open')) return;
-
-      switch (e.key) {
-        case 'ArrowLeft':
-          e.preventDefault();
-          this.prevStory();
-          break;
-        case 'ArrowRight':
-          e.preventDefault();
-          this.nextStory();
-          break;
-        case 'Escape':
-          e.preventDefault();
-          this.closeStory();
-          break;
-        case 'Tab':
-          // Focus trapping is handled by ModalDialog's trapFocus
-          break;
-      }
-    }
-
-    handleTouchStart(e) {
-      if (e.changedTouches && e.changedTouches.length > 0) {
-        this.touchStartX = e.changedTouches[0].screenX;
-      }
-    }
-
-    handleTouchEnd(e) {
-      if (e.changedTouches && e.changedTouches.length > 0) {
-        this.touchEndX = e.changedTouches[0].screenX;
-        this.handleSwipe();
-      }
-    }
-
-    handleAtcClick(e) {
-      e.stopPropagation();
-      const productUrl = e.currentTarget.getAttribute('data-product-url');
-      if (productUrl) {
-        this.openQuickAdd(productUrl, e.currentTarget);
-      }
-    }
-
-    openStory(index) {
-      if (index < 0 || index >= this.stories.length) return;
-
-      this.currentIndex = index;
-      const story = this.stories[index];
-      if (!story) return;
-
-      // Store the opener for focus restoration
-      this.openedBy = story;
-
-      // Update modal content
-      this.updateModalContent(story, index);
-
-      // Show modal using ModalDialog's show method if available
-      if (typeof this.modal.show === 'function') {
-        this.modal.show(story);
-      } else {
-        this.modal.setAttribute('open', '');
-        document.body.classList.add('overflow-hidden');
-
-        // Use theme's trapFocus function if available
-        const dialog = this.modal.querySelector(InstaStoryViewer.SELECTORS.dialog);
-        if (dialog && typeof window.trapFocus === 'function') {
-          window.trapFocus(this.modal, dialog);
-        } else if (dialog) {
-          dialog.focus();
-        }
-      }
-
-      // Announce to screen readers
-      this.announceStoryChange(index);
-    }
-
-    updateModalContent(story, index) {
-      const imageUrl = story.getAttribute('data-story-image');
-      const videoId = story.getAttribute('data-story-video');
-      const productUrl = story.getAttribute('data-story-product-url');
-      const productTitle = story.getAttribute('data-story-product-title');
-      const totalStories = this.stories.length;
-      const storyNumber = index + 1;
-
-      // Update modal aria-label with story information
-      const dialog = this.modal.querySelector(InstaStoryViewer.SELECTORS.dialog);
-      if (dialog) {
-        const storyLabel = productTitle
-          ? `${this.escapeHtml(productTitle)}, ${storyNumber} of ${totalStories}`
-          : `Story ${storyNumber} of ${totalStories}`;
-        dialog.setAttribute('aria-label', `Instagram Story: ${storyLabel}`);
-      }
-
-      // Update media
-      const mediaContainer = this.modal.querySelector(InstaStoryViewer.SELECTORS.mediaContainer);
-      if (mediaContainer) {
-        // Pause any existing videos first
-        const existingVideos = mediaContainer.querySelectorAll('video');
-        existingVideos.forEach((video) => {
-          if (video instanceof HTMLVideoElement) {
-            video.pause();
-          }
-        });
-
-        if (videoId) {
-          this.updateVideoContent(mediaContainer, story, productTitle);
-        } else if (imageUrl) {
-          this.updateImageContent(mediaContainer, imageUrl, productTitle);
-        }
-      }
-
-      // Update ATC button
-      const atcBtn = this.modal.querySelector(InstaStoryViewer.SELECTORS.atcBtn);
-      if (atcBtn) {
-        if (productUrl) {
-          atcBtn.setAttribute('data-product-url', productUrl);
-          atcBtn.style.display = 'block';
-        } else {
-          atcBtn.style.display = 'none';
-        }
-      }
-
-      // Update navigation buttons
-      this.updateNavigation(index);
-    }
-
-    updateVideoContent(container, story, productTitle) {
-      const videoElement = story.querySelector('.insta-story-inner-circle video');
-      if (!videoElement || !(videoElement instanceof HTMLVideoElement)) return;
-
-      const clonedVideo = videoElement.cloneNode(true);
-      clonedVideo.classList.add('insta-story-full-view__video');
-      clonedVideo.removeAttribute('width');
-      clonedVideo.removeAttribute('height');
-      clonedVideo.style.width = '100%';
-      clonedVideo.style.height = '100%';
-      clonedVideo.style.objectFit = 'contain';
-      clonedVideo.setAttribute('autoplay', '');
-      clonedVideo.setAttribute('loop', '');
-      clonedVideo.setAttribute('muted', '');
-      clonedVideo.setAttribute('playsinline', '');
-      clonedVideo.setAttribute('preload', 'auto');
-      clonedVideo.setAttribute(
-        'aria-label',
-        productTitle ? `${this.escapeHtml(productTitle)} video story` : 'Instagram story video'
-      );
-      clonedVideo.removeAttribute('controls');
-
-      // Ensure track element exists for accessibility
-      if (!clonedVideo.querySelector('track')) {
-        const track = document.createElement('track');
-        track.kind = 'captions';
-        track.src = '';
-        track.srclang = 'en';
-        track.label = 'English';
-        track.default = true;
-        clonedVideo.appendChild(track);
-      }
-
-      container.innerHTML = '';
-      container.appendChild(clonedVideo);
-
-      // Play the video
-      clonedVideo.play().catch(() => {
-        // Autoplay blocked or error - silently fail
-      });
-    }
-
-    updateImageContent(container, imageUrl, productTitle) {
-      const altText = productTitle ? `${this.escapeHtml(productTitle)} Instagram story` : 'Instagram story';
-
-      const img = document.createElement('img');
-      img.src = imageUrl;
-      img.alt = altText;
-      img.loading = 'eager';
-      img.className = 'insta-story-full-view__image';
-      img.setAttribute('fetchpriority', 'high');
-      // Prevent CLS - set dimensions
-      img.width = 1080;
-      img.height = 1080;
-      img.style.aspectRatio = '1 / 1';
-      img.style.display = 'block';
-
-      container.innerHTML = '';
-      container.appendChild(img);
-    }
-
-    escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    updateNavigation(index) {
-      const prevBtn = this.modal.querySelector('[data-story-prev]');
-      const nextBtn = this.modal.querySelector('[data-story-next]');
-
-      if (prevBtn) {
-        const isVisible = index > 0;
-        prevBtn.style.display = isVisible ? 'flex' : 'none';
-        prevBtn.setAttribute('aria-hidden', !isVisible);
-        prevBtn.setAttribute('tabindex', isVisible ? '0' : '-1');
-      }
-      if (nextBtn) {
-        const isVisible = index < this.stories.length - 1;
-        nextBtn.style.display = isVisible ? 'flex' : 'none';
-        nextBtn.setAttribute('aria-hidden', !isVisible);
-        nextBtn.setAttribute('tabindex', isVisible ? '0' : '-1');
-      }
-    }
-
-    prevStory() {
-      if (this.currentIndex > 0) {
-        this.openStory(this.currentIndex - 1);
-      }
-    }
-
-    nextStory() {
-      if (this.currentIndex < this.stories.length - 1) {
-        this.openStory(this.currentIndex + 1);
-      }
-    }
-
-    closeStory() {
-      // Use ModalDialog's hide method if available
-      if (typeof this.modal.hide === 'function') {
-        this.modal.hide();
-      } else {
-        this.modal.removeAttribute('open');
-        document.body.classList.remove('overflow-hidden');
-
-        // Use theme's removeTrapFocus if available
-        if (typeof window.removeTrapFocus === 'function') {
-          window.removeTrapFocus(this.openedBy);
-        }
-      }
-
-      // Pause any videos
-      const videos = this.modal.querySelectorAll('video');
-      videos.forEach((video) => {
-        if (video instanceof HTMLVideoElement) {
-          video.pause();
-        }
-      });
-
-      // Restore focus to the opener
-      if (this.openedBy) {
-        this.openedBy.focus();
-        this.openedBy = null;
-      }
-    }
-
-    announceStoryChange(index) {
-      const story = this.stories[index];
-      if (!story) return;
-
-      const productTitle = story.getAttribute('data-story-product-title');
-      const totalStories = this.stories.length;
-      const storyNumber = index + 1;
-
-      // Create or update aria-live region
-      let liveRegion = document.getElementById('insta-story-announcements');
-      if (!liveRegion) {
-        liveRegion = document.createElement('div');
-        liveRegion.id = 'insta-story-announcements';
-        liveRegion.setAttribute('role', 'status');
-        liveRegion.setAttribute('aria-live', 'polite');
-        liveRegion.setAttribute('aria-atomic', 'true');
-        liveRegion.className = 'visually-hidden';
-        document.body.appendChild(liveRegion);
-      }
-
-      const announcement = productTitle
-        ? `${productTitle}, story ${storyNumber} of ${totalStories}`
-        : `Story ${storyNumber} of ${totalStories}`;
-      liveRegion.textContent = announcement;
-    }
-
-    handleSwipe() {
-      const diff = this.touchStartX - this.touchEndX;
-      const absDiff = Math.abs(diff);
-
-      if (absDiff > InstaStoryViewer.SWIPE_THRESHOLD) {
-        if (diff > 0) {
-          this.nextStory();
-        } else {
-          this.prevStory();
-        }
-      }
-    }
-
-    openQuickAdd(productUrl, opener) {
-      if (!productUrl) return;
-
-      // Close story modal first
-      this.closeStory();
-
-      // Find the quick-add modal (should exist in the section)
-      const quickAddModal = document.getElementById('QuickAdd-InstaStory');
-
-      if (quickAddModal && typeof quickAddModal.show === 'function') {
-        // Ensure the opener has the product URL
-        opener.setAttribute('data-product-url', productUrl);
-
-        // Add loading spinner if it doesn't exist
-        if (!opener.querySelector('.loading__spinner')) {
-          const spinner = document.createElement('span');
-          spinner.className = 'loading__spinner hidden';
-          opener.appendChild(spinner);
-        }
-
-        // Small delay to ensure story modal is closed
-        setTimeout(() => {
-          quickAddModal.show(opener);
-        }, InstaStoryViewer.QUICK_ADD_DELAY);
-      } else {
-        // Fallback: redirect to product page
-        window.location.href = productUrl;
-      }
-    }
-  }
-
-  // Initialize when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      new InstaStoryViewer();
-    });
-  } else {
-    new InstaStoryViewer();
-  }
-{% endjavascript %}
+{%- endstyle -%}
+
+<div class="">
+  <div class="section-{{ section.id }}-padding page-width" style="margin-top: 2rem; margin-bottom: 2rem;">
+    {%- if section.settings.heading != blank -%}
+      <div class="instagram-story__header text-{{ section.settings.heading_alignment }}">
+        <h2 style="text-align:center;" class=" h2">
+          {{ section.settings.heading }}
+        </h2>
+      </div>
+    {%- endif -%}
+
+    <div class="instagram-story">
+      <div class="instagram-story__container-wrapper">
+        <div class="instagram-story__container" aria-label="Instagram stories">
+          {%- if section.blocks.size > 0 -%}
+            {%- for block in section.blocks -%}
+              {%- render 'insta-story-circle', block: block -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..4) -%}
+              <div class="instagram-story__item">
+                <div class="insta-story-outer-circle">
+                  <div class="insta-story-inner-circle">
+                    {{ 'product-apparel-' | append: i | placeholder_svg_tag: 'placeholder-svg' }}
+                  </div>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+
+        {%- if section.settings.view_all_link != blank -%}
+          <div class="instagram-story__view-all">
+            <a href="{{ section.settings.view_all_link }}" class="instagram-story__view-all-link">
+              <span>View All</span>
+              <span class="icon-arrow">{% render 'icon-arrow' %}</span>
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- if section.blocks.size > 0 -%}
+  {%- render 'insta-story-full-view', blocks: section.blocks -%}
+{%- endif -%}
 
 {% schema %}
 {
   "name": "Instagram Story",
-  "settings": [],
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop Our Latest Looks"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View All Link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "circle_size_desktop",
+      "min": 60,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": "Circle Size (Desktop)",
+      "default": 84
+    },
+    {
+      "type": "range",
+      "id": "circle_size_mobile",
+      "min": 40,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Circle Size (Mobile)",
+      "default": 64
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 60
+    }
+  ],
   "blocks": [
     {
       "type": "instastory",
-      "name": "instastory",
+      "name": "Story Item",
       "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "New Arrival"
+        },
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Image",
-          "info": "Add an image for your Instagram story. Recommended size: 1080x1920px (9:16 aspect ratio)"
-        },
-        {
-          "type": "video",
-          "id": "video",
-          "label": "Video",
-          "info": "Optional: Add a video instead of an image for your story"
+          "label": "Cover Image",
+          "info": "Used for the circle trigger"
         },
         {
           "type": "product",
           "id": "product",
-          "label": "Product",
-          "info": "Optional: Link this story to a product. The product title will appear below the story circle"
+          "label": "Tagged Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "story_image",
+          "label": "Story Content Image",
+          "info": "Displayed in the full-screen viewer"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Story Content Video",
+          "info": "Optional: Replaces image in viewer"
+        },
+        {
+          "type": "text",
+          "id": "fabric",
+          "label": "Fabric / Highlights",
+          "info": "Display in Quick Buy panel"
         }
       ]
     }
@@ -774,26 +202,7 @@
   "presets": [
     {
       "name": "Instagram Story",
-      "blocks": [
-        {
-          "type": "instastory",
-          "settings": {
-            "image": ""
-          }
-        },
-        {
-          "type": "instastory",
-          "settings": {
-            "image": ""
-          }
-        },
-        {
-          "type": "instastory",
-          "settings": {
-            "image": ""
-          }
-        }
-      ]
+      "blocks": [{ "type": "instastory" }, { "type": "instastory" }, { "type": "instastory" }, { "type": "instastory" }]
     }
   ]
 }

@@ -1,258 +1,27 @@
-{%- style -%}
-  .folder-section-{{ section.id }} {
-    padding-top: {{ section.settings.padding_top }}px;
-    padding-bottom: {{ section.settings.padding_bottom }}px;
-    background-color: {{ section.settings.bg_color }};
-  }
+{% comment %}
+  Blog Folders Section
+  Displays blog collections as interactive folder cards
+{% endcomment %}
 
-  .folders-grid-{{ section.id }} {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 60px 40px;
-    justify-content: center;
-  }
-
-  .folder-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    text-decoration: none;
-    transition: transform 0.2s ease;
-  }
-
-  @media screen and (min-width: 750px) {
-    .folder-container {
-       width: calc((100% - ({{ section.settings.columns_desktop | minus: 1 }} * 40px)) / {{ section.settings.columns_desktop }});
-    }
-  }
-
-
-
-  .folder-container:hover {
-    transform: translateY(-5px);
-  }
-
-  .folder-stack {
-    position: relative;
-    width: 220px;
-    height: 160px;
-    margin-bottom: 20px;
-  }
-
-  .folder-photo {
-    position: absolute;
-    width: 80px;
-    height: 100px;
-    background-size: cover;
-    background-position: center;
-    border-radius: 8px;
-    border: 3px solid white;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    transition: transform 0.3s ease;
-    background-color: #eee;
-    overflow: hidden; /* Ensure SVG stays inside */
-  }
-
-  .folder-photo svg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .photo-1 { top: -20px; left: 20px; transform: rotate(-10deg); z-index: 1; }
-  .photo-2 { top: -35px; left: 70px; transform: rotate(0deg); z-index: 2; }
-  .photo-3 { top: -20px; left: 120px; transform: rotate(10deg); z-index: 1; }
-
-  .folder-container:hover .photo-1 { transform: rotate(-15deg) translate(-5px, -5px); }
-  .folder-container:hover .photo-2 { transform: translateY(-10px); }
-  .folder-container:hover .photo-3 { transform: rotate(15deg) translate(5px, -5px); }
-
-  .folder-front {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 140px;
-    background: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-    z-index: 10;
-    overflow: hidden;
-  }
-
-  .folder-front::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 40%;
-    height: 25px;
-    background: rgba(255,255,255,0.2);
-    border-bottom-right-radius: 12px;
-    border-right: 1px solid rgba(255, 255, 255, 0.6);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
-  }
-
-  .folder-accent-lines {
-    position: absolute;
-    bottom: 12px;
-    left: 15px;
-    right: 15px;
-    height: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .line {
-    height: 1px;
-    background: rgba(0,0,0,0.05);
-    width: 100%;
-  }
-
-  .folder-sticker {
-    position: absolute;
-    z-index: 20;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-    background: white;
-    padding: 4px;
-    border-radius: 4px;
-    font-size: 20px;
-    pointer-events: none;
-  }
-
-  .sticker-left { top: 45px; left: 30px; transform: rotate(-5deg); }
-  .sticker-right { top: 70px; right: 40px; transform: rotate(8deg); }
-
-  .folder-title {
-    font-weight: 600;
-    font-size: 1.1rem;
-    color: #333;
-    margin-top: 4px;
-    text-align: center;
-  }
-
-  .folder-subtitle {
-    font-size: 0.85rem;
-    color: #aaa;
-    margin-top: 2px;
-    text-align: center;
-  }
-{%- endstyle -%}
+{% render 'blog-folder-styles', section: section %}
 
 <div class="folder-section-{{ section.id }}">
-  <div class="folders-grid-{{ section.id }} page-width">
-    {%- for block in section.blocks -%}
-      {%- liquid
-        assign folder_title = block.settings.title
-        assign folder_subtitle = block.settings.subtitle
-        assign folder_link = block.settings.link
-        assign bg_image_1 = block.settings.image_1
-        assign bg_image_2 = block.settings.image_2
-        assign bg_image_3 = block.settings.image_3
-        assign sticker_1 = block.settings.sticker_1
-        assign sticker_2 = block.settings.sticker_2
-
-        assign selected_blog = block.settings.blog
-        if selected_blog != blank
-          if folder_title == blank or folder_title == block.settings.title.default
-            assign folder_title = selected_blog.title
-          endif
-
-          if folder_link == blank
-            assign folder_link = selected_blog.url
-          endif
-
-          if block.settings.subtitle == blank or block.settings.subtitle == block.settings.subtitle.default
-            assign folder_subtitle = selected_blog.articles_count | append: ' articles'
-          endif
-
-          if selected_blog.articles.size > 0
-            if bg_image_1 == blank
-              assign bg_image_1 = selected_blog.articles[0].image
-            endif
-            if bg_image_2 == blank and selected_blog.articles.size > 1
-              assign bg_image_2 = selected_blog.articles[1].image
-            endif
-            if bg_image_3 == blank and selected_blog.articles.size > 2
-              assign bg_image_3 = selected_blog.articles[2].image
-            endif
-
-            assign tags = selected_blog.articles[0].tags
-            if sticker_1 == blank or sticker_1 == block.settings.sticker_1.default
-              if tags.size > 0
-                assign sticker_1 = tags[0]
-              else
-                assign sticker_1 = ''
-              endif
-            endif
-            if sticker_2 == blank or sticker_2 == block.settings.sticker_2.default
-              if tags.size > 1
-                assign sticker_2 = tags[1]
-              else
-                assign sticker_2 = ''
-              endif
-            endif
-          endif
-        endif
-      -%}
-      <a href="{{ folder_link | default: '#' }}" class="folder-container" {{ block.shopify_attributes }}>
-        <div class="folder-stack">
-          <div
-            class="folder-photo photo-1"
-            {% if bg_image_1 %}
-              style="background-image: url('{{ bg_image_1 | image_url: width: 300 }}')"
-            {% endif %}
-          >
-            {%- if bg_image_1 == blank -%}
-              {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
-            {%- endif -%}
-          </div>
-          <div
-            class="folder-photo photo-2"
-            {% if bg_image_2 %}
-              style="background-image: url('{{ bg_image_2 | image_url: width: 300 }}')"
-            {% endif %}
-          >
-            {%- if bg_image_2 == blank -%}
-              {{ 'collection-2' | placeholder_svg_tag: 'placeholder-svg' }}
-            {%- endif -%}
-          </div>
-          <div
-            class="folder-photo photo-3"
-            {% if bg_image_3 %}
-              style="background-image: url('{{ bg_image_3 | image_url: width: 300 }}')"
-            {% endif %}
-          >
-            {%- if bg_image_3 == blank -%}
-              {{ 'collection-3' | placeholder_svg_tag: 'placeholder-svg' }}
-            {%- endif -%}
-          </div>
-
-          <div class="folder-front">
-            <div class="folder-accent-lines">
-              <div class="line"></div>
-              <div class="line"></div>
-              <div class="line"></div>
-            </div>
-          </div>
-
-          {%- if sticker_1 != blank -%}
-            <div class="folder-sticker sticker-left">{{ sticker_1 }}</div>
-          {%- endif -%}
-          {%- if sticker_2 != blank -%}
-            <div class="folder-sticker sticker-right">{{ sticker_2 }}</div>
-          {%- endif -%}
+  <div class="page-width">
+    <div class="folder-section-header">
+      {%- if section.settings.title != blank -%}
+        <h2 class="{{ section.settings.heading_size }}">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subtitle != blank -%}
+        <div class="folder-section-subtitle rte">
+          {{ section.settings.subtitle }}
         </div>
-        <div class="folder-title">{{ folder_title }}</div>
-        <div class="folder-subtitle">{{ folder_subtitle }}</div>
-      </a>
-    {%- endfor -%}
+      {%- endif -%}
+    </div>
+    <div class="folders-grid-{{ section.id }}">
+      {%- for block in section.blocks -%}
+        {% render 'blog-folder-card', blog: block.settings.blog, block_attributes: block.shopify_attributes %}
+      {%- endfor -%}
+    </div>
   </div>
 </div>
 
@@ -260,6 +29,42 @@
 {
   "name": "Blog Folders",
   "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Blog Folders"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "<p>Explore our curated collections of stories and adventures.</p>"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Small"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h0",
+          "label": "Large"
+        },
+        {
+          "value": "hxl",
+          "label": "Extra Large"
+        }
+      ],
+      "default": "h1",
+      "label": "Heading Size"
+    },
     {
       "type": "color",
       "id": "bg_color",
@@ -276,11 +81,22 @@
       "label": "Columns on Desktop"
     },
     {
-      "type": "number",
-      "id": "max_width",
-      "label": "Max Width (px)",
-      "default": 1000
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "2",
+      "label": "Columns on Mobile"
     },
+
     {
       "type": "header",
       "content": "Spacing"
@@ -312,55 +128,10 @@
       "name": "Blog Folder",
       "settings": [
         {
-          "type": "text",
-          "id": "title",
-          "label": "Folder Title",
-          "default": "Japan 2024",
-          "info": "Leave blank to use Blog title if a blog is selected"
-        },
-        {
           "type": "blog",
           "id": "blog",
           "label": "Blog Source",
-          "info": "Select a blog to automatically populate images."
-        },
-        {
-          "type": "text",
-          "id": "subtitle",
-          "label": "Subtitle",
-          "default": "83 photos"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Link"
-        },
-        {
-          "type": "image_picker",
-          "id": "image_1",
-          "label": "Background Photo 1"
-        },
-        {
-          "type": "image_picker",
-          "id": "image_2",
-          "label": "Center Photo 2"
-        },
-        {
-          "type": "image_picker",
-          "id": "image_3",
-          "label": "Background Photo 3"
-        },
-        {
-          "type": "text",
-          "id": "sticker_1",
-          "label": "Sticker 1 (Emoji or text)",
-          "default": "🇯🇵"
-        },
-        {
-          "type": "text",
-          "id": "sticker_2",
-          "label": "Sticker 2 (Emoji or text)",
-          "default": "⛩️"
+          "info": "Select a blog to automatically populate content."
         }
       ]
     }

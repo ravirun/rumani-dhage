@@ -1,0 +1,218 @@
+{{ 'section-collection-explorer.css' | asset_url | stylesheet_tag }}
+
+<section class="collection-explorer-section" id="CollectionExplorer-{{ section.id }}" data-section="{{ section.id }}">
+  <div class="app-shell-container">
+    <div class="flex flex-1 overflow-hidden">
+      <!-- Sidebar Navigation -->
+      <div class="sidebar flex flex-col space-y-8">
+        <p
+          class="text-[9px] uppercase font-bold text-gray-400 tracking-[0.2em] mb-4 cursor-pointer hover:text-gray-900"
+          onclick="toggleExplorerView('grid')"
+        >
+          Collections
+        </p>
+
+        {%- for collection in collections -%}
+          <div
+            class="category-card {% if forloop.first %}active{% endif %} sidebar-item-{{ forloop.index0 }}"
+            onclick="updateExplorerDetailView({{ forloop.index0 }}, this)"
+            data-id="{{ collection.id }}"
+            data-title="{{ collection.title | escape }}"
+            data-sub="{{ collection.metafields.custom.sub_category | default: 'PREMIUM COLLECTION' | escape }}"
+            data-img="{{ collection.featured_image | image_url: width: 1200 }}"
+            data-count="{{ collection.all_products_count }}"
+            data-desc="{{ collection.description | strip_html | escape }}"
+            data-url="{{ collection.url }}"
+          >
+            <div class="relative w-14 h-14 mx-auto mb-2">
+              {%- if collection.featured_image -%}
+                <img
+                  src="{{ collection.featured_image | image_url: width: 150, height: 150, crop: 'center' }}"
+                  class="w-full h-full object-cover rounded-full grayscale hover:grayscale-0 transition-all border-2 border-white shadow-md {% if forloop.first %}grayscale-0{% endif %}"
+                  alt="{{ collection.title }}"
+                  width="150"
+                  height="150"
+                >
+              {%- else -%}
+                {{
+                  'collection-1'
+                  | placeholder_svg_tag: 'w-full h-full object-cover rounded-full grayscale hover:grayscale-0 transition-all border-2 border-white shadow-md'
+                }}
+              {%- endif -%}
+            </div>
+            <p class="text-[9px] font-bold text-gray-700 uppercase">{{ collection.title | truncate: 10 }}</p>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <!-- Detail View -->
+      <div id="explorer-detail-view" class="main-content-area flex flex-col transition-all duration-500">
+        {%- assign first_collection = collections.first -%}
+        <div class="hero-container">
+          <img
+            id="explorer-hero-img"
+            src="{{ first_collection.featured_image | image_url: width: 1200 }}"
+            class="hero-image"
+            alt="{{ first_collection.title }}"
+            width="1200"
+            height="800"
+          >
+          <div class="sub-category-badge">
+            <p id="explorer-sub-category">
+              {{ first_collection.metafields.custom.sub_category | default: 'PREMIUM COLLECTION' }}
+            </p>
+          </div>
+        </div>
+
+        <div class="flex-1 space-y-4">
+          <div class="flex justify-between items-start">
+            <div>
+              <h2 id="explorer-main-title" class="serif text-2xl md:text-5xl font-bold text-gray-900 leading-tight">
+                Complete {{ first_collection.title }} Collection
+              </h2>
+              <p
+                id="explorer-collection-count"
+                class="text-[11px] font-medium text-gray-400 mt-1 uppercase tracking-widest"
+              >
+                {{ first_collection.all_products_count }} Products
+              </p>
+            </div>
+            <button class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400">
+              <i class="fa-regular fa-heart"></i>
+            </button>
+          </div>
+          <p id="explorer-collection-desc" class="text-xs md:text-base text-gray-500 leading-relaxed max-w-2xl">
+            {{ first_collection.description | strip_html | truncate: 200 }}
+          </p>
+          <div class="pt-4 pb-8 flex items-center justify-between">
+            <button
+              onclick="toggleExplorerView('grid')"
+              class="text-[10px] font-bold text-gray-400 border-b border-gray-200 pb-1"
+            >
+              VIEW ALL COLLECTIONS
+            </button>
+            <a id="explorer-shop-link" href="{{ first_collection.url }}" class="btn-gold">Shop All</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid View -->
+      <div id="explorer-grid-view" class="main-content-area flex flex-col transition-all duration-500 hidden-view">
+        <div class="flex justify-between items-end mb-8">
+          <h2 class="serif text-3xl font-bold text-gray-900">Our Collections</h2>
+          <div class="flex flex-col items-end">
+            <label class="text-[10px] uppercase font-bold text-gray-400 mb-1">Sort By</label>
+            <select
+              id="sort-explorer-collections"
+              onchange="sortExplorerGrid()"
+              class="text-[11px] bg-transparent border-none font-bold text-gray-900 focus:ring-0 cursor-pointer"
+            >
+              <option value="alphabetical">Alphabetical</option>
+              <option value="products_high">Product Count (High)</option>
+            </select>
+          </div>
+        </div>
+
+        <ul id="explorer-grid-list" class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
+          {%- for collection in collections -%}
+            {% render 'collection-card-explorer', collection: collection, animation_delay: forloop.index0 | times: 0.1 %}
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function toggleExplorerView(view) {
+    const detail = document.getElementById('explorer-detail-view');
+    const grid = document.getElementById('explorer-grid-view');
+    if (view === 'grid') {
+      detail.classList.add('hidden-view');
+      grid.classList.remove('hidden-view');
+    } else {
+      detail.classList.remove('hidden-view');
+      grid.classList.add('hidden-view');
+    }
+  }
+
+  function updateExplorerDetailView(index, el) {
+    toggleExplorerView('detail');
+    document.querySelectorAll('.category-card').forEach((card) => card.classList.remove('active'));
+    el.classList.add('active');
+
+    // Handle images in sidebar
+    document.querySelectorAll('.category-card img').forEach((img) => img.classList.add('grayscale'));
+    el.querySelector('img').classList.remove('grayscale');
+
+    const heroImg = document.getElementById('explorer-hero-img');
+    const title = document.getElementById('explorer-main-title');
+    const sub = document.getElementById('explorer-sub-category');
+    const desc = document.getElementById('explorer-collection-desc');
+    const count = document.getElementById('explorer-collection-count');
+    const shopLink = document.getElementById('explorer-shop-link');
+
+    const data = el.dataset;
+
+    heroImg.style.opacity = '0';
+    setTimeout(() => {
+      heroImg.src = data.img;
+      title.innerText = 'Complete ' + data.title + ' Collection';
+      sub.innerText = data.sub;
+      desc.innerText = data.desc;
+      count.innerText = data.count + ' Products';
+      shopLink.href = data.url;
+      heroImg.style.opacity = '1';
+    }, 300);
+  }
+
+  function openCollection(id, index) {
+    const item = document.querySelector(`.sidebar-item-${index}`);
+    if (item) updateExplorerDetailView(index, item);
+  }
+
+  function sortExplorerGrid() {
+    const gridList = document.getElementById('explorer-grid-list');
+    const items = Array.from(gridList.children);
+    const sortVal = document.getElementById('sort-explorer-collections').value;
+
+    items.sort((a, b) => {
+      if (sortVal === 'alphabetical') {
+        const titleA = a.querySelector('h3').innerText.toLowerCase();
+        const titleB = b.querySelector('h3').innerText.toLowerCase();
+        return titleA.localeCompare(titleB);
+      } else if (sortVal === 'products_high') {
+        const countA = parseInt(a.querySelector('p').innerText);
+        const countB = parseInt(b.querySelector('p').innerText);
+        return countB - countA;
+      }
+      return 0;
+    });
+
+    gridList.innerHTML = '';
+    items.forEach((item) => gridList.appendChild(item));
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Collection Explorer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#fffcf8"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Explorer"
+    }
+  ]
+}
+{% endschema %}

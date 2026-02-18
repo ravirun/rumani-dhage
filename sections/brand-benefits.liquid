@@ -1,0 +1,306 @@
+{% comment %}
+  Brand Benefits Section
+
+  Displays key brand differentiators and benefits in a grid layout
+  with icons, headings, and descriptions.
+{% endcomment %}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .brand-benefits-{{ section.id }} .section-heading {
+    text-transform: uppercase;
+    letter-spacing: 0.3rem;
+    margin-bottom: 4rem;
+    text-align: center;
+    color: rgb(var(--color-foreground));
+  }
+
+  .brand-benefits-{{ section.id }} .benefits-row {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns_mobile }}, 1fr);
+    gap: {{ section.settings.gap_mobile }}px;
+    max-width: {{ section.settings.container_width }}px;
+    margin: 0 auto;
+  }
+
+  @media screen and (min-width: 750px) {
+    .brand-benefits-{{ section.id }} .benefits-row {
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+      gap: {{ section.settings.gap_desktop }}px;
+    }
+  }
+
+  .brand-benefits-{{ section.id }} .benefit-card {
+    text-align: center;
+    padding: 2rem 1.5rem;
+  }
+
+  .brand-benefits-{{ section.id }} .benefit-icon {
+    font-size: {{ section.settings.icon_size }}px;
+    margin-bottom: 1.5rem;
+    color: rgba(var(--color-foreground), 0.7);
+    display: block;
+  }
+
+  .brand-benefits-{{ section.id }} .benefit-title {
+    font-size: {{ section.settings.title_size }}px;
+    margin-bottom: 1rem;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    color: rgb(var(--color-foreground));
+    font-family: var(--font-heading-family);
+  }
+
+  .brand-benefits-{{ section.id }} .benefit-description {
+    font-size: {{ section.settings.description_size }}px;
+    line-height: 1.6;
+    color: rgba(var(--color-foreground), 0.8);
+    font-family: var(--font-body-family);
+  }
+{%- endstyle -%}
+
+<div class="brand-benefits-{{ section.id }} section-{{ section.id }}-padding">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="section-heading h2">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    <div class="benefits-row">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'benefit' -%}
+          <div class="benefit-card" {{ block.shopify_attributes }}>
+            {%- if block.settings.icon != blank -%}
+              <span class="benefit-icon">{{ block.settings.icon }}</span>
+            {%- endif -%}
+            {%- if block.settings.title != blank -%}
+              <h3 class="benefit-title">{{ block.settings.title }}</h3>
+            {%- endif -%}
+            {%- if block.settings.description != blank -%}
+              <p class="benefit-description">{{ block.settings.description }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Brand Benefits",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why Choose Us"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "label": "Columns (desktop)",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "label": "Columns (mobile)",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "gap_desktop",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "label": "Gap between items (desktop)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "label": "Gap between items (mobile)",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "min": 800,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "label": "Maximum container width",
+      "default": 1200
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 18,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Icon size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 11,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Description size",
+      "default": 13
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon",
+          "default": "❁",
+          "info": "Use emoji or symbol (❁, ✦, ⚱, ✂, etc.)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Handcrafted"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Woven by master artisans."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Benefits",
+      "blocks": [
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "❁",
+            "title": "Handcrafted",
+            "description": "Woven by master artisans."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "✦",
+            "title": "Global Delivery",
+            "description": "Shipping to 40+ countries."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "⚱",
+            "title": "Pure Zari",
+            "description": "Authentic gold zari threads."
+          }
+        },
+        {
+          "type": "benefit",
+          "settings": {
+            "icon": "✂",
+            "title": "Bespoke",
+            "description": "Tailored to your fit."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

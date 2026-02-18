@@ -263,7 +263,7 @@
     max-height: 85%;
     min-width: 100%;
     margin-bottom: 0;
-    z-index: 5;
+    z-index: 1;
   }
 
   .country-selector__close-button.link {

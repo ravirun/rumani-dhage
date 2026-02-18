@@ -1,0 +1,204 @@
+{% comment %}
+  Brand Story Section
+  Displays brand heritage and story with alternating image-text layouts.
+{% endcomment %}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .brand-story .story-block {
+    margin-bottom: 6rem;
+  }
+
+  .brand-story .story-block:last-child {
+    margin-bottom: 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .brand-story .grid--reverse {
+      flex-direction: row-reverse;
+    }
+  }
+
+  .brand-story .story-image {
+    line-height: 0;
+    border-radius: var(--media-radius);
+    overflow: hidden;
+  }
+
+  .brand-story .story-text {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .brand-story .story-text h3 {
+    margin-top: 0;
+    margin-bottom: 2rem;
+    font-family: var(--font-heading-family);
+    color: rgb(var(--color-foreground));
+  }
+
+  .brand-story .rte {
+    color: rgba(var(--color-foreground), 0.75);
+    font-family: var(--font-body-family);
+    line-height: calc(1 + 0.5 / var(--font-body-scale));
+  }
+
+  @media screen and (min-width: 750px) {
+    .brand-story .story-text {
+      padding: 0 4rem;
+    }
+  }
+{%- endstyle -%}
+
+<div class="brand-story color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'story_block' -%}
+        <div
+          class="story-block grid grid--1-col grid--2-col-tablet align-center {% if block.settings.reverse_layout %}grid--reverse{% endif %}"
+          {{ block.shopify_attributes }}
+        >
+          <div class="grid__item">
+            <div class="story-image media media--square global-media-settings gradient">
+              {%- if block.settings.image != blank -%}
+                {%- assign image_width = 1200 -%}
+                {{
+                  block.settings.image
+                  | image_url: width: image_width
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '400, 600, 800, 1000, 1200',
+                    sizes: '(min-width: 750px) 50vw, calc(100vw - 40px)'
+                }}
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </div>
+          </div>
+          <div class="grid__item">
+            <div class="story-text">
+              {%- if block.settings.heading != blank -%}
+                <h3 class="h2">{{ block.settings.heading }}</h3>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <div class="rte">{{ block.settings.text }}</div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Brand Story",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "story_block",
+      "name": "Story Block",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "The Roots"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Our journey began in the narrow lanes of Lucknow, where the rhythmic sound of looms has echoed for centuries.</p><p>We founded Rumani Dhaage to ensure that these threads of history are never broken by the passage of time.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "reverse_layout",
+          "label": "Reverse layout (image on right)",
+          "default": false,
+          "info": "Only applies on desktop"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Story",
+      "blocks": [
+        {
+          "type": "story_block",
+          "settings": {
+            "heading": "The Roots",
+            "text": "<p>Our journey began in the narrow lanes of Lucknow, where the rhythmic sound of looms has echoed for centuries.</p><p>We founded Rumani Dhaage to ensure that these threads of history are never broken by the passage of time.</p>",
+            "reverse_layout": false
+          }
+        },
+        {
+          "type": "story_block",
+          "settings": {
+            "heading": "The Craft",
+            "text": "<p>Every Rumani creation takes weeks, sometimes months, to complete. Our artisans treat every saree as a canvas.</p><p>Using age-old techniques like Zardosi and Chikankari, we bring a level of detail that machines can never replicate.</p>",
+            "reverse_layout": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

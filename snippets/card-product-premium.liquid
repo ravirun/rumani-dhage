@@ -96,13 +96,7 @@
       <div class="premium-badge">
         {%- if card_product.vendor != blank -%}
           {%- comment -%} Using a placeholder for avatar or maybe branding icon {%- endcomment -%}
-          <img
-            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100"
-            class="premium-badge-avatar"
-            alt="Brand Logo"
-            width="24"
-            height="24"
-          >
+          {{ 'image' | placeholder_svg_tag: 'premium-badge-avatar' }}
         {%- endif -%}
         <span class="premium-badge-text">
           {%- if card_product.tags contains 'New' -%}

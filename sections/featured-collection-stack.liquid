@@ -41,7 +41,10 @@
       </div>
     {%- endif -%}
 
-    <div class="featured-collection-stack__cards" id="featured-collection-stack-{{ section.id }}">
+    <div
+      class="featured-collection-stack__cards {% if settings.animations_reveal_on_scroll %}scroll-trigger animate--slide-in{% endif %}"
+      id="featured-collection-stack-{{ section.id }}"
+    >
       {%- if section.settings.collection.products.size > 0 -%}
         {%- for product in section.settings.collection.products limit: section.settings.products_to_show -%}
           <div
@@ -50,22 +53,22 @@
           >
             <div class="featured-collection-stack__card-inner">
               <div class="featured-collection-stack__image-container">
-                {%- if product.featured_media -%}
+                {%- if product.media.last -%}
                   <img
                     class="featured-collection-stack__image"
                     srcset="
-                      {%- if product.featured_media.width >= 400 -%}{{ product.featured_media | image_url: width: 400 }} 400w,{%- endif -%}
-                      {%- if product.featured_media.width >= 800 -%}{{ product.featured_media | image_url: width: 800 }} 800w,{%- endif -%}
-                      {%- if product.featured_media.width >= 1200 -%}{{ product.featured_media | image_url: width: 1200 }} 1200w,{%- endif -%}
-                      {%- if product.featured_media.width >= 1600 -%}{{ product.featured_media | image_url: width: 1600 }} 1600w,{%- endif -%}
-                      {{ product.featured_media | image_url }} {{ product.featured_media.width }}w
+                      {%- if product.media.last.width >= 400 -%}{{ product.media.last | image_url: width: 400 }} 400w,{%- endif -%}
+                      {%- if product.media.last.width >= 800 -%}{{ product.media.last | image_url: width: 800 }} 800w,{%- endif -%}
+                      {%- if product.media.last.width >= 1200 -%}{{ product.media.last | image_url: width: 1200 }} 1200w,{%- endif -%}
+                      {%- if product.media.last.width >= 1600 -%}{{ product.media.last | image_url: width: 1600 }} 1600w,{%- endif -%}
+                      {{ product.media.last | image_url }} {{ product.media.last.width }}w
                     "
-                    src="{{ product.featured_media | image_url: width: 1200 }}"
+                    src="{{ product.media.last | image_url: width: 1200 }}"
                     sizes="100vw"
-                    alt="{{ product.featured_media.alt | escape }}"
+                    alt="{{ product.media.last.alt | escape }}"
                     loading="lazy"
-                    width="{{ product.featured_media.width }}"
-                    height="{{ product.featured_media.height }}"
+                    width="{{ product.media.last.width }}"
+                    height="{{ product.media.last.height }}"
                   >
                 {%- else -%}
                   {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
@@ -142,14 +145,14 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 40px 0;
+    gap: 100px 0;
     box-sizing: border-box;
   }
 
   .featured-collection-stack__card {
     position: sticky;
     top: {{ section.settings.sticky_top_mobile }}%;
-    padding-top: 20px;
+    /* padding-top: 20px; */
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
@@ -324,6 +327,7 @@
     font-size: 2.5rem;
     margin: 0 0 1rem;
     font-weight: 600;
+    color: {{ section.settings.text_color }};
   }
 
   .featured-collection-stack__heading a {
