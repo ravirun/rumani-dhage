@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "slideshow_main": {
@@ -142,7 +151,6 @@
         "instastory_WpHcMF",
         "instastory_3"
       ],
-      "disabled": false,
       "name": "Instagram Story",
       "settings": {}
     },
@@ -313,11 +321,10 @@
         "video_4"
       ],
       "settings": {
+        "color_scheme": "scheme-1",
         "layout_style": "slide",
         "animation_type": "fade",
         "show_navigation": true,
-        "overlay_color": "#000000",
-        "color_scheme": "scheme-1",
         "padding_top": 36,
         "padding_bottom": 36
       }
@@ -396,7 +403,7 @@
           "settings": {
             "heading": "What fabrics do you use for your sarees?",
             "icon": "question_mark",
-            "row_content": "<p>We specialize in premium handcrafted fabrics including Benarasi silk, pure organza, handloom cotton, and block-printed textiles. Each piece is carefully selected to celebrate Indian textile heritage and craftsmanship.<\/p>",
+            "row_content": "<p>We specialize in premium handcrafted fabrics including Benarasi silk, pure organza, handloom cotton, and block-printed textiles. Each piece is carefully selected to celebrate Indian textile heritage and craftsmanship.</p>",
             "page": ""
           }
         },
@@ -405,7 +412,7 @@
           "settings": {
             "heading": "Do you ship internationally?",
             "icon": "question_mark",
-            "row_content": "<p>Yes, we ship both domestically across India and internationally. Shipping costs and delivery times vary by location. International orders may be subject to customs duties based on your country's regulations.<\/p>",
+            "row_content": "<p>Yes, we ship both domestically across India and internationally. Shipping costs and delivery times vary by location. International orders may be subject to customs duties based on your country's regulations.</p>",
             "page": ""
           }
         },
@@ -414,7 +421,7 @@
           "settings": {
             "heading": "How do I care for my handloom saree or suit?",
             "icon": "question_mark",
-            "row_content": "<p>We recommend dry cleaning for silk and embellished pieces. For cotton and block-printed items, gentle hand wash in cold water with mild detergent is best. Always store in a cool, dry place away from direct sunlight.<\/p>",
+            "row_content": "<p>We recommend dry cleaning for silk and embellished pieces. For cotton and block-printed items, gentle hand wash in cold water with mild detergent is best. Always store in a cool, dry place away from direct sunlight.</p>",
             "page": ""
           }
         },
@@ -423,7 +430,7 @@
           "settings": {
             "heading": "What is your return and exchange policy?",
             "icon": "question_mark",
-            "row_content": "<p>We accept returns and exchanges within 7 days of delivery for unused items in original condition with tags attached. Please contact us before initiating a return. Custom or pre-order pieces may have different terms.<\/p>",
+            "row_content": "<p>We accept returns and exchanges within 7 days of delivery for unused items in original condition with tags attached. Please contact us before initiating a return. Custom or pre-order pieces may have different terms.</p>",
             "page": ""
           }
         },
@@ -432,7 +439,7 @@
           "settings": {
             "heading": "Can I place a custom or pre-order?",
             "icon": "question_mark",
-            "row_content": "<p>Yes! We offer custom orders and pre-orders for select pieces. Please reach out to us via WhatsApp or email with your requirements, and we'll work with you to create something special.<\/p>",
+            "row_content": "<p>Yes! We offer custom orders and pre-orders for select pieces. Please reach out to us via WhatsApp or email with your requirements, and we'll work with you to create something special.</p>",
             "page": ""
           }
         }
@@ -524,15 +531,7 @@
         "heading": "Loved by Thousands",
         "subheading": "Join our community of satisfied customers worldwide",
         "brand_name": "Rumani Dhaage",
-        "font_family": "Garamond",
-        "bg_color": "#fffcf5",
-        "accent_color": "#d4af37",
-        "text_color": "#5d0e11",
-        "petal_color": "#8b0000",
         "scroll_speed": 60,
-        "enable_sound": true,
-        "enable_particles": true,
-        "section_height": 500,
         "padding_top": 36,
         "padding_bottom": 36
       }
@@ -576,13 +575,7 @@
         "trust_4"
       ],
       "settings": {
-        "bg_color": "#ffffff",
-        "text_color": "#5d0e11",
-        "icon_color": "#d4af37",
-        "border_color": "#d4af37",
-        "font_family": "Garamond",
         "font_size": 11,
-        "opacity": 70,
         "padding_top": 20,
         "padding_bottom": 20
       }
@@ -636,14 +629,9 @@
         "gap_desktop": 20,
         "gap_mobile": 15,
         "container_width": 1200,
-        "font_family": "Garamond",
         "icon_size": 24,
         "title_size": 14,
         "description_size": 13,
-        "bg_color": "#fffcf5",
-        "heading_color": "#5d0e11",
-        "text_color": "#5d0e11",
-        "icon_color": "#d4af37",
         "padding_top": 60,
         "padding_bottom": 60
       }
@@ -654,7 +642,6 @@
         "story_1": {
           "type": "story_block",
           "settings": {
-            "image_placeholder_text": "Workshop View",
             "heading": "The Roots",
             "text": "<p>Our journey began in the narrow lanes of Lucknow, where the rhythmic sound of looms has echoed for centuries.</p><p>We founded Rumani Dhaage to ensure that these threads of history are never broken by the passage of time.</p>",
             "reverse_layout": false
@@ -663,7 +650,6 @@
         "story_2": {
           "type": "story_block",
           "settings": {
-            "image_placeholder_text": "Artisan Detail",
             "heading": "The Craft",
             "text": "<p>Every Rumani creation takes weeks, sometimes months, to complete. Our artisans treat every saree as a canvas.</p><p>Using age-old techniques like Zardosi and Chikankari, we bring a level of detail that machines can never replicate.</p>",
             "reverse_layout": true
@@ -675,17 +661,6 @@
         "story_2"
       ],
       "settings": {
-        "container_width": 1200,
-        "image_height_desktop": 350,
-        "image_height_mobile": 250,
-        "font_family": "Garamond",
-        "heading_size": 20,
-        "text_size": 15,
-        "bg_color": "#fdfaf2",
-        "heading_color": "#5d0e11",
-        "text_color": "#5d0e11",
-        "border_color": "#d4af37",
-        "placeholder_bg": "#eeeeee",
         "padding_top": 60,
         "padding_bottom": 60
       }
@@ -699,17 +674,6 @@
         "button_text": "Subscribe",
         "success_message": "Thank you for subscribing!",
         "container_width": 800,
-        "font_family": "Garamond",
-        "heading_size": 28,
-        "subheading_size": 15,
-        "bg_color": "#5d0e11",
-        "heading_color": "#fffcf5",
-        "text_color": "#fffcf5",
-        "input_bg_color": "#ffffff",
-        "input_text_color": "#5d0e11",
-        "input_border_color": "#d4af37",
-        "button_bg_color": "#d4af37",
-        "button_text_color": "#5d0e11",
         "padding_top": 60,
         "padding_bottom": 60
       }
@@ -733,4 +697,3 @@
     "newsletter_cta_main"
   ]
 }
-
