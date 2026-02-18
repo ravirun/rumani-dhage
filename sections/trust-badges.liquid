@@ -46,7 +46,7 @@
   }
 {%- endstyle -%}
 
-<section class="trust-strip-{{ section.id }} color-{{ section.settings.color_scheme }} gradient">
+<section class="trust-strip-{{ section.id }}">
   <div class="page-width">
     <div class="trust-container">
       {%- for block in section.blocks -%}
@@ -72,12 +72,6 @@
     "groups": ["header", "footer"]
   },
   "settings": [
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme-1"
-    },
     {
       "type": "header",
       "content": "Appearance"
