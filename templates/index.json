@@ -91,6 +91,120 @@
         "accessibility_info": "Slideshow about our brand"
       }
     },
+    "trust_badges_main": {
+      "type": "trust-badges",
+      "blocks": {
+        "trust_1": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "★",
+            "text": "4.9 Trustscore"
+          }
+        },
+        "trust_2": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "✓",
+            "text": "Verified Artisans"
+          }
+        },
+        "trust_3": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "✦",
+            "text": "Global Shipping"
+          }
+        },
+        "trust_4": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "❁",
+            "text": "Authentic Handloom"
+          }
+        }
+      },
+      "block_order": [
+        "trust_1",
+        "trust_2",
+        "trust_3",
+        "trust_4"
+      ],
+      "settings": {
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
+    "social_proof_scroll_main": {
+      "type": "social-proof-scroll",
+      "blocks": {
+        "bubble_1": {
+          "type": "bubble",
+          "settings": {
+            "title": "Silk Anarkali",
+            "subtitle": "Sold in London",
+            "badge": "POPULAR"
+          }
+        },
+        "bubble_2": {
+          "type": "bubble",
+          "settings": {
+            "title": "@ananya_v",
+            "subtitle": "Wearing 'Noor'",
+            "badge": "INFLUENCER"
+          }
+        },
+        "bubble_3": {
+          "type": "bubble",
+          "settings": {
+            "title": "Handcrafted",
+            "subtitle": "Pure Banaras",
+            "badge": "AUTHENTIC"
+          }
+        },
+        "bubble_4": {
+          "type": "bubble",
+          "settings": {
+            "title": "Global Ship",
+            "subtitle": "To 40+ Countries",
+            "badge": "SHIPPING"
+          }
+        },
+        "bubble_5": {
+          "type": "bubble",
+          "settings": {
+            "title": "Velvet Lehnga",
+            "subtitle": "Limited Edition",
+            "badge": "HOT"
+          }
+        },
+        "bubble_6": {
+          "type": "bubble",
+          "settings": {
+            "title": "@ethnic_vibe",
+            "subtitle": "Must-have Saree",
+            "badge": "REVIEW"
+          }
+        }
+      },
+      "block_order": [
+        "bubble_1",
+        "bubble_2",
+        "bubble_3",
+        "bubble_4",
+        "bubble_5",
+        "bubble_6"
+      ],
+      "settings": {
+        "show_header": true,
+        "heading": "Loved by Thousands",
+        "subheading": "Join our community of satisfied customers worldwide",
+        "brand_name": "Rumani Dhaage",
+        "color_scheme": "",
+        "scroll_speed": 60,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "featured_collection_stack_8wxHxW": {
       "type": "featured-collection-stack",
       "name": "Featured Collection Stack",
@@ -120,28 +234,36 @@
         "instastory_1": {
           "type": "instastory",
           "settings": {
-            "product": "benarasi-mango-silk-saree-hot-pink"
+            "label": "New Arrival",
+            "product": "benarasi-mango-silk-saree-hot-pink",
+            "fabric": ""
           }
         },
         "instastory_2": {
           "type": "instastory",
           "settings": {
+            "label": "New Arrival",
             "image": "shopify://shop_images/amritsari-phulkari-dupatta-hero-shot.png",
-            "product": "amritsari-phulkari-dupatta"
+            "product": "amritsari-phulkari-dupatta",
+            "fabric": ""
           }
         },
         "instastory_WpHcMF": {
           "type": "instastory",
           "settings": {
+            "label": "New Arrival",
             "image": "shopify://shop_images/teal-blue-georgette-anarkali-suit-set-hero-shot.png",
-            "product": "teal-blue-georgette-anarkali"
+            "product": "teal-blue-georgette-anarkali",
+            "fabric": ""
           }
         },
         "instastory_3": {
           "type": "instastory",
           "settings": {
+            "label": "New Arrival",
             "image": "shopify://shop_images/crimson-glory-banarasi-silk-saree-hero-shot.png",
-            "product": "crimson-glory-banarasi-saree"
+            "product": "crimson-glory-banarasi-saree",
+            "fabric": ""
           }
         }
       },
@@ -152,7 +274,17 @@
         "instastory_3"
       ],
       "name": "Instagram Story",
-      "settings": {}
+      "settings": {
+        "heading": "Shop Our Latest Looks",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "view_all_link": "",
+        "color_scheme": "",
+        "circle_size_desktop": 84,
+        "circle_size_mobile": 64,
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
     },
     "featured_collection_main": {
       "type": "featured-collection",
@@ -274,6 +406,63 @@
         "padding_bottom": 36
       }
     },
+    "brand_benefits_main": {
+      "type": "brand-benefits",
+      "blocks": {
+        "benefit_1": {
+          "type": "benefit",
+          "settings": {
+            "icon": "❁",
+            "title": "Handcrafted",
+            "description": "Woven by master artisans."
+          }
+        },
+        "benefit_2": {
+          "type": "benefit",
+          "settings": {
+            "icon": "✦",
+            "title": "Global Delivery",
+            "description": "Shipping to 40+ countries."
+          }
+        },
+        "benefit_3": {
+          "type": "benefit",
+          "settings": {
+            "icon": "⚱",
+            "title": "Pure Zari",
+            "description": "Authentic gold zari threads."
+          }
+        },
+        "benefit_4": {
+          "type": "benefit",
+          "settings": {
+            "icon": "✂",
+            "title": "Bespoke",
+            "description": "Tailored to your fit."
+          }
+        }
+      },
+      "block_order": [
+        "benefit_1",
+        "benefit_2",
+        "benefit_3",
+        "benefit_4"
+      ],
+      "settings": {
+        "heading": "Why Choose Us",
+        "columns_desktop": 4,
+        "columns_mobile": 2,
+        "gap_desktop": 20,
+        "gap_mobile": 15,
+        "container_width": 1200,
+        "icon_size": 24,
+        "title_size": 14,
+        "description_size": 13,
+        "color_scheme": "",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
     "shopable_video_reel_main": {
       "type": "shoppable-video-reel",
       "blocks": {
@@ -321,12 +510,78 @@
         "video_4"
       ],
       "settings": {
+        "heading": "Watch & Shop",
+        "heading_size": "h1",
+        "subheading": "",
+        "heading_alignment": "left",
         "color_scheme": "scheme-1",
         "layout_style": "slide",
         "animation_type": "fade",
         "show_navigation": true,
         "padding_top": 36,
         "padding_bottom": 36
+      }
+    },
+    "brand_story_main": {
+      "type": "brand-story",
+      "blocks": {
+        "story_1": {
+          "type": "story_block",
+          "settings": {
+            "heading": "The Roots",
+            "text": "<p>Our journey began in the narrow lanes of Lucknow, where the rhythmic sound of looms has echoed for centuries.</p><p>We founded Rumani Dhaage to ensure that these threads of history are never broken by the passage of time.</p>",
+            "reverse_layout": false
+          }
+        },
+        "story_2": {
+          "type": "story_block",
+          "settings": {
+            "heading": "The Craft",
+            "text": "<p>Every Rumani creation takes weeks, sometimes months, to complete. Our artisans treat every saree as a canvas.</p><p>Using age-old techniques like Zardosi and Chikankari, we bring a level of detail that machines can never replicate.</p>",
+            "reverse_layout": true
+          }
+        }
+      },
+      "block_order": [
+        "story_1",
+        "story_2"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "featured_blog_folders_ew9BQ3": {
+      "type": "featured-blog-folders",
+      "blocks": {
+        "photo_folder_KiNBXa": {
+          "type": "photo_folder",
+          "settings": {
+            "blog": ""
+          }
+        },
+        "photo_folder_6qiErm": {
+          "type": "photo_folder",
+          "settings": {
+            "blog": ""
+          }
+        }
+      },
+      "block_order": [
+        "photo_folder_KiNBXa",
+        "photo_folder_6qiErm"
+      ],
+      "name": "Blog Folders",
+      "settings": {
+        "title": "Blog Folders",
+        "subtitle": "<p>Explore our curated collections of stories and adventures.</p>",
+        "heading_size": "h1",
+        "bg_color": "#f8f9fa",
+        "columns_desktop": 2,
+        "columns_mobile": "2",
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     },
     "featured_blog_main": {
@@ -465,217 +720,6 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
-    },
-    "social_proof_scroll_main": {
-      "type": "social-proof-scroll",
-      "blocks": {
-        "bubble_1": {
-          "type": "bubble",
-          "settings": {
-            "title": "Silk Anarkali",
-            "subtitle": "Sold in London",
-            "badge": "POPULAR"
-          }
-        },
-        "bubble_2": {
-          "type": "bubble",
-          "settings": {
-            "title": "@ananya_v",
-            "subtitle": "Wearing 'Noor'",
-            "badge": "INFLUENCER"
-          }
-        },
-        "bubble_3": {
-          "type": "bubble",
-          "settings": {
-            "title": "Handcrafted",
-            "subtitle": "Pure Banaras",
-            "badge": "AUTHENTIC"
-          }
-        },
-        "bubble_4": {
-          "type": "bubble",
-          "settings": {
-            "title": "Global Ship",
-            "subtitle": "To 40+ Countries",
-            "badge": "SHIPPING"
-          }
-        },
-        "bubble_5": {
-          "type": "bubble",
-          "settings": {
-            "title": "Velvet Lehnga",
-            "subtitle": "Limited Edition",
-            "badge": "HOT"
-          }
-        },
-        "bubble_6": {
-          "type": "bubble",
-          "settings": {
-            "title": "@ethnic_vibe",
-            "subtitle": "Must-have Saree",
-            "badge": "REVIEW"
-          }
-        }
-      },
-      "block_order": [
-        "bubble_1",
-        "bubble_2",
-        "bubble_3",
-        "bubble_4",
-        "bubble_5",
-        "bubble_6"
-      ],
-      "settings": {
-        "show_header": true,
-        "heading": "Loved by Thousands",
-        "subheading": "Join our community of satisfied customers worldwide",
-        "brand_name": "Rumani Dhaage",
-        "scroll_speed": 60,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "trust_badges_main": {
-      "type": "trust-badges",
-      "blocks": {
-        "trust_1": {
-          "type": "trust_item",
-          "settings": {
-            "icon": "★",
-            "text": "4.9 Trustscore"
-          }
-        },
-        "trust_2": {
-          "type": "trust_item",
-          "settings": {
-            "icon": "✓",
-            "text": "Verified Artisans"
-          }
-        },
-        "trust_3": {
-          "type": "trust_item",
-          "settings": {
-            "icon": "✦",
-            "text": "Global Shipping"
-          }
-        },
-        "trust_4": {
-          "type": "trust_item",
-          "settings": {
-            "icon": "❁",
-            "text": "Authentic Handloom"
-          }
-        }
-      },
-      "block_order": [
-        "trust_1",
-        "trust_2",
-        "trust_3",
-        "trust_4"
-      ],
-      "settings": {
-        "padding_top": 20,
-        "padding_bottom": 20
-      }
-    },
-    "brand_benefits_main": {
-      "type": "brand-benefits",
-      "blocks": {
-        "benefit_1": {
-          "type": "benefit",
-          "settings": {
-            "icon": "❁",
-            "title": "Handcrafted",
-            "description": "Woven by master artisans."
-          }
-        },
-        "benefit_2": {
-          "type": "benefit",
-          "settings": {
-            "icon": "✦",
-            "title": "Global Delivery",
-            "description": "Shipping to 40+ countries."
-          }
-        },
-        "benefit_3": {
-          "type": "benefit",
-          "settings": {
-            "icon": "⚱",
-            "title": "Pure Zari",
-            "description": "Authentic gold zari threads."
-          }
-        },
-        "benefit_4": {
-          "type": "benefit",
-          "settings": {
-            "icon": "✂",
-            "title": "Bespoke",
-            "description": "Tailored to your fit."
-          }
-        }
-      },
-      "block_order": [
-        "benefit_1",
-        "benefit_2",
-        "benefit_3",
-        "benefit_4"
-      ],
-      "settings": {
-        "heading": "Why Choose Us",
-        "columns_desktop": 4,
-        "columns_mobile": 2,
-        "gap_desktop": 20,
-        "gap_mobile": 15,
-        "container_width": 1200,
-        "icon_size": 24,
-        "title_size": 14,
-        "description_size": 13,
-        "padding_top": 60,
-        "padding_bottom": 60
-      }
-    },
-    "brand_story_main": {
-      "type": "brand-story",
-      "blocks": {
-        "story_1": {
-          "type": "story_block",
-          "settings": {
-            "heading": "The Roots",
-            "text": "<p>Our journey began in the narrow lanes of Lucknow, where the rhythmic sound of looms has echoed for centuries.</p><p>We founded Rumani Dhaage to ensure that these threads of history are never broken by the passage of time.</p>",
-            "reverse_layout": false
-          }
-        },
-        "story_2": {
-          "type": "story_block",
-          "settings": {
-            "heading": "The Craft",
-            "text": "<p>Every Rumani creation takes weeks, sometimes months, to complete. Our artisans treat every saree as a canvas.</p><p>Using age-old techniques like Zardosi and Chikankari, we bring a level of detail that machines can never replicate.</p>",
-            "reverse_layout": true
-          }
-        }
-      },
-      "block_order": [
-        "story_1",
-        "story_2"
-      ],
-      "settings": {
-        "padding_top": 60,
-        "padding_bottom": 60
-      }
-    },
-    "newsletter_cta_main": {
-      "type": "newsletter-cta",
-      "settings": {
-        "heading": "The Inner Circle",
-        "subheading": "Join for exclusive previews and artisan stories.",
-        "input_placeholder": "Email address",
-        "button_text": "Subscribe",
-        "success_message": "Thank you for subscribing!",
-        "container_width": 800,
-        "padding_top": 60,
-        "padding_bottom": 60
-      }
     }
   },
   "order": [
@@ -690,9 +734,9 @@
     "brand_benefits_main",
     "shopable_video_reel_main",
     "brand_story_main",
+    "featured_blog_folders_ew9BQ3",
     "featured_blog_main",
     "testimonials_main",
-    "collapsible_content_main",
-    "newsletter_cta_main"
+    "collapsible_content_main"
   ]
 }
