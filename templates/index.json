@@ -528,6 +528,7 @@
         "story_1": {
           "type": "story_block",
           "settings": {
+            "image": "shopify://shop_images/heritage-of-lucknows-traditional-handloom-craftsmanship.png",
             "heading": "The Roots",
             "text": "<p>Our journey began in the narrow lanes of Lucknow, where the rhythmic sound of looms has echoed for centuries.</p><p>We founded Rumani Dhaage to ensure that these threads of history are never broken by the passage of time.</p>",
             "reverse_layout": false
@@ -536,6 +537,7 @@
         "story_2": {
           "type": "story_block",
           "settings": {
+            "image": "shopify://shop_images/intricate-zardosi-and-chikankari-handwork-craftsmanship.png",
             "heading": "The Craft",
             "text": "<p>Every Rumani creation takes weeks, sometimes months, to complete. Our artisans treat every saree as a canvas.</p><p>Using age-old techniques like Zardosi and Chikankari, we bring a level of detail that machines can never replicate.</p>",
             "reverse_layout": true
@@ -555,20 +557,27 @@
     "featured_blog_folders_ew9BQ3": {
       "type": "featured-blog-folders",
       "blocks": {
+        "photo_folder_4VEhiw": {
+          "type": "photo_folder",
+          "settings": {
+            "blog": "style-guide"
+          }
+        },
         "photo_folder_KiNBXa": {
           "type": "photo_folder",
           "settings": {
-            "blog": ""
+            "blog": "care-maintenance"
           }
         },
         "photo_folder_6qiErm": {
           "type": "photo_folder",
           "settings": {
-            "blog": ""
+            "blog": "news"
           }
         }
       },
       "block_order": [
+        "photo_folder_4VEhiw",
         "photo_folder_KiNBXa",
         "photo_folder_6qiErm"
       ],
@@ -577,8 +586,8 @@
         "title": "Blog Folders",
         "subtitle": "<p>Explore our curated collections of stories and adventures.</p>",
         "heading_size": "h1",
-        "bg_color": "#f8f9fa",
-        "columns_desktop": 2,
+        "bg_color": "rgba(0,0,0,0)",
+        "columns_desktop": 3,
         "columns_mobile": "2",
         "padding_top": 40,
         "padding_bottom": 40
@@ -586,6 +595,7 @@
     },
     "featured_blog_main": {
       "type": "featured-blog",
+      "disabled": true,
       "settings": {
         "blog": "news",
         "post_limit": 4,
