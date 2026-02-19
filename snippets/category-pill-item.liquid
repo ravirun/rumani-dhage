@@ -1,0 +1,33 @@
+{% comment %}
+  Renders a category pill item.
+
+  Accepts:
+  - image: {Object} Image object (optional)
+  - label: {String} Label text
+  - link: {String} Link URL
+  - pill_style: {String} 'circle' or 'boxy' (default: 'circle')
+  - block_attributes: {Object} Shopify block attributes for editor
+{% endcomment %}
+
+<a
+  href="{{ link | default: '#' }}"
+  class="category-pill category-pill--{{ pill_style | default: 'circle' }}{% if is_active %} is-active{% endif %}"
+  {{ block_attributes }}
+>
+  {%- if show_images -%}
+    <div class="category-pill__image-wrapper">
+      {%- if image != blank -%}
+        {{
+          image
+          | image_url: width: 200
+          | image_tag: class: 'category-pill__image', loading: 'lazy', widths: '100, 200', sizes: '100px'
+        }}
+      {%- else -%}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg category-pill__image' }}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+  {%- if label != blank -%}
+    <h2 class="category-pill__label">{{ label | escape }}</h2>
+  {%- endif -%}
+</a>

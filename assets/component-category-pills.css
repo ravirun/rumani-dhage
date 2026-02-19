@@ -1,0 +1,160 @@
+/* component-category-pills.css */
+.category-pills {
+  overflow: hidden;
+  position: relative;
+}
+
+.category-pills__container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+  padding: 1rem 0;
+  gap: 1.5rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-pills__container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.category-pill {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  cursor: pointer;
+  max-width: 140px;
+}
+
+.category-pill:hover {
+  transform: translateY(-5px);
+}
+
+.category-pill__image-wrapper {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%; /* Default to circle for images */
+  overflow: hidden;
+  margin-bottom: 1rem;
+  background: rgba(var(--color-foreground), 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--variant-pills-border-width) solid rgba(var(--color-foreground), var(--variant-pills-border-opacity));
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.category-pill:hover .category-pill__image-wrapper {
+  border-color: rgb(var(--color-foreground));
+  box-shadow: 0 10px 20px rgba(var(--color-shadow), 0.1);
+}
+
+.category-pill__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.category-pill:hover .category-pill__image {
+  transform: scale(1.1);
+}
+
+.category-pill__label {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: rgb(var(--color-foreground));
+  text-align: center;
+  line-height: 1.2;
+  margin: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Active/Inactive States */
+.category-pill {
+  opacity: 0.7;
+}
+
+.category-pill:hover,
+.category-pill.is-active {
+  opacity: 1;
+}
+
+.category-pills__container:hover .category-pill:not(:hover):not(.is-active) {
+  opacity: 0.5;
+}
+
+.category-pill.is-active .category-pill__image-wrapper {
+  border-color: rgb(var(--color-foreground));
+  border-width: calc(var(--variant-pills-border-width) + 1px);
+}
+
+.category-pill.is-active .category-pill__label {
+  font-weight: 700;
+}
+
+/* Theme Pill Styling (Applied when images are hidden) */
+.category-pill:not(:has(.category-pill__image-wrapper)) {
+  border: var(--variant-pills-border-width) solid rgba(var(--color-foreground), var(--variant-pills-border-opacity));
+  background-color: rgb(var(--color-background));
+  border-radius: var(--variant-pills-radius);
+  padding: 1rem 2rem;
+  transition: all var(--duration-short) ease;
+}
+
+.category-pill.is-active:not(:has(.category-pill__image-wrapper)) {
+  border-color: rgb(var(--color-foreground));
+  background-color: rgba(var(--color-foreground), 0.05);
+}
+
+.section-heading-wrapper {
+  margin-bottom: 3rem;
+}
+
+.section-heading-wrapper.center {
+  text-align: center;
+}
+
+.category-pills__heading {
+  margin: 0;
+}
+
+/* Page Width Centering */
+.category-pills--centered .category-pills__container {
+  justify-content: center;
+}
+
+@media screen and (max-width: 749px) {
+  .category-pills__container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    justify-content: flex-start;
+  }
+  
+  .category-pill__image-wrapper {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .category-pill__label {
+    font-size: 1.2rem;
+  }
+}
+
+/* Fade Effect for Scroll (CSS-Only) */
+.category-pills {
+  position: relative;
+  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
+}
+
+.category-pills--centered {
+  -webkit-mask-image: none;
+  mask-image: none;
+}

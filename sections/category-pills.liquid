@@ -1,0 +1,197 @@
+{{ 'component-category-pills.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  {%- if section.settings.custom_colors -%}
+    .section-{{ section.id }} {
+      --color-foreground: {{ section.settings.color_text.red }}, {{ section.settings.color_text.green }}, {{ section.settings.color_text.blue }};
+      --color-background: {{ section.settings.color_bg.red }}, {{ section.settings.color_bg.green }}, {{ section.settings.color_bg.blue }};
+      background-color: rgb(var(--color-background));
+    }
+  {%- endif -%}
+{%- endstyle -%}
+
+<div class="category-pills-section section-{{ section.id }} color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <div class="section-heading-wrapper {% if section.settings.heading_alignment == 'center' %} center{% endif %}">
+        <h2 class="category-pills__heading {{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
+      </div>
+    {%- endif -%}
+
+    <div class="category-pills {% if section.settings.center_pills %} category-pills--centered{% endif %}">
+      <div class="category-pills__container">
+        {%- if section.settings.menu != blank -%}
+          {%- for link in section.settings.menu.links -%}
+            {%- liquid
+              assign label = link.title
+              assign url = link.url
+              assign image = null
+
+              if link.type == 'collection_link'
+                assign collection = link.object
+                assign image = collection.featured_image
+                if label == blank
+                  assign label = collection.title
+                endif
+              endif
+            -%}
+            {%- liquid
+              assign is_active = false
+              if request.path == url
+                assign is_active = true
+              elsif link.active or link.child_active
+                assign is_active = true
+              endif
+            -%}
+            {% render 'category-pill-item',
+              image: image,
+              label: label,
+              link: url,
+              show_images: section.settings.show_images,
+              is_active: is_active
+            %}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Category Pills",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Browse by Category"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Extra small"
+        },
+        {
+          "value": "h1",
+          "label": "Small"
+        },
+        {
+          "value": "h0",
+          "label": "Medium"
+        }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "info": "Select the menu to drive categories. Best for control over ordering and visibility."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_images",
+      "label": "Show images",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "center_pills",
+      "label": "Center pills on desktop",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Color Scheme"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_colors",
+      "label": "Use custom colors",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Custom text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Custom background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category Pills"
+    }
+  ]
+}
+{% endschema %}
