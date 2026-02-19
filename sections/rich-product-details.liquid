@@ -5,7 +5,7 @@
     <!-- Header -->
     <div class="rich-product__header">
       <span class="rich-product__vendor">{{ product.vendor }}</span>
-      <h1 class="rich-product__title">{{ product.title }}</h1>
+      <h2 class="rich-product__title">{{ product.title }}</h2>
 
       <div class="rich-product__meta">
         <div class="rich-product__rating">
@@ -63,6 +63,42 @@
         {{ product.description }}
       {%- endif -%}
     </div>
+
+    <!-- Weaving Heritage -->
+    {%- liquid
+      assign has_heritage = false
+      if product.metafields.custom.silk_mark or product.metafields.custom.heritage_story != blank or product.metafields.custom.artisan_name != blank or product.metafields.custom.weaving_region != blank
+        assign has_heritage = true
+      endif
+    -%}
+    {%- if has_heritage -%}
+      <div class="rich-product__heritage">
+        {%- if product.metafields.custom.silk_mark -%}
+          <span class="rich-product__silk-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            Silk Mark Certified
+          </span>
+        {%- endif -%}
+        {%- if product.metafields.custom.artisan_name != blank or product.metafields.custom.weaving_region != blank -%}
+          <p class="rich-product__artisan">
+            {%- if product.metafields.custom.artisan_name != blank -%}
+              <strong>{{ product.metafields.custom.artisan_name }}</strong>
+            {%- endif -%}
+            {%- if product.metafields.custom.weaving_region != blank -%}
+              {%- if product.metafields.custom.artisan_name != blank -%}·{%- endif -%}
+              {{ product.metafields.custom.weaving_region }}
+            {%- endif -%}
+          </p>
+        {%- endif -%}
+        {%- if product.metafields.custom.heritage_story != blank -%}
+          <blockquote class="rich-product__heritage-story">
+            {{ product.metafields.custom.heritage_story | metafield_tag }}
+          </blockquote>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
 
     <!-- Benefits Checklist -->
     {%- if product.metafields.custom.benefits_list != blank -%}

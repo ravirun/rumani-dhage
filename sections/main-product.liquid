@@ -1,6 +1,6 @@
 <product-info
   id="MainProduct-{{ section.id }}"
-  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}"
+  class="section-{{ section.id }}-padding "
   data-section="{{ section.id }}"
   data-product-id="{{ product.id }}"
   data-update-url="true"
@@ -113,6 +113,42 @@
                     show_badges: true,
                     price_class: 'price--large'
                   -%}
+
+                  {%- comment -%} TRUST BADGES & SCARCITY {%- endcomment -%}
+                  {%- assign mf = product.metafields.custom -%}
+                  <div class="product-trust" style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.8rem;">
+                    {%- if mf.silk_mark -%}
+                      <span class="badge" style="background: #fdf3dc; color: #8a6300; border: 1px solid #e8c97a;"
+                        >Silk Mark Certified</span
+                      >
+                    {%- endif -%}
+                    {%- if mf.weaving_region != blank -%}
+                      <span
+                        class="badge"
+                        style="background: rgba(var(--color-foreground), 0.04); border: 1px solid rgba(var(--color-foreground), 0.1);"
+                      >
+                        {{- mf.weaving_region }} Origin</span
+                      >
+                    {%- endif -%}
+                    {%- if mf.weave_type contains 'Handloom'
+                      or mf.weave_type contains 'Kadhua'
+                      or mf.weave_type contains 'Jamdani'
+                    -%}
+                      <span
+                        class="badge custom-liquid"
+                        style="background: rgba(var(--color-foreground), 0.04); border: 1px solid rgba(var(--color-foreground), 0.1);"
+                        >Handwoven Heritage</span
+                      >
+                    {%- endif -%}
+                  </div>
+                  {%- if mf.batch_info != blank -%}
+                    <div
+                      class="limited-batch"
+                      style="margin-top: 0.8rem; font-size: 1.3rem; color: #d32f2f; font-weight: 500;"
+                    >
+                      🔥 {{ mf.batch_info }}
+                    </div>
+                  {%- endif -%}
                 </div>
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
@@ -194,6 +230,11 @@
               {%- when 'description' -%}
                 {%- if product.description != blank -%}
                   <div class="product__description rte quick-add-hidden" {{ block.shopify_attributes }}>
+                    {%- if product.metafields.custom.short_description != blank -%}
+                      <div class="product-hero-story" style="font-style: italic; margin-bottom: 1.5rem; opacity: 0.85;">
+                        {{ product.metafields.custom.short_description | metafield_tag }}
+                      </div>
+                    {%- endif -%}
                     {{ product.description }}
                   </div>
                 {%- endif -%}
@@ -222,8 +263,86 @@
                       {{- 'icon-caret.svg' | inline_asset_content -}}
                     </summary>
                     <div class="accordion__content rte" id="ProductAccordion-{{ block.id }}-{{ section.id }}">
-                      {{ block.settings.content }}
-                      {{ block.settings.page.content }}
+                      {%- assign heading_handle = block.settings.heading | handleize -%}
+                      {%- assign mf = product.metafields.custom -%}
+
+                      {%- if heading_handle == 'fabric-weave-details' or heading_handle == 'materials' -%}
+                        {%- if mf.fabric_text != blank
+                          or mf.weave_type != blank
+                          or mf.weaving_region != blank
+                          or mf.fabric != blank
+                        -%}
+                          <p>
+                            {%- if mf.fabric_text != blank -%}
+                              <strong>Fabric:</strong> {{ mf.fabric_text -}}
+                              <br>
+                            {%- elsif mf.fabric != blank -%}
+                              <strong>Fabric:</strong> {{ mf.fabric -}}
+                              <br>
+                            {%- endif -%}
+                            {%- if mf.weave_type != blank -%}
+                              <strong>Weave:</strong> {{ mf.weave_type -}}
+                              <br>
+                            {%- endif -%}
+                            {%- if mf.weaving_region != blank -%}
+                              <strong>Origin:</strong> {{ mf.weaving_region }}
+                            {%- endif -%}
+                          </p>
+                        {%- endif -%}
+                        {{ block.settings.content }}
+                      {%- elsif heading_handle == 'authenticity-artisan' or heading_handle == 'authenticity' -%}
+                        {%- if mf.silk_mark -%}
+                          <p>✔ Silk Mark Certified</p>
+                        {%- endif -%}
+                        {%- if mf.artisan_name != blank -%}
+                          <p><strong>Artisan:</strong> {{ mf.artisan_name }}</p>
+                        {%- endif -%}
+                        {%- if mf.heritage_story != blank -%}
+                          {{ mf.heritage_story | metafield_tag }}
+                        {%- endif -%}
+                        {{ block.settings.content }}
+                      {%- elsif heading_handle == 'draping-styling-guide' or heading_handle == 'dimensions' -%}
+                        {%- if mf.saree_length != blank or mf.blouse_length != blank or mf.border_width != blank -%}
+                          <p>
+                            {%- if mf.saree_length != blank -%}
+                              <strong>Saree:</strong> {{ mf.saree_length -}}
+                              <br>
+                            {%- endif -%}
+                            {%- if mf.blouse_length != blank -%}
+                              <strong>Blouse:</strong> {{ mf.blouse_length -}}
+                              <br>
+                            {%- endif -%}
+                            {%- if mf.border_width != blank -%}
+                              <strong>Border:</strong> {{ mf.border_width }}
+                            {%- endif -%}
+                          </p>
+                        {%- endif -%}
+                        {%- if mf.draping_style != blank -%}
+                          <p><strong>Draping:</strong> {{ mf.draping_style }}</p>
+                        {%- endif -%}
+                        {{ block.settings.content }}
+                      {%- elsif heading_handle == 'care-preservation' or heading_handle == 'care-instructions' -%}
+                        {%- if mf.wash_instructions != blank -%}
+                          <p><strong>Wash:</strong> {{ mf.wash_instructions }}</p>
+                        {%- endif -%}
+                        {%- if mf.storage_tips != blank -%}
+                          <p><strong>Storage:</strong> {{ mf.storage_tips }}</p>
+                        {%- endif -%}
+                        {%- if mf.care != blank -%}
+                          <p>{{ mf.care }}</p>
+                        {%- endif -%}
+                        {{ block.settings.content }}
+                      {%- elsif heading_handle == 'shipping-delivery' -%}
+                        <p>
+                          Free insured shipping across India.<br>
+                          International delivery: 5–9 days.<br>
+                          COD available for select PIN codes.
+                        </p>
+                        {{ block.settings.content }}
+                      {%- else -%}
+                        {{ block.settings.content }}
+                        {{ block.settings.page.content }}
+                      {%- endif -%}
                     </div>
                   </details>
                 </div>

@@ -1,19 +1,422 @@
-<div class="product-saree-details">
-  <ul>
-    {% if product.metafields.custom.fabric_text != blank %}
-      <li><strong>Fabric:</strong> {{ product.metafields.custom.fabric_text }}</li>
-    {% endif %}
+{%- comment -%}
+  Snippet: product-saree-details.liquid
+  Renders a rich, metafield-driven saree detail block.
 
-    {% if product.metafields.custom.occasion_text != blank %}
-      <li><strong>Occasion:</strong> {{ product.metafields.custom.occasion_text }}</li>
-    {% endif %}
+  Existing metafields (already defined in Shopify Admin):
+    custom.fabric_text      — Fabric short label
+    custom.occasion_text    — Occasion short text  (also check custom.occasion)
+    custom.blouse_included  — Boolean
+    custom.care             — Care summary (short)
 
-    {% if product.metafields.custom.blouse_included %}
-      <li>Blouse Included</li>
-    {% endif %}
+  New metafields to create in Admin (Settings → Custom Data → Products):
+    custom.weave_type         — Single line text  e.g. "Kadhua"
+    custom.weaving_region     — Single line text  e.g. "Varanasi"
+    custom.artisan_name       — Single line text
+    custom.silk_mark          — True / False
+    custom.heritage_story     — Rich text
+    custom.saree_length       — Single line text  e.g. "5.5 meters"
+    custom.blouse_length      — Single line text  e.g. "0.8 meters"
+    custom.border_width       — Single line text  e.g. "5 cm"
+    custom.pallu_design       — Multi-line text
+    custom.weight_grams       — Single line text  e.g. "620g"
+    custom.draping_style      — Multi-line text
+    custom.styling_suggestions— Multi-line text
+    custom.wash_instructions  — Multi-line text
+    custom.storage_tips       — Multi-line text
+    custom.first_wear_prep    — Multi-line text
+{%- endcomment -%}
 
-    {% if product.metafields.custom.care != blank %}
-      <li><strong>Care:</strong> {{ product.metafields.custom.care }}</li>
-    {% endif %}
-  </ul>
-</div>
+{%- liquid
+  assign has_weaving = false
+  assign has_specs = false
+  assign has_styling = false
+  assign has_care = false
+
+  if product.metafields.custom.weave_type != blank or product.metafields.custom.weaving_region != blank or product.metafields.custom.artisan_name != blank or product.metafields.custom.silk_mark or product.metafields.custom.heritage_story != blank or product.metafields.custom.fabric_text != blank or product.metafields.custom.fabric != blank
+    assign has_weaving = true
+  endif
+
+  if product.metafields.custom.saree_length != blank or product.metafields.custom.blouse_length != blank or product.metafields.custom.border_width != blank or product.metafields.custom.pallu_design != blank or product.metafields.custom.weight_grams != blank or product.metafields.custom.weight != blank or product.metafields.custom.blouse_included
+    assign has_specs = true
+  endif
+
+  if product.metafields.custom.draping_style != blank or product.metafields.custom.styling_suggestions != blank or product.metafields.custom.occasion_text != blank or product.metafields.custom.occasion != blank
+    assign has_styling = true
+  endif
+
+  if product.metafields.custom.wash_instructions != blank or product.metafields.custom.storage_tips != blank or product.metafields.custom.first_wear_prep != blank or product.metafields.custom.care != blank
+    assign has_care = true
+  endif
+-%}
+
+{%- if has_weaving or has_specs or has_styling or has_care -%}
+  <div class="saree-details" id="saree-details-{{ product.id }}">
+    {%- comment -%}──────────── WEAVING & AUTHENTICITY ────────────{%- endcomment -%}
+    {%- if has_weaving -%}
+      <div class="saree-details__panel">
+        <h3 class="saree-details__heading">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            aria-hidden="true"
+          >
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          Weaving &amp; Craft
+        </h3>
+        <dl class="saree-details__grid">
+          {%- if product.metafields.custom.fabric_text != blank or product.metafields.custom.fabric != blank -%}
+            <div class="saree-details__row">
+              <dt>Fabric</dt>
+              <dd>{{ product.metafields.custom.fabric_text | default: product.metafields.custom.fabric }}</dd>
+            </div>
+          {%- endif -%}
+          {%- if product.metafields.custom.weave_type != blank -%}
+            <div class="saree-details__row">
+              <dt>Weave Type</dt>
+              <dd>{{ product.metafields.custom.weave_type }}</dd>
+            </div>
+          {%- endif -%}
+          {%- if product.metafields.custom.weaving_region != blank -%}
+            <div class="saree-details__row">
+              <dt>Origin</dt>
+              <dd>{{ product.metafields.custom.weaving_region }}</dd>
+            </div>
+          {%- endif -%}
+          {%- if product.metafields.custom.artisan_name != blank -%}
+            <div class="saree-details__row">
+              <dt>Artisan / Cooperative</dt>
+              <dd>{{ product.metafields.custom.artisan_name }}</dd>
+            </div>
+          {%- endif -%}
+          {%- if product.metafields.custom.silk_mark -%}
+            <div class="saree-details__row">
+              <dt>Certification</dt>
+              <dd>
+                <span class="saree-details__badge saree-details__badge--gold">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M20 6L9 17l-5-5"/>
+                  </svg>
+                  Silk Mark Certified
+                </span>
+              </dd>
+            </div>
+          {%- endif -%}
+        </dl>
+
+        {%- if product.metafields.custom.heritage_story != blank -%}
+          <div class="saree-details__story">
+            {{ product.metafields.custom.heritage_story | metafield_tag }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%}──────────── PRODUCT SPECIFICATIONS ────────────{%- endcomment -%}
+    {%- if has_specs -%}
+      <div class="saree-details__panel">
+        <h3 class="saree-details__heading">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            aria-hidden="true"
+          >
+            <path d="M3 3h18v18H3zM3 9h18M9 3v18M15 3v18"/>
+          </svg>
+          Specifications
+        </h3>
+        <dl class="saree-details__grid saree-details__grid--specs">
+          {%- if product.metafields.custom.saree_length != blank -%}
+            <div class="saree-details__spec-item">
+              <dt>Saree Length</dt>
+              <dd>{{ product.metafields.custom.saree_length }}</dd>
+            </div>
+          {%- endif -%}
+          {%- if product.metafields.custom.blouse_length != blank -%}
+            <div class="saree-details__spec-item">
+              <dt>Blouse Piece</dt>
+              <dd>{{ product.metafields.custom.blouse_length }}</dd>
+            </div>
+          {%- endif -%}
+          {%- if product.metafields.custom.border_width != blank -%}
+            <div class="saree-details__spec-item">
+              <dt>Border Width</dt>
+              <dd>{{ product.metafields.custom.border_width }}</dd>
+            </div>
+          {%- endif -%}
+          {%- if product.metafields.custom.weight_grams != blank or product.metafields.custom.weight != blank -%}
+            <div class="saree-details__spec-item">
+              <dt>Weight</dt>
+              <dd>{{ product.metafields.custom.weight_grams | default: product.metafields.custom.weight }}</dd>
+            </div>
+          {%- endif -%}
+          {%- if product.metafields.custom.blouse_included -%}
+            <div class="saree-details__spec-item">
+              <dt>Blouse Included</dt>
+              <dd>
+                <span class="saree-details__badge saree-details__badge--green">✓ Yes</span>
+              </dd>
+            </div>
+          {%- endif -%}
+        </dl>
+        {%- if product.metafields.custom.pallu_design != blank -%}
+          <div class="saree-details__note"><strong>Pallu:</strong> {{ product.metafields.custom.pallu_design }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%}──────────── STYLING & OCCASION ────────────{%- endcomment -%}
+    {%- if has_styling -%}
+      <div class="saree-details__panel">
+        <h3 class="saree-details__heading">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            aria-hidden="true"
+          >
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Styling &amp; Occasion
+        </h3>
+        {%- if product.metafields.custom.occasion_text != blank or product.metafields.custom.occasion != blank -%}
+          <p class="saree-details__occasion">
+            <strong>Best for:</strong>
+            {{ product.metafields.custom.occasion_text | default: product.metafields.custom.occasion }}
+          </p>
+        {%- endif -%}
+        {%- if product.metafields.custom.draping_style != blank -%}
+          <div class="saree-details__note">
+            <strong>Draping Style:</strong>
+            {{ product.metafields.custom.draping_style | newline_to_br }}
+          </div>
+        {%- endif -%}
+        {%- if product.metafields.custom.styling_suggestions != blank -%}
+          <div class="saree-details__note">
+            <strong>Styling Tips:</strong>
+            {{ product.metafields.custom.styling_suggestions | newline_to_br }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%}──────────── CARE & MAINTENANCE ────────────{%- endcomment -%}
+    {%- if has_care -%}
+      <div class="saree-details__panel">
+        <h3 class="saree-details__heading">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            aria-hidden="true"
+          >
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          Care &amp; Maintenance
+        </h3>
+        {%- if product.metafields.custom.wash_instructions != blank -%}
+          <div class="saree-details__care-item">
+            <span class="saree-details__care-icon">🧼</span>
+            <div>
+              <strong>Washing</strong>
+              <p>{{ product.metafields.custom.wash_instructions | newline_to_br }}</p>
+            </div>
+          </div>
+        {%- elsif product.metafields.custom.care != blank -%}
+          <div class="saree-details__care-item">
+            <span class="saree-details__care-icon">🧼</span>
+            <div>
+              <strong>Care</strong>
+              <p>{{ product.metafields.custom.care | newline_to_br }}</p>
+            </div>
+          </div>
+        {%- endif -%}
+        {%- if product.metafields.custom.first_wear_prep != blank -%}
+          <div class="saree-details__care-item">
+            <span class="saree-details__care-icon">✨</span>
+            <div>
+              <strong>First Wear</strong>
+              <p>{{ product.metafields.custom.first_wear_prep | newline_to_br }}</p>
+            </div>
+          </div>
+        {%- endif -%}
+        {%- if product.metafields.custom.storage_tips != blank -%}
+          <div class="saree-details__care-item">
+            <span class="saree-details__care-icon">📦</span>
+            <div>
+              <strong>Storage</strong>
+              <p>{{ product.metafields.custom.storage_tips | newline_to_br }}</p>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <style>
+    .saree-details {
+      font-family: var(--font-body-family);
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+    }
+    .saree-details__panel {
+      border: none;
+      border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
+      padding: 2.5rem 0;
+      background: transparent;
+    }
+    .saree-details__panel:last-child {
+      border-bottom: none;
+    }
+    .saree-details__heading {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-heading-family);
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(var(--color-foreground), 0.85);
+      margin: 0 0 1.2rem;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    .saree-details__grid {
+      display: grid;
+      gap: 0.4rem 0;
+      margin: 0;
+    }
+    .saree-details__row {
+      display: flex;
+      gap: 0.8rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(var(--color-foreground), 0.05);
+      font-size: 1.4rem;
+      line-height: 1.5;
+    }
+    .saree-details__row:last-child {
+      border-bottom: none;
+    }
+    .saree-details__row dt {
+      flex: 0 0 14rem;
+      color: rgba(var(--color-foreground), 0.6);
+      font-weight: 500;
+    }
+    .saree-details__row dd {
+      flex: 1;
+      margin: 0;
+      color: rgba(var(--color-foreground), 0.9);
+    }
+    /* specs grid */
+    .saree-details__grid--specs {
+      grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+      gap: 1rem;
+    }
+    .saree-details__spec-item {
+      background: transparent;
+      border: 1px solid rgba(var(--color-foreground), 0.1);
+      border-radius: 0.4rem;
+      padding: 0.8rem 1rem;
+      font-size: 1.3rem;
+    }
+    .saree-details__spec-item dt {
+      color: rgba(var(--color-foreground), 0.55);
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.2rem;
+    }
+    .saree-details__spec-item dd {
+      margin: 0;
+      font-weight: 600;
+      color: rgba(var(--color-foreground), 0.9);
+    }
+    /* badges */
+    .saree-details__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      padding: 0.2rem 0.7rem;
+      border-radius: 2rem;
+    }
+    .saree-details__badge--gold {
+      background: transparent;
+      color: #8a6300;
+      border: 1px solid #e8c97a;
+    }
+    .saree-details__badge--green {
+      background: transparent;
+      color: #1e6e3e;
+      border: 1px solid #a8d5b5;
+    }
+    /* story */
+    .saree-details__story {
+      margin-top: 1rem;
+      font-size: 1.4rem;
+      line-height: 1.7;
+      color: rgba(var(--color-foreground), 0.75);
+      font-style: italic;
+      border-left: 3px solid rgba(var(--color-foreground), 0.15);
+      padding-left: 1.2rem;
+    }
+    /* note */
+    .saree-details__note {
+      margin-top: 1rem;
+      font-size: 1.3rem;
+      line-height: 1.6;
+      color: rgba(var(--color-foreground), 0.75);
+    }
+    /* occasion */
+    .saree-details__occasion {
+      font-size: 1.4rem;
+      margin: 0 0 0.8rem;
+      color: rgba(var(--color-foreground), 0.85);
+    }
+    /* care items */
+    .saree-details__care-item {
+      display: flex;
+      gap: 1rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(var(--color-foreground), 0.05);
+      font-size: 1.3rem;
+      line-height: 1.6;
+    }
+    .saree-details__care-item:last-child {
+      border-bottom: none;
+    }
+    .saree-details__care-icon {
+      flex-shrink: 0;
+      font-size: 1.6rem;
+      margin-top: 0.1rem;
+    }
+    .saree-details__care-item strong {
+      display: block;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: rgba(var(--color-foreground), 0.8);
+      margin-bottom: 0.2rem;
+    }
+    .saree-details__care-item p {
+      margin: 0;
+      color: rgba(var(--color-foreground), 0.65);
+    }
+  </style>
+{%- endif -%}

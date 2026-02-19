@@ -5,11 +5,10 @@
 }
 
 .rich-product__container {
-  max-width: 80rem;
+  max-width: 70rem;
   margin: 0 auto;
-  padding: 2rem;
-  border: 1px solid rgba(var(--color-foreground), 0.1);
-  border-radius: 8px;
+  padding: 0 2rem;
+  border: none;
 }
 
 /* Header */
@@ -99,9 +98,10 @@
 /* Benefits List */
 .rich-product__benefits {
   margin-bottom: 3rem;
-  background: rgba(var(--color-foreground), 0.03);
-  padding: 2rem;
-  border-radius: 8px;
+  background: transparent;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(var(--color-foreground), 0.08);
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
 }
 
 .rich-product__benefits-title {
@@ -181,3 +181,48 @@
   color: rgb(var(--color-background));
   border-color: rgb(var(--color-foreground));
 }
+
+/* Weaving Heritage Block */
+.rich-product__heritage {
+  margin: 2rem 0;
+  padding: 1rem 0 1rem 1.5rem;
+  background: transparent;
+  border-left: 3px solid rgba(var(--color-foreground), 0.15);
+}
+
+.rich-product__silk-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8a6300;
+  background: #fdf3dc;
+  border: 1px solid #e8c97a;
+  border-radius: 20px;
+  padding: 0.3rem 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.rich-product__artisan {
+  font-size: 1.4rem;
+  color: rgba(var(--color-foreground), 0.75);
+  margin: 0.5rem 0 1rem;
+}
+
+.rich-product__artisan strong {
+  color: rgba(var(--color-foreground), 0.9);
+}
+
+.rich-product__heritage-story {
+  margin: 0;
+  font-size: 1.4rem;
+  line-height: 1.75;
+  font-style: italic;
+  color: rgba(var(--color-foreground), 0.7);
+  border: none;
+  padding: 0;
+}
+

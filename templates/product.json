@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
@@ -58,8 +49,8 @@
         "collapsible-row-0": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "Materials",
-            "icon": "leather",
+            "heading": "Fabric & Weave Details",
+            "icon": "shirt",
             "content": "",
             "page": ""
           }
@@ -67,8 +58,8 @@
         "collapsible-row-1": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "Shipping & Returns",
-            "icon": "truck",
+            "heading": "Authenticity & Artisan",
+            "icon": "check_mark",
             "content": "",
             "page": ""
           }
@@ -76,7 +67,7 @@
         "collapsible-row-2": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "Dimensions",
+            "heading": "Draping & Size Guide",
             "icon": "ruler",
             "content": "",
             "page": ""
@@ -85,8 +76,17 @@
         "collapsible-row-3": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "Care Instructions",
+            "heading": "Care & Preservation",
             "icon": "heart",
+            "content": "",
+            "page": ""
+          }
+        },
+        "collapsible-row-4": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping & Delivery",
+            "icon": "truck",
             "content": "",
             "page": ""
           }
@@ -111,13 +111,14 @@
         "collapsible-row-1",
         "collapsible-row-2",
         "collapsible-row-3",
+        "collapsible-row-4",
         "share"
       ],
       "settings": {
         "enable_sticky_info": true,
         "media_size": "large",
         "constrain_to_viewport": true,
-        "gallery_layout": "stacked",
+        "gallery_layout": "thumbnail_slider",
         "mobile_thumbnails": "hide",
         "hide_variants": true,
         "enable_video_looping": false,
@@ -131,14 +132,14 @@
         "image-with-text-0": {
           "type": "heading",
           "settings": {
-            "heading": "Image with text",
+            "heading": "Crafted Over 18 Days",
             "heading_size": "h1"
           }
         },
         "image-with-text-1": {
           "type": "text",
           "settings": {
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "text": "<p>Every warp and weft is hand-positioned by master weavers. A single saree represents 18-25 days of dedicated craftsmanship on traditional pit looms, preserving an art form passed down through generations.</p>",
             "text_style": "body"
           }
         }
@@ -166,8 +167,8 @@
         "column-0": {
           "type": "column",
           "settings": {
-            "title": "Free Shipping",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "title": "Handwoven Heritage",
+            "text": "<p>Woven on traditional pit looms in Varanasi by master artisans.</p>",
             "link_label": "",
             "link": ""
           }
@@ -175,8 +176,26 @@
         "column-1": {
           "type": "column",
           "settings": {
-            "title": "Hassle-Free Exchanges",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "title": "Silk Mark Certified",
+            "text": "<p>Authentic pure silk certified under Silk Mark standards.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column-2": {
+          "type": "column",
+          "settings": {
+            "title": "Limited Batch Production",
+            "text": "<p>Each saree is produced in small artisan batches.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column-3": {
+          "type": "column",
+          "settings": {
+            "title": "Secure Global Shipping",
+            "text": "<p>Express delivery with full insurance protection.</p>",
             "link_label": "",
             "link": ""
           }
@@ -184,7 +203,9 @@
       },
       "block_order": [
         "column-0",
-        "column-1"
+        "column-1",
+        "column-2",
+        "column-3"
       ],
       "settings": {
         "title": "",
@@ -193,7 +214,7 @@
         "image_ratio": "adapt",
         "button_label": "",
         "button_link": "",
-        "columns_desktop": 2,
+        "columns_desktop": 4,
         "column_alignment": "left",
         "background_style": "none",
         "color_scheme": "scheme-1",
@@ -219,10 +240,7 @@
         "padding_bottom": 28
       }
     },
-    "highlight_offers_grid_global": {
-      "type": "highlight-offers-grid",
-      "settings": {}
-    },
+
     "highlight_shipping_banner_global": {
       "type": "highlight-shipping-banner",
       "settings": {}
@@ -250,15 +268,14 @@
   },
   "order": [
     "main",
-    "rich_product_details_main",
-    "product_offer_widget_main",
-    "image-with-text",
-    "multicolumn",
-    "related-products",
-    "highlight_offers_grid_global",
     "highlight_shipping_banner_global",
+    "rich_product_details_main",
+    "multicolumn",
+    "image-with-text",
     "highlight_bundle_grid_global",
+    "product_offer_widget_main",
     "highlight_coupon_box_global",
+    "related-products",
     "sticky_atc_main"
   ]
 }
