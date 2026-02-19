@@ -1,7 +1,51 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "name": "t:sections.footer.name",
   "type": "footer",
   "sections": {
+    "newsletter_MhtDJQ": {
+      "type": "newsletter",
+      "blocks": {
+        "heading_cxEfxG": {
+          "type": "heading",
+          "settings": {
+            "heading": "Subscribe to our emails",
+            "heading_size": "h1"
+          }
+        },
+        "paragraph_DACjq7": {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Be the first to know about new collections and exclusive offers.</p>"
+          }
+        },
+        "email_form_Kt8qcj": {
+          "type": "email_form",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "heading_cxEfxG",
+        "paragraph_DACjq7",
+        "email_form_Kt8qcj"
+      ],
+      "disabled": true,
+      "name": "t:sections.newsletter.presets.name",
+      "settings": {
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
     "footer": {
       "type": "footer",
       "blocks": {
@@ -23,7 +67,7 @@
           "type": "text",
           "settings": {
             "heading": "Our mission",
-            "subtext": "<p>Share contact information, store details, and brand content with your customers.<\/p>"
+            "subtext": "<p>Share contact information, store details, and brand content with your customers.</p>"
           }
         }
       },
@@ -36,11 +80,21 @@
         "color_scheme": "scheme-1",
         "newsletter_enable": true,
         "newsletter_heading": "Subscribe to our emails",
+        "enable_follow_on_shop": true,
         "show_social": true,
         "enable_country_selector": false,
         "enable_language_selector": false,
         "payment_enable": true,
         "show_policy": false,
+        "enable_canvas_animation": true,
+        "thread_count": 15,
+        "animation_speed": 100,
+        "scroll_sensitivity": 80,
+        "thread_opacity": 40,
+        "thread_color_1": "#d4af37",
+        "thread_color_2": "#e5c07b",
+        "thread_color_3": "#f3e5ab",
+        "thread_color_4": "#c5a059",
         "margin_top": 48,
         "padding_top": 36,
         "padding_bottom": 36
@@ -48,6 +102,7 @@
     }
   },
   "order": [
+    "newsletter_MhtDJQ",
     "footer"
   ]
 }
