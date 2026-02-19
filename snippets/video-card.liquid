@@ -25,7 +25,7 @@
   >
     <div
       class="card__inner {% if settings.card_style == 'standard' %}color-{{ settings.card_color_scheme }} gradient{% endif %} ratio"
-      style="--ratio-percent: 172%;"
+      style="--ratio-percent: 150%;"
     >
       <div class="card__media">
         {%- if video -%}
@@ -46,8 +46,8 @@
 
         {%- if discount_label != blank -%}
           <span
-            class="badge"
-            style="position: absolute; top: 1rem; left: 1rem; background-color: {{ discount_color | default: '#ef4444' }}; color: #fff; z-index: 2;"
+            class="badge badge--bottom-left"
+            style="background-color: {{ discount_color | default: '#ef4444' }}; color: #fff;"
           >
             {{ discount_label }}
           </span>
@@ -60,7 +60,7 @@
         {%- if product != blank -%}
           <h3 class="card__heading h5">
             <a href="{{ product.url }}" class="full-unstyled-link">
-              {{ product.title | truncate: 30 }}
+              {{ product.title | truncate: 40 }}
             </a>
           </h3>
           <div class="price">

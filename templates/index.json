@@ -470,8 +470,8 @@
           "type": "video_card",
           "settings": {
             "video": "shopify://files/videos/Video-715.mp4",
-            "product": "",
-            "discount_label": "",
+            "product": "benarasi-mango-silk-saree-hot-pink",
+            "discount_label": "BESTSELLER",
             "discount_color": "#ef4444"
           }
         },
@@ -479,27 +479,27 @@
           "type": "video_card",
           "settings": {
             "video": "shopify://files/videos/Video-70.mp4",
-            "product": "",
-            "discount_label": "",
-            "discount_color": "#ef4444"
+            "product": "amritsari-phulkari-dupatta",
+            "discount_label": "NEW ARRIVAL",
+            "discount_color": "#10b981"
           }
         },
         "video_3": {
           "type": "video_card",
           "settings": {
             "video": "shopify://files/videos/Video-500.mp4",
-            "product": "",
-            "discount_label": "",
-            "discount_color": "#ef4444"
+            "product": "teal-blue-georgette-anarkali",
+            "discount_label": "FEATURED",
+            "discount_color": "#3b82f6"
           }
         },
         "video_4": {
           "type": "video_card",
           "settings": {
             "video": "shopify://files/videos/Video-335.mp4",
-            "product": "",
-            "discount_label": "",
-            "discount_color": "#ef4444"
+            "product": "crimson-glory-banarasi-saree",
+            "discount_label": "STUNNING",
+            "discount_color": "#f59e0b"
           }
         }
       },

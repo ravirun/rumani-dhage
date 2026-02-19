@@ -11,6 +11,13 @@
     }
   }
 
+  :root {
+    --reel-card-width: 260px;
+    --reel-card-height: 440px;
+    --reel-card-width-mobile: 220px;
+    --reel-card-height-mobile: 380px;
+  }
+
   /* Container */
   .reel-stage {
     position: relative;
@@ -34,6 +41,8 @@
     width: 100%;
     overflow-x: auto;
     padding-bottom: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     z-index: 1;
@@ -50,11 +59,6 @@
   }
 
   /* Layout Modes */
-  .reel-track--stacked {
-    overflow-x: hidden;
-    justify-content: center;
-  }
-
   .reel-track--grid {
     flex-wrap: wrap;
     justify-content: center;
@@ -69,15 +73,28 @@
   }
 
   .reel-section-wrapper .card {
-    width: 220px;
-    height: 380px;
+    width: var(--reel-card-width-mobile);
+    height: var(--reel-card-height-mobile);
     position: relative;
     background-color: transparent;
   }
 
+  @media screen and (min-width: 750px) {
+    .reel-section-wrapper .card {
+      width: var(--reel-card-width);
+      height: var(--reel-card-height);
+    }
+  }
+
   .reel-track--grid .card {
     width: 180px;
+    height: 320px;
     margin-bottom: 1rem;
+  }
+
+  .reel-track--stacked {
+    overflow-x: hidden;
+    justify-content: center;
   }
 
   .reel-track--stacked .card-wrapper {
@@ -105,24 +122,10 @@
   .reel-card__overlay-gradient {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent 60%);
     pointer-events: none;
     z-index: 1;
-  }
-
-  /* Badge */
-  .reel-card__badge {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    color: #ffffff;
-    font-size: 1rem;
-    font-weight: 700;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    text-transform: uppercase;
-    font-style: italic;
-    z-index: 2;
+    border-radius: var(--media-radius);
   }
 
   /* Content Adjustments */
@@ -131,12 +134,17 @@
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 1rem;
+    padding: 1.5rem;
     z-index: 2;
   }
 
   .reel-section-wrapper .card__heading,
   .reel-section-wrapper .price {
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+  }
+
+  .reel-section-wrapper .price .price-item {
     color: #ffffff;
   }
 
@@ -145,25 +153,31 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 4rem;
-    height: 4rem;
+    width: 3.5rem;
+    height: 3.5rem;
     background-color: rgb(var(--color-background));
     border-radius: 50%;
-    box-shadow: var(--shadow-horizontal-offset) var(--shadow-vertical-offset) var(--shadow-blur-radius) rgba(var(--color-shadow), var(--shadow-opacity));
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     display: flex;
     align-items: center;
     justify-content: center;
     border: 1px solid rgba(var(--color-foreground), 0.1);
     cursor: pointer;
-    z-index: 1;
-    transition: all 0.2s;
-    opacity: 0.9;
+    z-index: 3;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    opacity: 0;
+    pointer-events: none;
     color: rgb(var(--color-foreground));
   }
 
-  .reel-nav-btn:hover {
-    background-color: rgba(var(--color-background), 0.9);
+  .reel-section-wrapper:hover .reel-nav-btn {
     opacity: 1;
+    pointer-events: auto;
+  }
+
+  .reel-nav-btn:hover {
+    background-color: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
     transform: translateY(-50%) scale(1.1);
   }
 
@@ -171,8 +185,8 @@
   .reel-nav-btn--next { right: 1rem; }
 
   .reel-nav-btn svg {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1rem;
+    height: 1rem;
   }
 
   .reel-nav-btn--prev svg {
