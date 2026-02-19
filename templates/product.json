@@ -37,7 +37,8 @@
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
-            "picker_type": "button"
+            "picker_type": "button",
+            "swatch_shape": "circle"
           }
         },
         "quantity_selector": {
@@ -115,14 +116,39 @@
       ],
       "settings": {
         "enable_sticky_info": true,
+        "color_scheme": "",
         "media_size": "large",
         "constrain_to_viewport": true,
+        "media_fit": "contain",
         "gallery_layout": "stacked",
         "mobile_thumbnails": "hide",
+        "media_position": "left",
+        "image_zoom": "lightbox",
         "hide_variants": true,
         "enable_video_looping": false,
         "padding_top": 36,
         "padding_bottom": 12
+      }
+    },
+    "rich_product_details_main": {
+      "type": "rich-product-details",
+      "settings": {
+        "color_scheme": ""
+      }
+    },
+    "highlight_shipping_banner_global": {
+      "type": "highlight-shipping-banner",
+      "settings": {
+        "color_scheme": "",
+        "text_content": "Free Shipping on all domestic orders above 1,999 INR",
+        "subtext": "Hand-packed with care in sustainable packaging."
+      }
+    },
+    "product_offer_widget_main": {
+      "type": "product-offer-widget",
+      "settings": {
+        "shipping_threshold": 2000,
+        "sub_discount": 15
       }
     },
     "image-with-text": {
@@ -151,10 +177,12 @@
         "height": "small",
         "desktop_image_width": "medium",
         "layout": "text_first",
+        "image_behavior": "none",
         "content_layout": "no-overlap",
         "desktop_content_position": "top",
         "desktop_content_alignment": "left",
         "mobile_content_alignment": "left",
+        "section_color_scheme": "",
         "color_scheme": "scheme-2",
         "padding_top": 36,
         "padding_bottom": 36
@@ -208,10 +236,12 @@
       "settings": {
         "heading": "You may also like",
         "heading_size": "h2",
+        "products_to_show": 4,
         "columns_desktop": 4,
         "columns_mobile": "2",
         "color_scheme": "scheme-1",
         "image_ratio": "square",
+        "image_shape": "default",
         "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": false,
@@ -221,44 +251,44 @@
     },
     "highlight_offers_grid_global": {
       "type": "highlight-offers-grid",
-      "settings": {}
-    },
-    "highlight_shipping_banner_global": {
-      "type": "highlight-shipping-banner",
-      "settings": {}
+      "settings": {
+        "color_scheme": ""
+      }
     },
     "highlight_bundle_grid_global": {
       "type": "highlight-bundle-grid",
-      "settings": {}
+      "settings": {
+        "color_scheme": ""
+      }
     },
     "highlight_coupon_box_global": {
       "type": "highlight-coupon-box",
-      "settings": {}
-    },
-    "product_offer_widget_main": {
-      "type": "product-offer-widget",
-      "settings": {}
+      "settings": {
+        "color_scheme": "",
+        "title": "ROYAL WEDDING SALE",
+        "description": "Use code “QUEEN25” for 25% off on Kanjivaram Collection.",
+        "link_text": "Shop The Look",
+        "link": ""
+      }
     },
     "sticky_atc_main": {
       "type": "sticky-atc",
-      "settings": {}
-    },
-    "rich_product_details_main": {
-      "type": "rich-product-details",
-      "settings": {}
+      "settings": {
+        "color_scheme": ""
+      }
     }
   },
   "order": [
     "main",
     "rich_product_details_main",
-    "product_offer_widget_main",
-    "image-with-text",
-    "multicolumn",
-    "related-products",
-    "highlight_offers_grid_global",
     "highlight_shipping_banner_global",
+    "multicolumn",
+    "image-with-text",
     "highlight_bundle_grid_global",
+    "product_offer_widget_main",
     "highlight_coupon_box_global",
-    "sticky_atc_main"
+    "related-products",
+    "sticky_atc_main",
+    "highlight_offers_grid_global"
   ]
 }
