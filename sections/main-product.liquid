@@ -646,94 +646,29 @@
                 {%- endif -%}
               {%- when 'custom_color_picker' -%}
                 {%- if product.metafields.custom.is_customisable -%}
-                  <div class="custom-color-picker" data-custom-color-picker {{ block.shopify_attributes }}>
-                    <!-- Color Mode Toggle -->
-                    <fieldset class="color-mode-selector">
-                      <legend class="visually-hidden">Choose your option:</legend>
-
-                      <label>
-                        <input
-                          type="radio"
-                          name="color_mode"
-                          value="in-stock"
-                          checked
-                          form="{{ product_form_id }}"
-                        >
-                        <span>
-                          <span style="font-weight:600;"
-                            >Current Color:
-                            {{ product.selected_or_first_available_variant.option1 | default: 'As Shown' -}}
-                          </span>
-                          <br>
-                          <span style="font-size: 1.2rem; opacity: 0.8; margin-left: 0; display: block;">
-                            {% if product.selected_or_first_available_variant.available %}
-                              In Stock - Ships in 24 hrs
-                            {% else %}
-                              Sold Out
-                            {% endif %}
-                          </span>
-                        </span>
-                      </label>
-
-                      <label>
-                        <input
-                          type="radio"
-                          name="color_mode"
-                          value="custom"
-                          form="{{ product_form_id }}"
-                        >
-                        <span>
-                          <span style="font-weight:600;">Order Custom Color</span>
-                          <br>
-                          <span style="font-size: 1.2rem; opacity: 0.8; margin-left: 0; display: block;">
-                            Made to order • {{ product.metafields.custom.preorder_lead_time | default: '4-6 weeks' }}
-                          </span>
-                        </span>
-                      </label>
-                    </fieldset>
-
-                    <!-- Custom Color Dropdown (hidden by default) -->
-                    <div class="custom-color-dropdown-container" data-custom-dropdown hidden style="display: none;">
-                      <label for="custom-color-select-{{ section.id }}">Select Your Preferred Color:</label>
-                      <select
-                        id="custom-color-select-{{ section.id }}"
-                        name="properties[Custom Color]"
-                        form="{{ product_form_id }}"
-                        disabled
-                      >
-                        {% assign colors = product.metafields.custom.available_colors | split: ',' %}
-                        {% for color in colors %}
-                          <option value="{{ color | strip }}">{{ color | strip }}</option>
-                        {% endfor %}
-                      </select>
-
-                      <p class="confirmation-note">
-                        ✅
-                        {{
-                          product.metafields.custom.confirmation_window
-                          | default: 'Orders confirmed within 24 hours'
-                        }}
-                      </p>
-                    </div>
-                  </div>
-                {%- endif -%}
-              {%- when 'custom_color_picker' -%}
-                {%- if product.metafields.custom.is_customisable -%}
-                  <div class="custom-color-picker-block" {{ block.shopify_attributes }} style="margin-bottom: 2rem;">
+                  <div class="custom-color-picker-wrapper" data-custom-color-picker {{ block.shopify_attributes }}>
                     <style>
-                      .custom-color-options {
+                      .custom-color-picker-wrapper {
+                        margin: 2.5rem 0;
+                        border: 1px solid rgba(var(--color-foreground), 0.1);
+                        border-radius: var(--variant-pills-radius);
+                        padding: 1.5rem;
+                        background: rgba(var(--color-foreground), 0.02);
+                      }
+                      .color-mode-selector {
+                        border: none;
+                        padding: 0;
+                        margin: 0;
                         display: flex;
+                        flex-direction: column;
                         gap: 1rem;
-                        background: #f8f8f8;
-                        padding: 0.5rem;
-                        border-radius: 8px;
-                        border: 1px solid #e0e0e0;
                       }
-                      .custom-color-option {
-                        flex: 1;
+                      .color-mode-option {
                         position: relative;
+                        cursor: pointer;
+                        display: block;
                       }
-                      .custom-color-option input {
+                      .color-mode-option input {
                         position: absolute;
                         opacity: 0;
                         width: 100%;
@@ -741,89 +676,166 @@
                         cursor: pointer;
                         z-index: 2;
                       }
-                      .custom-color-option label {
+                      .color-mode-content {
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 1.2rem;
+                        padding: 1.2rem;
+                        border: 1px solid rgba(var(--color-foreground), 0.1);
+                        border-radius: 8px;
+                        background: rgb(var(--color-background));
+                        transition: all 0.2s ease;
+                      }
+                      .color-mode-radio {
+                        width: 18px;
+                        height: 18px;
+                        border: 2px solid rgba(var(--color-foreground), 0.3);
+                        border-radius: 50%;
+                        margin-top: 0.2rem;
+                        flex-shrink: 0;
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        padding: 0.8rem;
-                        border-radius: 6px;
-                        font-size: 1.4rem;
-                        font-weight: 500;
-                        color: #666;
                         transition: all 0.2s ease;
-                        border: 1px solid transparent;
-                        cursor: pointer;
-                        text-align: center;
-                        height: 100%;
                       }
-                      .custom-color-option input:checked + label {
-                        background: #fff;
-                        color: #000;
-                        border-color: #dcdcdc;
-                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                      .color-mode-radio::after {
+                        content: '';
+                        width: 10px;
+                        height: 10px;
+                        background: rgb(var(--color-button));
+                        border-radius: 50%;
+                        transform: scale(0);
+                        transition: transform 0.2s ease;
+                      }
+                      .color-mode-option input:checked + .color-mode-content {
+                        border-color: rgb(var(--color-button));
+                        background: rgba(var(--color-button), 0.03);
+                      }
+                      .color-mode-option input:checked + .color-mode-content .color-mode-radio {
+                        border-color: rgb(var(--color-button));
+                      }
+                      .color-mode-option input:checked + .color-mode-content .color-mode-radio::after {
+                        transform: scale(1);
+                      }
+                      .color-mode-details {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 0.2rem;
+                      }
+                      .color-mode-title {
+                        font-weight: 600;
+                        font-size: 1.5rem;
+                        color: rgb(var(--color-foreground));
+                      }
+                      .color-mode-info {
+                        font-size: 1.2rem;
+                        opacity: 0.7;
+                        color: rgb(var(--color-foreground));
                       }
                       .custom-color-dropdown-container {
                         margin-top: 1.5rem;
-                        padding: 1.5rem;
-                        background: #f9f9f9;
-                        border-radius: 8px;
-                        border: 1px solid #eee;
-                        display: none; /* Hidden by default, toggled via JS */
+                        padding-top: 1.5rem;
+                        border-top: 1px dashed rgba(var(--color-foreground), 0.1);
+                      }
+                      .custom-color-dropdown-container label {
+                        display: block;
+                        margin-bottom: 0.8rem;
+                        font-size: 1.3rem;
+                        font-weight: 500;
+                      }
+                      .confirmation-note {
+                        margin-top: 1rem;
+                        font-size: 1.1rem;
+                        opacity: 0.8;
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
                       }
                     </style>
 
-                    <div class="custom-color-options">
-                      <div class="custom-color-option">
+                    <fieldset class="color-mode-selector">
+                      <legend class="visually-hidden">Choose your option:</legend>
+
+                      <label class="color-mode-option">
                         <input
                           type="radio"
-                          id="color-mode-current-{{ section.id }}"
                           name="color_mode"
-                          value="current"
+                          value="in-stock"
                           checked
+                          form="{{ product_form_id }}"
                         >
-                        <label for="color-mode-current-{{ section.id }}">
-                          Current Color: {{ product.metafields.custom.color_name | default: 'As Shown' }}
-                        </label>
-                      </div>
-                      <div class="custom-color-option">
-                        <input type="radio" id="color-mode-custom-{{ section.id }}" name="color_mode" value="custom">
-                        <label for="color-mode-custom-{{ section.id }}"> Order Custom Color </label>
-                      </div>
-                    </div>
-
-                    <div class="custom-color-dropdown-container">
-                      <label
-                        for="custom-color-select-{{ section.id }}"
-                        style="display: block; margin-bottom: 0.8rem; font-size: 1.3rem; color: #444;"
-                      >
-                        Select Your Preferred Color
+                        <div class="color-mode-content">
+                          <div class="color-mode-radio"></div>
+                          <div class="color-mode-details">
+                            <span class="color-mode-title">
+                              Current Color:
+                              {{ product.selected_or_first_available_variant.option1 | default: 'As Shown' -}}
+                            </span>
+                            <span class="color-mode-info">
+                              {% if product.selected_or_first_available_variant.available %}
+                                In Stock - Ships in 24 hrs
+                              {% else %}
+                                Sold Out
+                              {% endif %}
+                            </span>
+                          </div>
+                        </div>
                       </label>
+
+                      <label class="color-mode-option">
+                        <input
+                          type="radio"
+                          name="color_mode"
+                          value="custom"
+                          form="{{ product_form_id }}"
+                        >
+                        <div class="color-mode-content">
+                          <div class="color-mode-radio"></div>
+                          <div class="color-mode-details">
+                            <span class="color-mode-title">Order Custom Color</span>
+                            <span class="color-mode-info">
+                              Made to order • {{ product.metafields.custom.preorder_lead_time | default: '4-6 weeks' }}
+                            </span>
+                          </div>
+                        </div>
+                      </label>
+                    </fieldset>
+
+                    <div class="custom-color-dropdown-container" data-custom-dropdown hidden style="display: none;">
+                      <label for="custom-color-select-{{ section.id }}">Select Your Preferred Color:</label>
                       <div class="select">
-                        <select id="custom-color-select-{{ section.id }}" class="select__select custom-color-select">
-                          {%- assign colors = product.metafields.custom.available_colors | split: ',' -%}
-                          {%- for color in colors -%}
+                        <select
+                          id="custom-color-select-{{ section.id }}"
+                          class="select__select"
+                          name="properties[Custom Color]"
+                          form="{{ product_form_id }}"
+                          disabled
+                        >
+                          {% assign colors = product.metafields.custom.available_colors | split: ',' %}
+                          {% for color in colors %}
                             <option value="{{ color | strip }}">{{ color | strip }}</option>
-                          {%- endfor -%}
+                          {% endfor %}
                         </select>
                         {% render 'icon-caret' %}
                       </div>
-                      <p style="margin-top: 1rem; font-size: 1.2rem; color: #666; display: flex; align-items: center; gap: 0.5rem;">
+
+                      <p class="confirmation-note">
                         <svg
-                          width="14"
-                          height="14"
+                          width="12"
+                          height="12"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
-                          stroke-width="2"
+                          stroke-width="3"
                         >
-                          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                          <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
-                        Orders confirmed within 24 hours
+                        {{
+                          product.metafields.custom.confirmation_window
+                          | default: 'Orders confirmed within 24 hours'
+                        }}
                       </p>
                     </div>
-
-                    <input type="hidden" name="properties[Custom Color]" form="{{ product_form_id }}" disabled>
                   </div>
                 {%- endif -%}
               {%- when 'complementary' -%}
