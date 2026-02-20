@@ -11,6 +11,13 @@
   "name": "t:sections.footer.name",
   "type": "footer",
   "sections": {
+    "floating_cart_Ft8K6r": {
+      "type": "floating-cart",
+      "name": "Floating Cart",
+      "settings": {
+        "color_scheme": ""
+      }
+    },
     "newsletter_MhtDJQ": {
       "type": "newsletter",
       "blocks": {
@@ -102,6 +109,7 @@
     }
   },
   "order": [
+    "floating_cart_Ft8K6r",
     "newsletter_MhtDJQ",
     "footer"
   ]
