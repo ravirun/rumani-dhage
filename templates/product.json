@@ -36,6 +36,10 @@
           "type": "quantity_selector",
           "settings": {}
         },
+        "custom_color_picker": {
+          "type": "custom_color_picker",
+          "settings": {}
+        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -106,6 +110,7 @@
         "price",
         "variant_picker",
         "quantity_selector",
+        "custom_color_picker",
         "buy_buttons",
         "description",
         "collapsible-row-0",

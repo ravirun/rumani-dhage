@@ -87,204 +87,167 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Product Offer Widget (Buy Box) --- */
+/* --- Product Offer Widget (Luxury Trust Block) --- */
 .product-offer-widget {
-  background-color: var(--color-base-background-1);
-  border: 1px solid rgba(var(--color-foreground), 0.1);
-  border-radius: 8px;
-  padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  background-color: rgb(var(--color-background));
+  border: 1px solid rgba(var(--color-foreground), 0.08); /* Softer border */
+  border-radius: 12px; /* Softer corners */
+  padding: 2.5rem; /* More breathing room */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04); /* Diffuse premium shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-offer-widget:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
 }
 
 .offer-widget__header {
-    margin-bottom: 2rem;
-    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
-    padding-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.06);
+  padding-bottom: 2rem;
 }
 
 .offer-widget__title {
   font-family: var(--font-heading-family);
-  font-size: 2rem;
-  margin: 0 0 0.5rem 0;
+  font-size: 2.2rem;
+  font-weight: 500;
+  margin: 0 0 0.8rem 0;
+  line-height: 1.25;
+  color: rgb(var(--color-foreground));
 }
 
-.offer-widget__rating {
-  font-size: 1.4rem;
-  color: #f4b400; /* Star color */
-}
-
-/* Volume Selector */
-.volume-selector {
+.offer-widget__price-area {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  align-items: baseline;
+  gap: 1.2rem;
+  margin-top: 0.8rem;
 }
 
-.volume-option {
-  flex: 1;
-  border: 1px solid rgba(var(--color-foreground), 0.1);
-  padding: 1rem;
+.auth-strip {
+  background: rgba(var(--color-foreground), 0.03);
+  color: rgba(var(--color-foreground), 0.8);
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
   text-align: center;
-  border-radius: 4px;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.2s;
+  padding: 1rem;
+  margin: 2rem 0 1.5rem;
+  border-radius: 6px;
 }
 
-.volume-option:hover {
-  border-color: rgb(var(--color-button));
-}
-
-.volume-option.is-selected {
-  border-color: rgb(var(--color-button));
-  background-color: rgba(var(--color-button), 0.05);
-}
-
-.volume-option__tag {
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #ff4d4f;
-  color: white;
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-weight: bold;
-  white-space: nowrap;
-}
-
-.volume-option__qty {
-  font-weight: 700;
-  display: block;
-  font-size: 1.6rem;
-}
-
-.volume-option__unit {
-  font-size: 1.2rem;
-  color: rgba(var(--color-foreground), 0.7);
-}
-
-/* Purchase Type Toggle (Sub vs One-time) */
-.purchase-type {
+/* Bridal Bundle Selector (Visual) */
+.bridal-bundle-selector {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: 1.2rem;
+  margin-bottom: 2.5rem;
 }
 
-.purchase-option {
+.bridal-option {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 1.5rem;
-  border: 1px solid rgba(var(--color-foreground), 0.1);
-  border-radius: 4px;
+  padding: 1.4rem; /* Larger touch target */
+  border: 1px solid transparent; /* Cleaner look */
+  background: rgba(var(--color-foreground), 0.03);
+  border-radius: 8px;
   cursor: pointer;
-  position: relative;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.purchase-option.is-selected {
-  border-color: rgb(var(--color-button));
-  background-color: rgba(var(--color-button), 0.03);
-  box-shadow: 0 0 0 1px rgb(var(--color-button)) inset;
+.bridal-option:hover {
+  background: rgba(var(--color-foreground), 0.05);
+  transform: translateY(-1px);
 }
 
-.purchase-option__radio {
-    margin-right: 1rem;
-    accent-color: rgb(var(--color-button));
+.bridal-option.is-selected {
+  background: rgb(var(--color-background));
+  border-color: rgb(var(--color-foreground));
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-.purchase-option__label {
-    flex: 1;
-    font-weight: 600;
+.bridal-option__radio {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-right: 1.5rem;
+  accent-color: rgb(var(--color-foreground));
 }
 
-.purchase-option__price {
-    font-weight: 700;
+.bridal-option__title {
+  display: block;
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+  color: rgb(var(--color-foreground));
 }
 
-.purchase-option__badge {
-    background: #4caf50;
-    color: white;
-    font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-left: 0.5rem;
+.bridal-option__desc {
+  font-size: 1.3rem;
+  color: rgba(var(--color-foreground), 0.65);
 }
 
-.subscription-details {
-    margin-top: 1rem;
-    padding-left: 2.5rem;
-    font-size: 1.3rem;
-    color: rgba(var(--color-foreground), 0.75);
-    display: none;
-}
-.purchase-option.is-selected .subscription-details {
-    display: block;
-}
-
-/* Shipping Progress */
-.shipping-progress {
-    margin-bottom: 2rem;
-}
-
-.shipping-progress__text {
-    font-size: 1.3rem;
-    margin-bottom: 0.5rem;
-    display: block;
+/* Shipping Message */
+.shipping-message {
+  font-size: 1.3rem;
+  color: #1a5e3a; /* Darker, richer green */
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.8rem;
+  font-weight: 500;
+  background: rgba(26, 94, 58, 0.05);
+  padding: 0.8rem 1.2rem;
+  border-radius: 6px;
+  width: fit-content;
 }
 
-.shipping-progress__bar {
-    height: 8px;
-    background: rgba(var(--color-foreground), 0.1);
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.shipping-progress__fill {
-    height: 100%;
-    background: #4caf50; /* Green */
-    width: 0%;
-    transition: width 0.3s ease;
-}
-
-/* Add to Cart */
+/* CTA Button */
 .offer-widget__atc {
-    width: 100%;
-    padding: 1.5rem;
-    background-color: #4caf50; /* Green CTA like image */
-    color: white;
-    border: none;
-    border-radius: 50px;
-    font-size: 1.6rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.3s;
-    margin-bottom: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 3rem;
-    padding-right: 3rem;
+  width: 100%;
+  padding: 1.8rem 2.5rem;
+  background-color: rgb(var(--color-button));
+  color: rgb(var(--color-button-text));
+  border: none;
+  border-radius: 4px; /* Classic luxury, confusing with rounded pills */
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .offer-widget__atc:hover {
-    background-color: #43a047;
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* Trust Badges */
-.offer-widget__trust {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-size: 1.2rem;
-    color: rgba(var(--color-foreground), 0.7);
+/* Luxury Trust Stack */
+.luxury-trust {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 1.3rem;
+  color: rgba(var(--color-foreground), 0.75);
 }
 
-.offer-widget__trust-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
+.luxury-trust li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.luxury-trust svg {
+  width: 18px;
+  height: 18px;
+  color: rgb(var(--color-foreground));
+  opacity: 0.8;
+  flex-shrink: 0;
 }

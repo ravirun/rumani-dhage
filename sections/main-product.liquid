@@ -41,6 +41,7 @@
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'custom-color-picker.js' | asset_url }}" defer="defer"></script>
   {%- if product.quantity_price_breaks_configured? -%}
     <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
@@ -641,6 +642,188 @@
                         {{ 'accessibility.total_reviews' | t -}}
                       </span>
                     </p>
+                  </div>
+                {%- endif -%}
+              {%- when 'custom_color_picker' -%}
+                {%- if product.metafields.custom.is_customisable -%}
+                  <div class="custom-color-picker" data-custom-color-picker {{ block.shopify_attributes }}>
+                    <!-- Color Mode Toggle -->
+                    <fieldset class="color-mode-selector">
+                      <legend class="visually-hidden">Choose your option:</legend>
+
+                      <label>
+                        <input
+                          type="radio"
+                          name="color_mode"
+                          value="in-stock"
+                          checked
+                          form="{{ product_form_id }}"
+                        >
+                        <span>
+                          <span style="font-weight:600;"
+                            >Current Color:
+                            {{ product.selected_or_first_available_variant.option1 | default: 'As Shown' -}}
+                          </span>
+                          <br>
+                          <span style="font-size: 1.2rem; opacity: 0.8; margin-left: 0; display: block;">
+                            {% if product.selected_or_first_available_variant.available %}
+                              In Stock - Ships in 24 hrs
+                            {% else %}
+                              Sold Out
+                            {% endif %}
+                          </span>
+                        </span>
+                      </label>
+
+                      <label>
+                        <input
+                          type="radio"
+                          name="color_mode"
+                          value="custom"
+                          form="{{ product_form_id }}"
+                        >
+                        <span>
+                          <span style="font-weight:600;">Order Custom Color</span>
+                          <br>
+                          <span style="font-size: 1.2rem; opacity: 0.8; margin-left: 0; display: block;">
+                            Made to order • {{ product.metafields.custom.preorder_lead_time | default: '4-6 weeks' }}
+                          </span>
+                        </span>
+                      </label>
+                    </fieldset>
+
+                    <!-- Custom Color Dropdown (hidden by default) -->
+                    <div class="custom-color-dropdown-container" data-custom-dropdown hidden style="display: none;">
+                      <label for="custom-color-select-{{ section.id }}">Select Your Preferred Color:</label>
+                      <select
+                        id="custom-color-select-{{ section.id }}"
+                        name="properties[Custom Color]"
+                        form="{{ product_form_id }}"
+                        disabled
+                      >
+                        {% assign colors = product.metafields.custom.available_colors | split: ',' %}
+                        {% for color in colors %}
+                          <option value="{{ color | strip }}">{{ color | strip }}</option>
+                        {% endfor %}
+                      </select>
+
+                      <p class="confirmation-note">
+                        ✅
+                        {{
+                          product.metafields.custom.confirmation_window
+                          | default: 'Orders confirmed within 24 hours'
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                {%- endif -%}
+              {%- when 'custom_color_picker' -%}
+                {%- if product.metafields.custom.is_customisable -%}
+                  <div class="custom-color-picker-block" {{ block.shopify_attributes }} style="margin-bottom: 2rem;">
+                    <style>
+                      .custom-color-options {
+                        display: flex;
+                        gap: 1rem;
+                        background: #f8f8f8;
+                        padding: 0.5rem;
+                        border-radius: 8px;
+                        border: 1px solid #e0e0e0;
+                      }
+                      .custom-color-option {
+                        flex: 1;
+                        position: relative;
+                      }
+                      .custom-color-option input {
+                        position: absolute;
+                        opacity: 0;
+                        width: 100%;
+                        height: 100%;
+                        cursor: pointer;
+                        z-index: 2;
+                      }
+                      .custom-color-option label {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 0.8rem;
+                        border-radius: 6px;
+                        font-size: 1.4rem;
+                        font-weight: 500;
+                        color: #666;
+                        transition: all 0.2s ease;
+                        border: 1px solid transparent;
+                        cursor: pointer;
+                        text-align: center;
+                        height: 100%;
+                      }
+                      .custom-color-option input:checked + label {
+                        background: #fff;
+                        color: #000;
+                        border-color: #dcdcdc;
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                      }
+                      .custom-color-dropdown-container {
+                        margin-top: 1.5rem;
+                        padding: 1.5rem;
+                        background: #f9f9f9;
+                        border-radius: 8px;
+                        border: 1px solid #eee;
+                        display: none; /* Hidden by default, toggled via JS */
+                      }
+                    </style>
+
+                    <div class="custom-color-options">
+                      <div class="custom-color-option">
+                        <input
+                          type="radio"
+                          id="color-mode-current-{{ section.id }}"
+                          name="color_mode"
+                          value="current"
+                          checked
+                        >
+                        <label for="color-mode-current-{{ section.id }}">
+                          Current Color: {{ product.metafields.custom.color_name | default: 'As Shown' }}
+                        </label>
+                      </div>
+                      <div class="custom-color-option">
+                        <input type="radio" id="color-mode-custom-{{ section.id }}" name="color_mode" value="custom">
+                        <label for="color-mode-custom-{{ section.id }}"> Order Custom Color </label>
+                      </div>
+                    </div>
+
+                    <div class="custom-color-dropdown-container">
+                      <label
+                        for="custom-color-select-{{ section.id }}"
+                        style="display: block; margin-bottom: 0.8rem; font-size: 1.3rem; color: #444;"
+                      >
+                        Select Your Preferred Color
+                      </label>
+                      <div class="select">
+                        <select id="custom-color-select-{{ section.id }}" class="select__select custom-color-select">
+                          {%- assign colors = product.metafields.custom.available_colors | split: ',' -%}
+                          {%- for color in colors -%}
+                            <option value="{{ color | strip }}">{{ color | strip }}</option>
+                          {%- endfor -%}
+                        </select>
+                        {% render 'icon-caret' %}
+                      </div>
+                      <p style="margin-top: 1rem; font-size: 1.2rem; color: #666; display: flex; align-items: center; gap: 0.5rem;">
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        Orders confirmed within 24 hours
+                      </p>
+                    </div>
+
+                    <input type="hidden" name="properties[Custom Color]" form="{{ product_form_id }}" disabled>
                   </div>
                 {%- endif -%}
               {%- when 'complementary' -%}
@@ -1574,6 +1757,11 @@
           "default": false
         }
       ]
+    },
+    {
+      "type": "custom_color_picker",
+      "name": "Custom Color Picker",
+      "limit": 1
     },
     {
       "type": "icon-with-text",
