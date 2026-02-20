@@ -1,137 +1,228 @@
 {{ 'advanced-product.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'product-widget.js' | asset_url }}" defer="defer"></script>
 
+<style>
+  .product-offer-widget {
+    border: 1px solid rgba(var(--color-foreground), 0.08);
+    border-radius: 8px;
+    padding: 2rem;
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  }
+  .offer-widget__header {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.06);
+    padding-bottom: 1.5rem;
+  }
+  .offer-widget__title {
+    font-size: 1.8rem;
+    font-family: var(--font-heading-family);
+    margin: 0 0 0.5rem;
+    line-height: 1.3;
+  }
+  .offer-widget__price-area {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  .auth-strip {
+    background: rgba(var(--color-foreground), 0.03);
+    color: rgba(var(--color-foreground), 0.8);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-align: center;
+    padding: 0.8rem;
+    margin: 1.5rem 0 1rem;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  .luxury-trust {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    font-size: 1.3rem;
+    color: rgba(var(--color-foreground), 0.75);
+  }
+  .luxury-trust li {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+  .luxury-trust svg {
+    width: 16px;
+    height: 16px;
+    color: var(--color-foreground);
+    opacity: 0.6;
+  }
+  .offer-widget__atc {
+    width: 100%;
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 1.5rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px;
+  }
+  .offer-widget__atc:hover {
+    opacity: 0.9;
+  }
+  /* Bridal Bundle Selector (Visual) */
+  .bridal-bundle-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .bridal-option {
+    display: flex;
+    align-items: center;
+    padding: 1.2rem;
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .bridal-option.is-selected {
+    border-color: var(--color-foreground);
+    background: rgba(var(--color-foreground), 0.02);
+  }
+  .bridal-option__radio {
+    width: 1.8rem;
+    height: 1.8rem;
+    margin-right: 1.2rem;
+    accent-color: var(--color-foreground);
+  }
+  .bridal-option__info {
+    flex: 1;
+  }
+  .bridal-option__title {
+    display: block;
+    font-weight: 600;
+    font-size: 1.4rem;
+    margin-bottom: 0.2rem;
+  }
+  .bridal-option__desc {
+    font-size: 1.2rem;
+    color: rgba(var(--color-foreground), 0.6);
+  }
+  .shipping-message {
+    font-size: 1.3rem;
+    color: #1e6e3e;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+</style>
+
 <div class="highlight-section">
-  <div
-    class="product-offer-widget"
-    data-base-price="{{ product.price }}"
-    data-shipping-threshold="{{ section.settings.shipping_threshold | times: 100 }}"
-    data-sub-discount="{{ section.settings.sub_discount }}"
-  >
+  <div class="product-offer-widget">
     {%- assign current_variant = product.selected_or_first_available_variant -%}
 
     <div class="offer-widget__header">
       <h2 class="offer-widget__title">{{ product.title }}</h2>
-      <div class="offer-widget__rating">
-        ★★★★★ <span style="color:var(--color-foreground);font-size:1.2rem;opacity:0.8;">(119 reviews)</span>
-      </div>
-      <div style="margin-top:0.5rem;">
-        <span style="text-decoration:line-through;opacity:0.6;">{{ product.compare_at_price | money }}</span>
-        <span style="font-weight:bold;font-size:1.8rem;">{{ product.price | money }}</span>
+      <div class="offer-widget__price-area">
+        <span style="font-weight:600;font-size:1.8rem;">{{ product.price | money }}</span>
         {% if product.compare_at_price > product.price %}
-          <span style="background:#e6f4ea;color:#1e8e3e;font-weight:700;font-size:1.1rem;padding:2px 6px;border-radius:4px;margin-left:0.5rem;"
-            >SAVE
-            {{
-              product.compare_at_price
-              | minus: product.price
-              | times: 100.0
-              | divided_by: product.compare_at_price
-              | round
-            -}}
-            %</span
-          >
+          <span style="text-decoration:line-through;opacity:0.6;font-size:1.4rem;">
+            {{- product.compare_at_price | money -}}
+          </span>
         {% endif %}
       </div>
-      <p style="margin-top:1rem;font-size:1.4rem;line-height:1.4;">
-        {{ product.description | strip_html | truncate: 120 }}
+      <p style="margin-top:1rem;font-size:1.4rem;line-height:1.5;color:rgba(var(--color-foreground), 0.75);">
+        {{ product.metafields.custom.short_description | default: product.description | strip_html | truncate: 140 }}
       </p>
     </div>
 
-    <!-- Volume Selector -->
-    <label style="display:block;margin-bottom:0.5rem;font-weight:600;">Select quantity:</label>
-    <div class="volume-selector">
-      <div class="volume-option is-selected" data-qty="1">
-        <span class="volume-option__qty">1 Saree</span>
-        <span class="volume-option__unit">{{ product.price | money }}</span>
-      </div>
-      <div class="volume-option" data-qty="2">
-        <div class="volume-option__tag">WEDDING GIFT</div>
-        <span class="volume-option__qty">2 Sarees</span>
-        <span class="volume-option__unit">Save 10%</span>
-      </div>
-      <div class="volume-option" data-qty="3">
-        <span class="volume-option__qty">3 Sarees</span>
-        <span class="volume-option__unit">Save 15%</span>
-      </div>
-    </div>
-
-    <!-- Purchase Type Toggle -->
-    <label style="display:block;margin-bottom:0.5rem;font-weight:600;">Select option:</label>
-    <div class="purchase-type">
-      <label class="purchase-option is-selected">
-        <input type="radio" name="purchase_type" value="onetime" class="purchase-option__radio" checked>
-        <div style="flex:1;">
-          <div style="display:flex;justify-content:space-between;">
-            <span class="purchase-option__label">One-time purchase</span>
-            <span class="purchase-option__price" data-price-onetime>{{ product.price | money }}</span>
-          </div>
+    <!-- Bridal Bundle Selector (Visual for Positioning) -->
+    <div class="bridal-bundle-selector">
+      <label class="bridal-option is-selected">
+        <input type="radio" name="bundle_type" checked class="bridal-option__radio">
+        <div class="bridal-option__info">
+          <span class="bridal-option__title">Saree Only</span>
+          <span class="bridal-option__desc">Standard packaging</span>
         </div>
       </label>
-
-      {%- if product.selling_plan_groups.size > 0 -%}
-        {%- assign group = product.selling_plan_groups[0] -%}
-        {%- assign plan = group.selling_plans[0] -%}
-        <label class="purchase-option">
-          <input
-            type="radio"
-            name="purchase_type"
-            value="sub"
-            class="purchase-option__radio"
-            data-plan-id="{{ plan.id }}"
-          >
-          <div style="flex:1;">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span class="purchase-option__label">Subscribe & Save {{ section.settings.sub_discount }}%</span>
-              <span class="purchase-option__price" style="color:#d93025;">
-                {{ product.price | times: 100 | minus: section.settings.sub_discount | times: 0.01 | money }}
-              </span>
-            </div>
-            <div class="subscription-details">Never run out. Cancel anytime.</div>
-          </div>
-          <span class="purchase-option__badge">SAVE 20%</span>
-        </label>
-      {%- endif -%}
+      <label class="bridal-option">
+        <input type="radio" name="bundle_type" class="bridal-option__radio">
+        <div class="bridal-option__info">
+          <span class="bridal-option__title">Add Blouse Stitching</span>
+          <span class="bridal-option__desc">Custom fit (+ ₹1,200)</span>
+        </div>
+      </label>
+      <label class="bridal-option">
+        <input type="radio" name="bundle_type" class="bridal-option__radio">
+        <div class="bridal-option__info">
+          <span class="bridal-option__title">Complete Bridal Set</span>
+          <span class="bridal-option__desc">Unboxing experience + Accessories</span>
+        </div>
+      </label>
     </div>
 
-    <!-- Shipping Progress -->
-    <div class="shipping-progress">
-      <span class="shipping-progress__text">You are close to Free Express Shipping!</span>
-      <div class="shipping-progress__bar">
-        <div class="shipping-progress__fill" style="width: 50%;"></div>
-      </div>
-    </div>
+    <!-- Auth Strip -->
+    <div class="auth-strip">Handwoven • Limited Edition • Direct from Loom</div>
 
     <!-- Add to Cart Form -->
     {% form 'product', product %}
       <input type="hidden" name="id" value="{{ current_variant.id }}">
       <input type="hidden" name="quantity" value="1">
-      <input type="hidden" name="selling_plan" value="">
+
+      <div class="shipping-message">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        Complimentary Insured Delivery Included
+      </div>
 
       <button type="submit" name="add" class="offer-widget__atc">
-        <span>Add to Cart</span>
-        <span data-price-display>{{ product.price | money }}</span>
+        <span>Secure This Saree</span>
+        <span>{{ product.price | money }}</span>
       </button>
     {% endform %}
 
-    <!-- Trust Badges -->
-    <ul class="offer-widget__trust">
-      <li class="offer-widget__trust-item">
-        <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Luxury Trust Stack -->
+    <ul class="luxury-trust">
+      <li>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
         </svg>
-        Authentic Handloom Certified
+        {% if product.metafields.custom.silk_mark -%}
+          Silk Mark Certified Pure Silk
+        {%- else -%}
+          Authentic Handloom Guarantee
+        {%- endif %}
       </li>
-      <li class="offer-widget__trust-item">
-        <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      {% if product.metafields.custom.weaving_region %}
+        <li>
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+          Handwoven by {{ product.metafields.custom.weaving_region }} Artisans
+        </li>
+      {% endif %}
+      <li>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
         </svg>
-        Free Fall & Pico Included
+        Free Fall & Pico Finishing
       </li>
-      <li class="offer-widget__trust-item">
-        <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <li>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
         </svg>
-        Secure payment with Razorpay
+        Easy Exchange Support
       </li>
     </ul>
   </div>
@@ -142,28 +233,7 @@
   "name": "Product Offer Widget",
   "tag": "section",
   "class": "section",
-  "settings": [
-    {
-      "type": "range",
-      "id": "shipping_threshold",
-      "min": 500,
-      "max": 5000,
-      "step": 100,
-      "unit": "INR",
-      "label": "Free Shipping Threshold",
-      "default": 2000
-    },
-    {
-      "type": "range",
-      "id": "sub_discount",
-      "min": 5,
-      "max": 50,
-      "step": 5,
-      "unit": "%",
-      "label": "Subscription Discount",
-      "default": 15
-    }
-  ],
+  "settings": [],
   "presets": [
     {
       "name": "Product Offer Widget"
