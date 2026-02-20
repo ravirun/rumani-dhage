@@ -84,7 +84,7 @@
         "footer-2"
       ],
       "settings": {
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-5",
         "newsletter_enable": true,
         "newsletter_heading": "Subscribe to our emails",
         "enable_follow_on_shop": true,
@@ -98,7 +98,7 @@
         "animation_speed": 100,
         "scroll_sensitivity": 80,
         "thread_opacity": 40,
-        "thread_color_1": "#d4af37",
+        "thread_color_1": "#121212",
         "thread_color_2": "#e5c07b",
         "thread_color_3": "#f3e5ab",
         "thread_color_4": "#c5a059",
