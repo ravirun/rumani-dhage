@@ -161,6 +161,8 @@
                         {{ 'image' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
                       {%- endif -%}
                     </div>
+                  {%- when 'floating_cart' -%}
+                    {% render 'floating-cart', color_scheme: block.settings.color_scheme %}
                 {%- endcase -%}
               </div>
             {%- endfor -%}
@@ -556,6 +558,19 @@
             }
           ],
           "default": "center"
+        }
+      ]
+    },
+    {
+      "type": "floating_cart",
+      "name": "Floating Cart",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "t:sections.all.colors.label",
+          "default": "scheme-1"
         }
       ]
     }
