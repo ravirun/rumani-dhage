@@ -33,7 +33,7 @@
       "name": "Petal Experience",
       "settings": {
         "position_type": "fixed",
-        "z_index": -1,
+        "z_index": 1,
         "height": 100,
         "bg_color": "rgba(0,0,0,0)",
         "physics_mode": "wave",
@@ -56,7 +56,7 @@
         "interaction_mode": "autotext",
         "target_text": "rumani dhaage",
         "spark_color": "#fff1f2",
-        "show_controls": false
+        "show_controls": true
       }
     }
   },
