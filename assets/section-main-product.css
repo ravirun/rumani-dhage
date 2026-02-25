@@ -1568,3 +1568,108 @@ a.product__text {
   padding: 0.8rem;
   border-radius: 4px;
 }
+
+/* Custom Color Picker */
+.custom-color-picker-wrapper {
+  margin: 2.5rem 0;
+  border: 1px solid rgba(var(--color-foreground), 0.1);
+  border-radius: var(--variant-pills-radius);
+  padding: 1.5rem;
+  background: rgba(var(--color-foreground), 0.02);
+}
+.color-mode-selector {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.color-mode-option {
+  position: relative;
+  cursor: pointer;
+  display: block;
+}
+.color-mode-option input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  z-index: 2;
+}
+.color-mode-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  padding: 1.2rem;
+  border: 1px solid rgba(var(--color-foreground), 0.1);
+  border-radius: 8px;
+  background: rgb(var(--color-background));
+  transition: all 0.2s ease;
+}
+.color-mode-radio {
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 0.2rem solid rgba(var(--color-foreground), 0.3);
+  border-radius: 50%;
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+.color-mode-radio::after {
+  content: '';
+  width: 1rem;
+  height: 1rem;
+  background: rgb(var(--color-button));
+  border-radius: 50%;
+  transform: scale(0);
+  transition: transform 0.2s ease;
+}
+.color-mode-option input:checked + .color-mode-content {
+  border-color: rgb(var(--color-button));
+  background: rgba(var(--color-button), 0.03);
+}
+.color-mode-option input:checked + .color-mode-content .color-mode-radio {
+  border-color: rgb(var(--color-button));
+}
+.color-mode-option input:checked + .color-mode-content .color-mode-radio::after {
+  transform: scale(1);
+}
+.color-mode-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.color-mode-title {
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: rgb(var(--color-foreground));
+}
+.color-mode-info {
+  font-size: 1.2rem;
+  opacity: 0.7;
+  color: rgb(var(--color-foreground));
+}
+.custom-color-dropdown-container {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 0.1rem dashed rgba(var(--color-foreground), 0.1);
+}
+.custom-color-dropdown-container label {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+.confirmation-note {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
