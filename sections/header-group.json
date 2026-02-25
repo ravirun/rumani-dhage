@@ -53,7 +53,7 @@
         "enable_glow": true,
         "glow_opacity": 1,
         "blur_amount": 0.5,
-        "interaction_mode": "autopop",
+        "interaction_mode": "autotext",
         "target_text": "rumani dhaage",
         "spark_color": "#fff1f2",
         "show_controls": false
