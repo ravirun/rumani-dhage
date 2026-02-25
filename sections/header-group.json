@@ -60,14 +60,19 @@
         "z_index": -1,
         "show_controls": false,
         "height": 100,
-        "bg_color": "rgba(0,0,0,0)",
+        "bg_color": "#050505",
+        "physics_mode": "wave",
+        "show_strings": true,
+        "string_count": 5,
+        "wave_intensity": 160,
+        "enable_glow": true,
+        "blur_amount": 1.5,
         "target_text": "rumani dhaage",
-        "petal_color": "#b91d4c",
-        "spark_color": "#b91e4c",
+        "petal_color": "#f9a8d4",
+        "spark_color": "#fff1f2",
         "float_speed": 0.6,
-        "density": 150,
-        "chime_volume": 0.1,
-        "interaction_mode": "autotext"
+        "density": 200,
+        "interaction_mode": "manual"
       }
     }
   },

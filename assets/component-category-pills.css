@@ -147,11 +147,29 @@
   }
 }
 
-/* Fade Effect for Scroll (CSS-Only) */
-.category-pills {
-  position: relative;
-  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
-  mask-image: linear-gradient(to right, black 85%, transparent 100%);
+/* Scroll Mask Utilities */
+.category-pills.has-scroll-left::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  background: linear-gradient(to right, rgb(var(--color-background)), transparent);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.category-pills.has-scroll-right::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  background: linear-gradient(to left, rgb(var(--color-background)), transparent);
+  z-index: 2;
+  pointer-events: none;
 }
 
 .category-pills--centered {

@@ -13,10 +13,22 @@
     {{ section.settings.target_text }}
   </h1>
 
-  <canvas
-    id="petal-canvas-{{ section.id }}"
-    style="position: absolute; inset: 0; width: 100%; height: 100%; display: block;"
-  ></canvas>
+  <div
+    class="canvas-container"
+    style="
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      {% if section.settings.enable_glow %}
+      filter: blur({{ section.settings.blur_amount }}px);
+      {% endif %}
+    "
+  >
+    <canvas
+      id="petal-canvas-{{ section.id }}"
+      style="width: 100%; height: 100%; display: block;"
+    ></canvas>
+  </div>
 
   <div
     class="floor-gradient"
@@ -33,16 +45,65 @@
         <label class="control-label">Interaction Mode</label>
         <div class="radio-group">
           <label class="radio-option">
-            <input type="radio" name="auto-mode-{{ section.id }}" value="manual" checked>
+            <input
+              type="radio"
+              name="auto-mode-{{ section.id }}"
+              value="manual"
+              {% if section.settings.interaction_mode == 'manual' %}
+                checked
+              {% endif %}
+            >
             <span>Manual</span>
           </label>
           <label class="radio-option">
-            <input type="radio" name="auto-mode-{{ section.id }}" value="autopop">
+            <input
+              type="radio"
+              name="auto-mode-{{ section.id }}"
+              value="autopop"
+              {% if section.settings.interaction_mode == 'autopop' %}
+                checked
+              {% endif %}
+            >
             <span>Auto-Pop</span>
           </label>
           <label class="radio-option">
-            <input type="radio" name="auto-mode-{{ section.id }}" value="autotext">
+            <input
+              type="radio"
+              name="auto-mode-{{ section.id }}"
+              value="autotext"
+              {% if section.settings.interaction_mode == 'autotext' %}
+                checked
+              {% endif %}
+            >
             <span>Auto-Pulse Text</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Physics Style</label>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="physics-mode-{{ section.id }}"
+              value="wave"
+              {% if section.settings.physics_mode == 'wave' %}
+                checked
+              {% endif %}
+            >
+            <span>Wind Waves</span>
+          </label>
+          <label class="radio-option">
+            <input
+              type="radio"
+              name="physics-mode-{{ section.id }}"
+              value="drift"
+              {% if section.settings.physics_mode == 'drift' %}
+                checked
+              {% endif %}
+            >
+            <span>Classic Drift</span>
           </label>
         </div>
       </div>
@@ -59,17 +120,17 @@
       </div>
 
       <div class="control-group">
-        <label class="control-label">Petal Color</label>
+        <label class="control-label">Base Petal Color</label>
         <input type="color" id="color-control-{{ section.id }}" value="{{ section.settings.petal_color }}">
       </div>
 
       <div class="control-group">
-        <label class="control-label">Float Speed</label>
+        <label class="control-label">Animation Speed</label>
         <input
           type="range"
           id="speed-control-{{ section.id }}"
           min="0.1"
-          max="3"
+          max="2.0"
           step="0.1"
           value="{{ section.settings.float_speed }}"
         >
@@ -84,28 +145,6 @@
           max="600"
           step="10"
           value="{{ section.settings.density }}"
-        >
-      </div>
-
-      <div style="border-top: 1px solid #eee; padding-top: 1rem; margin-top: 0.5rem;">
-        <h3 style="font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; color: #999;">
-          Spark Controls
-        </h3>
-        <div class="control-group">
-          <label class="control-label">Spark Color</label>
-          <input type="color" id="spark-color-control-{{ section.id }}" value="{{ section.settings.spark_color }}">
-        </div>
-      </div>
-
-      <div class="control-group" style="border-top: 1px solid #eee; padding-top: 1rem;">
-        <label class="control-label">Chime Volume</label>
-        <input
-          type="range"
-          id="volume-control-{{ section.id }}"
-          min="0"
-          max="1"
-          step="0.1"
-          value="{{ section.settings.chime_volume }}"
         >
       </div>
     </div>
@@ -232,104 +271,118 @@
   const containerId = "{{ section.id }}";
   const canvas = document.getElementById(`petal-canvas-${containerId}`);
   const ctx = canvas.getContext('2d', { alpha: true });
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   
   // Settings
   const settings = {
     speed: {{ section.settings.float_speed }},
+    driftSpeed: {{ section.settings.drift_speed }},
+    swayAmount: {{ section.settings.sway_amount }},
     density: {{ section.settings.density }},
-    volume: {{ section.settings.chime_volume }},
     color: '{{ section.settings.petal_color }}',
+    colorSecondary: '{{ section.settings.petal_color_secondary }}',
+    stringColor: '{{ section.settings.string_color }}',
+    stringOpacity: {{ section.settings.string_opacity }},
     sparkColor: '{{ section.settings.spark_color }}',
     targetText: "{{ section.settings.target_text }}",
     autoMode: "{{ section.settings.interaction_mode }}",
-    isFormingText: false
+    physicsMode: "{{ section.settings.physics_mode }}",
+    isFormingText: false,
+    stringCount: {{ section.settings.string_count }},
+    showStrings: {{ section.settings.show_strings }},
+    waveIntensity: {{ section.settings.wave_intensity }},
+    enableGlow: {{ section.settings.enable_glow }},
+    glowOpacity: {{ section.settings.glow_opacity }},
+    sizeMin: {{ section.settings.petal_size_min }},
+    sizeMax: {{ section.settings.petal_size_max }}
   };
 
-  // Mobile optimization cap
+  // Function to hex to rgb
+  function hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+  }
+
+  // Function to interpolate colors
+  function interpolateColor(c1, c2, factor) {
+    const rgb1 = hexToRgb(c1);
+    const rgb2 = hexToRgb(c2);
+    if (!rgb1 || !rgb2) return c1;
+    const r = Math.round(rgb1.r + (rgb2.r - rgb1.r) * factor);
+    const g = Math.round(rgb1.g + (rgb2.g - rgb1.g) * factor);
+    const b = Math.round(rgb1.b + (rgb2.b - rgb1.b) * factor);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  // Generate color array based on primary and secondary
+  const petalColors = [];
+  for(let i = 0; i < 5; i++) {
+    petalColors.push(interpolateColor(settings.color, settings.colorSecondary, i / 4));
+  }
+
+  // Mobile optimization
   const isMobile = window.innerWidth < 768;
   if (isMobile) {
     settings.density = Math.min(settings.density, 150);
   }
 
-  // --- Offscreen Sprite Generation ---
-  let petalSprite = null;
-  
-  function createPetalSprite(color) {
-    const canvas = document.createElement('canvas');
-    canvas.width = 64;
-    canvas.height = 64;
-    const ctx = canvas.getContext('2d');
-    
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    // Petal shape
-    ctx.moveTo(32, 0);
-    ctx.quadraticCurveTo(64, 32, 32, 64);
-    ctx.quadraticCurveTo(0, 32, 32, 0);
-    ctx.fill();
-    
-    return canvas;
-  }
-  
-  // Initialize sprite
-  petalSprite = createPetalSprite(settings.color);
-
-  // --- Audio ---
-  function playSparkleSound() {
-    // Check global audio state first
-    if (window.ThemeAudio && !window.ThemeAudio.isEnabled()) return;
-    if (settings.volume === 0) return;
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    // On mobile, limiting polyphony might be needed, but minimal oscillator use is generally okay
-    const now = audioCtx.currentTime;
-    [880, 1320, 1760].forEach((freq, i) => {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, now + (i * 0.02));
-      gain.gain.setValueAtTime(0.05 * settings.volume, now + (i * 0.02));
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3 + (i * 0.1));
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(now + (i * 0.02));
-      osc.stop(now + 0.5);
-    });
+  // --- Noise Function ---
+  function noise(x, y, z) {
+    return Math.sin(x + z) * Math.cos(y + z * 0.6) + 
+           Math.sin(x * 0.4 + z * 1.2) * 0.4;
   }
 
-  // Listen for global audio state changes
-  document.addEventListener('audioStateChanged', (e) => {
-    if (!e.detail.enabled && audioCtx.state === 'running') {
-      audioCtx.suspend();
-    } else if (e.detail.enabled && audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
-  });
+  // --- Offscreen Sprite Cache ---
+  const spriteCache = {};
+  
+  function getPetalSprite(color) {
+    if (spriteCache[color]) return spriteCache[color];
+    const sCanvas = document.createElement('canvas');
+    sCanvas.width = 64;
+    sCanvas.height = 64;
+    const sCtx = sCanvas.getContext('2d');
+    sCtx.fillStyle = color;
+    sCtx.beginPath();
+    sCtx.moveTo(32, 0);
+    sCtx.quadraticCurveTo(64, 32, 32, 64);
+    sCtx.quadraticCurveTo(0, 32, 32, 0);
+    sCtx.fill();
+    spriteCache[color] = sCanvas;
+    return sCanvas;
+  }
 
   // --- Data Model ---
   let petals = [];
   let sparks = [];
   let w = 0;
   let h = 0;
-  const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap DPR at 2 for performance
+  let nt = 0;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
   function createPetal(i) {
+    const color = petalColors[Math.floor(Math.random() * petalColors.length)];
     return {
       x: Math.random() * w,
-      y: -Math.random() * h * 1.5 - 50,
+      y: Math.random() * h,
       vx: 0,
       vy: Math.random() * 0.5 + 0.3,
       baseSpeed: Math.random() * 0.5 + 0.5,
       rot: Math.random() * Math.PI * 2,
-      rotSpeed: (Math.random() - 0.5) * 0.02,
-      size: Math.random() * 12 + 8,
-      opacity: Math.random() * 0.4 + 0.5,
+      rotSpeed: (Math.random() - 0.5) * 0.03,
+      size: settings.sizeMin + Math.random() * (settings.sizeMax - settings.sizeMin),
+      opacity: 0.3 + Math.random() * 0.6,
       waveOffset: Math.random() * Math.PI * 2,
+      waveIndex: Math.floor(Math.random() * settings.stringCount),
+      offsetX: (Math.random() - 0.5) * 40,
+      offsetY: (Math.random() - 0.5) * 100,
       settled: false,
       settleTime: 0,
       floorLevel: h - 15 - (Math.random() * 15),
-      targetX: null,
-      targetY: null,
+      color: color,
+      sprite: getPetalSprite(color),
       tilt: 0
     };
   }
@@ -337,16 +390,15 @@
   function spawnSparks(x, y) {
     const count = isMobile ? 6 : 12;
     for (let i = 0; i < count; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const speed = Math.random() * 3 + 1;
-      sparks.push({
-        x: x,
-        y: y,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        life: 1.0,
-        color: settings.sparkColor
-      });
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 3 + 1;
+        sparks.push({
+            x: x, y: y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            life: 1.0,
+            color: settings.sparkColor
+        });
     }
   }
 
@@ -354,20 +406,12 @@
   const samplingCanvas = document.createElement('canvas');
   const samplingCtx = samplingCanvas.getContext('2d', { willReadFrequently: true });
   let textPoints = [];
-  let lastCachedText = "";
 
   function updateTextPoints() {
     const text = settings.targetText || " ";
-    if (text === lastCachedText && w > 0) return;
-    lastCachedText = text;
-
-    // Use a fixed small size for sampling to keep it fast
-    const sampleW = 400;
-    const sampleH = 200;
-    samplingCanvas.width = sampleW;
-    samplingCanvas.height = sampleH;
+    const sampleW = 400; const sampleH = 200;
+    samplingCanvas.width = sampleW; samplingCanvas.height = sampleH;
     samplingCtx.clearRect(0, 0, sampleW, sampleH);
-
     samplingCtx.fillStyle = '#000';
     samplingCtx.font = `italic 80px 'Bodoni Moda', serif`;
     samplingCtx.textAlign = 'center';
@@ -376,253 +420,150 @@
 
     const imageData = samplingCtx.getImageData(0, 0, sampleW, sampleH).data;
     const points = [];
-    const step = 6;
-
-    for (let y = 0; y < sampleH; y += step) {
-      for (let x = 0; x < sampleW; x += step) {
+    for (let y = 0; y < sampleH; y += 6) {
+      for (let x = 0; x < sampleW; x += 6) {
         if (imageData[((y * sampleW) + x) * 4 + 3] > 128) {
-          points.push({ 
-            x: (x - sampleW / 2), 
-            y: (y - sampleH / 2) 
-          });
+          points.push({ x: (x - sampleW / 2), y: (y - sampleH / 2) });
         }
       }
     }
     textPoints = points;
   }
 
-  // --- Main Loop ---
-  let lastAutoPopTime = 0;
-  let lastAutoTextToggleTime = 0;
-  let isVisible = true;
+  // --- Guiding Strings ---
+  function drawStrings(nt) {
+    if (!settings.showStrings) return;
+    ctx.save();
+    ctx.lineWidth = 1;
+    for (let i = 0; i < settings.stringCount; i++) {
+        ctx.beginPath();
+        ctx.strokeStyle = settings.stringColor;
+        ctx.globalAlpha = settings.stringOpacity;
+        for (let x = 0; x <= w; x += 20) {
+            const y = h * 0.5 + noise(x / 700, 0.4 * i, nt) * settings.waveIntensity;
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+    }
+    ctx.restore();
+  }
 
-  // Visibility Optimization
-  document.addEventListener('visibilitychange', () => {
-    isVisible = !document.hidden;
-  });
+  // --- Animation Loop ---
+  let lastAutoPopTime = 0;
+  let isVisible = true;
+  document.addEventListener('visibilitychange', () => isVisible = !document.hidden);
 
   function animate(now) {
     requestAnimationFrame(animate);
     if (!isVisible) return;
+    nt += settings.speed * 0.01;
 
     ctx.clearRect(0, 0, w, h);
 
-    // Auto Modes
-    if (settings.autoMode === 'autopop' && now - lastAutoPopTime > 400) {
-      // Find a non-settled petal to pop
-      const candidates = petals.filter(p => p.y > 0 && p.y < h && !p.settled);
-      if (candidates.length > 0) {
-        const p = candidates[Math.floor(Math.random() * candidates.length)];
-        spawnSparks(p.x, p.y);
-        playSparkleSound();
-        // Reset petal
-        p.y = -50;
-        p.x = Math.random() * w;
-        p.settled = false;
-      }
-      lastAutoPopTime = now;
+    if (settings.enableGlow) {
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.globalAlpha = settings.glowOpacity;
     }
+    
+    drawStrings(nt);
 
-    if (settings.autoMode === 'autotext' && now - lastAutoTextToggleTime > 6000) {
-      settings.isFormingText = !settings.isFormingText;
-      if (typeof updateModeButton === 'function') updateModeButton();
-      lastAutoTextToggleTime = now;
-    }
-
-    // Update & Draw Petals
     const cx = w / 2;
     const cy = h / 2;
     const hasTextPoints = settings.isFormingText && textPoints.length > 0;
-    // Scale text to fit screen
-    const textScale = Math.min(w / 400, h / 200, 3); 
+    const textScale = Math.min(w / 400, h / 200, 3);
 
     for (let i = 0; i < petals.length; i++) {
         const p = petals[i];
-        
-        // --- Update ---
+
         if (hasTextPoints) {
             const pt = textPoints[i % textPoints.length];
-            const tx = cx + pt.x * textScale;
-            const ty = cy + pt.y * textScale;
-            
-            p.x += (tx - p.x) * 0.05;
-            p.y += (ty - p.y) * 0.05;
-            p.rot += (0 - p.rot) * 0.05;
-            p.settled = false;
+            p.x += (cx + pt.x * textScale - p.x) * 0.05;
+            p.y += (cy + pt.y * textScale - p.y) * 0.05;
+        } else if (settings.physicsMode === 'wave') {
+            const waveY = h * 0.5 + noise(p.x / 700, 0.4 * p.waveIndex, nt) * settings.waveIntensity;
+            const targetY = waveY + p.offsetY;
+            p.y += (targetY - p.y) * 0.02;
+            p.x += settings.driftSpeed * 10.0;
+            if (p.x > w + 50) p.x = -50;
         } else {
-            if (!p.settled) {
-                // Physics
-                p.y += p.vy * settings.speed * 2.0; 
-                p.x += Math.sin(p.y * 0.005 + p.waveOffset) * 0.5;
-                p.rot += p.rotSpeed * settings.speed;
-                p.tilt = Math.sin(p.y * 0.01) * 0.5; // Fake 3D tilt
-                
-                // Floor check
-                if (p.y >= p.floorLevel) {
-                    p.y = p.floorLevel;
-                    p.settled = true;
-                    p.settleTime = now;
-                }
-            } else {
-                // Settle logic
-                // Reset after delay
-                if (now - p.settleTime > (4000 + Math.random() * 3000)) {
-                    p.y = -50;
-                    p.x = Math.random() * w;
-                    p.settled = false;
-                    p.floorLevel = h - 15 - (Math.random() * 15);
-                }
+            p.y += p.vy * settings.speed * 20.0;
+            p.x += Math.sin(p.y * 0.005 + p.waveOffset) * settings.swayAmount;
+            if (p.y >= p.floorLevel) {
+                p.y = -50; p.x = Math.random() * w;
             }
         }
 
-        // --- Draw ---
-        // Optimization: Don't draw if off-screen (mostly for top)
-        if (p.y < -100 || p.y > h + 100) continue;
+        p.rot += p.rotSpeed;
 
         ctx.save();
         ctx.translate(p.x, p.y);
         ctx.rotate(p.rot);
-        // Fake 3D scale
-        ctx.scale(1, 1 - Math.abs(p.tilt) * 0.3);
-        
         ctx.globalAlpha = p.opacity;
-        // Draw pre-rendered sprite
-        ctx.drawImage(petalSprite, -p.size/2, -p.size/2, p.size, p.size);
+        ctx.drawImage(p.sprite, -p.size/2, -p.size/2, p.size, p.size);
         ctx.restore();
     }
 
-    // Update & Draw Sparks
+    // Sparks
+    ctx.globalCompositeOperation = 'source-over';
     for (let i = sparks.length - 1; i >= 0; i--) {
         const s = sparks[i];
-        s.x += s.vx;
-        s.y += s.vy;
-        s.life -= 0.03;
-        
-        if (s.life <= 0) {
-            sparks.splice(i, 1);
-            continue;
-        }
-
+        s.x += s.vx; s.y += s.vy; s.life -= 0.02;
+        if (s.life <= 0) { sparks.splice(i, 1); continue; }
         ctx.globalAlpha = s.life;
         ctx.fillStyle = s.color;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, 2, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.beginPath(); ctx.arc(s.x, s.y, 2, 0, Math.PI * 2); ctx.fill();
+    }
+
+    if (settings.autoMode === 'autopop' && now - lastAutoPopTime > 400) {
+        const p = petals[Math.floor(Math.random() * petals.length)];
+        spawnSparks(p.x, p.y);
+        lastAutoPopTime = now;
     }
   }
 
   // --- Interaction ---
   canvas.addEventListener('pointerdown', e => {
     const rect = canvas.getBoundingClientRect();
-    // Adjust for High DPI canvas
     const mx = (e.clientX - rect.left) * (canvas.width / rect.width);
     const my = (e.clientY - rect.top) * (canvas.height / rect.height);
-
-    // Simple hit test (iterate backwards to hit top ones first)
     for (let i = petals.length - 1; i >= 0; i--) {
         const p = petals[i];
-        const dx = mx - p.x;
-        const dy = my - p.y;
-        // Check distance (considering size)
-        if (dx*dx + dy*dy < (p.size * 2) * (p.size * 2)) {
+        if (Math.hypot(mx - p.x, my - p.y) < p.size * 2) {
             spawnSparks(p.x, p.y);
-            playSparkleSound();
-            // Reset petal immediately
-            p.y = -50; 
-            p.x = Math.random() * w; 
-            p.settled = false;
-            break; // Only pop one per click
+            p.x = -50; break;
         }
     }
   });
 
-  // --- Resizing ---
   function resize() {
-    w = canvas.clientWidth * dpr;
-    h = canvas.clientHeight * dpr;
-    
-    if (canvas.width !== w || canvas.height !== h) {
-        canvas.width = w;
-        canvas.height = h;
-        // Normalize context for drawing usage, but we keep logic coordinates in pixel space
-        ctx.scale(dpr, dpr);
-        // Need to update w/h to logical CSS pixels for physics
-        w = canvas.clientWidth;
-        h = canvas.clientHeight;
-        
-        // Re-sourcing text points
-        updateTextPoints();
-        
-        // Re-seed petals floor levels
-        petals.forEach(p => {
-             p.floorLevel = h - 15 - (Math.random() * 15);
-             if (p.x > w) p.x = Math.random() * w;
-        });
-    }
-  }
-
-  // --- Initialization ---
-  function init() {
-    resize();
-    window.addEventListener('resize', resize);
-    
-    // Create petals
-    for (let i = 0; i < settings.density; i++) {
-      petals.push(createPetal(i));
-    }
-    
-    // Initial text points
+    w = canvas.width = canvas.clientWidth;
+    h = canvas.height = canvas.clientHeight;
     updateTextPoints();
-    
-    // Start loop
-    requestAnimationFrame(animate);
   }
 
-  // --- UI Control Wiring (Legacy Support for Controls) ---
+  window.addEventListener('resize', resize);
+  resize();
+
+  for (let i = 0; i < settings.density; i++) petals.push(createPetal(i));
+  requestAnimationFrame(animate);
+
+  // Wire UI
   const modeToggle = document.getElementById(`mode-toggle-${containerId}`);
-  const textInput = document.getElementById(`text-input-${containerId}`);
-  
   if (modeToggle) {
-    window.updateModeButton = function() {
-        modeToggle.classList.toggle('active', settings.isFormingText);
-        modeToggle.innerText = settings.isFormingText ? "Release to Drift" : "Form Text";
-    };
     modeToggle.onclick = () => {
         settings.isFormingText = !settings.isFormingText;
-        updateModeButton();
+        modeToggle.classList.toggle('active', settings.isFormingText);
+        modeToggle.innerText = settings.isFormingText ? "Release" : "Form Text";
     };
   }
-
-  if (textInput) {
-      textInput.oninput = (e) => {
-          settings.targetText = e.target.value;
-          updateTextPoints();
-      };
-  }
-  
-  // Wire up other inputs if present
+  document.querySelectorAll(`input[name="physics-mode-${containerId}"]`).forEach(r => {
+      r.onchange = (e) => settings.physicsMode = e.target.value;
+  });
   document.querySelectorAll(`input[name="auto-mode-${containerId}"]`).forEach(r => {
       r.onchange = (e) => settings.autoMode = e.target.value;
   });
-  
-  const speedCtrl = document.getElementById(`speed-control-${containerId}`);
-  if(speedCtrl) speedCtrl.oninput = e => settings.speed = parseFloat(e.target.value);
 
-  const densityCtrl = document.getElementById(`density-control-${containerId}`);
-  if(densityCtrl) densityCtrl.onchange = e => {
-      const newDensity = parseInt(e.target.value);
-      while(petals.length < newDensity) petals.push(createPetal(petals.length));
-      while(petals.length > newDensity) petals.pop();
-      settings.density = newDensity;
-  };
-  
-  const colorCtrl = document.getElementById(`color-control-${containerId}`);
-  if(colorCtrl) colorCtrl.oninput = e => {
-      settings.color = e.target.value;
-      petalSprite = createPetalSprite(settings.color);
-  };
-
-  init();
 })();
 </script>
 
@@ -631,27 +572,25 @@
   "name": "Petal Experience",
   "settings": [
     {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
       "type": "select",
       "id": "position_type",
       "label": "Position Type",
       "options": [
         { "value": "relative", "label": "Relative" },
-        { "value": "fixed", "label": "Fixed (Fullscreen overlay)" },
+        { "value": "fixed", "label": "Fixed (Background)" },
         { "value": "absolute", "label": "Absolute" }
       ],
-      "default": "relative"
+      "default": "fixed"
     },
     {
       "type": "number",
       "id": "z_index",
       "label": "Z-Index",
-      "default": 1
-    },
-    {
-      "type": "checkbox",
-      "id": "show_controls",
-      "label": "Show On-screen Controls",
-      "default": false
+      "default": -1
     },
     {
       "type": "range",
@@ -660,70 +599,204 @@
       "min": 50,
       "max": 100,
       "step": 5,
-      "default": 100,
-      "unit": "vh"
+      "default": 100
     },
     {
       "type": "color",
       "id": "bg_color",
       "label": "Background Color",
-      "default": "#ffffff"
+      "default": "#050505"
     },
     {
-      "type": "text",
-      "id": "target_text",
-      "label": "Target Text (for Shape)",
-      "default": "Aranya"
+      "type": "header",
+      "content": "Visual Modes"
     },
     {
-      "type": "color",
-      "id": "petal_color",
-      "label": "Petal Color",
-      "default": "#b91e4c"
+      "type": "select",
+      "id": "physics_mode",
+      "label": "Physics Style",
+      "options": [
+        { "value": "wave", "label": "Wind Waves" },
+        { "value": "drift", "label": "Classic Drift" }
+      ],
+      "default": "wave"
     },
     {
-      "type": "color",
-      "id": "spark_color",
-      "label": "Spark Color",
-      "default": "#ffd700"
+      "type": "header",
+      "content": "General Physics"
     },
     {
       "type": "range",
       "id": "float_speed",
-      "label": "Float Speed",
+      "label": "General Speed",
       "min": 0.1,
-      "max": 3.0,
+      "max": 2.0,
       "step": 0.1,
       "default": 0.6
     },
     {
       "type": "range",
-      "id": "density",
-      "label": "Petal Count",
-      "min": 50,
-      "max": 600,
-      "step": 10,
-      "default": 250
+      "id": "drift_speed",
+      "label": "Wave Drift Speed",
+      "min": 0.1,
+      "max": 2.0,
+      "step": 0.1,
+      "default": 0.6
     },
     {
       "type": "range",
-      "id": "chime_volume",
-      "label": "Chime Volume",
+      "id": "sway_amount",
+      "label": "Classic Sway Amount",
+      "min": 0,
+      "max": 10,
+      "step": 0.5,
+      "default": 0.5
+    },
+    {
+      "type": "range",
+      "id": "density",
+      "label": "Petal density",
+      "min": 50,
+      "max": 600,
+      "step": 10,
+      "default": 200
+    },
+    {
+      "type": "header",
+      "content": "Wind Waves & Strings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_strings",
+      "label": "Show Wind Currents (Strings)",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "string_color",
+      "label": "String Color",
+      "default": "#f9a8d4"
+    },
+    {
+      "type": "range",
+      "id": "string_opacity",
+      "label": "String Opacity",
       "min": 0,
       "max": 1,
       "step": 0.1,
-      "default": 0.5
+      "default": 0.1
+    },
+    {
+      "type": "range",
+      "id": "string_count",
+      "label": "Current Count",
+      "min": 1,
+      "max": 10,
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "wave_intensity",
+      "label": "Wave Amplitude",
+      "min": 20,
+      "max": 400,
+      "step": 10,
+      "default": 160
+    },
+    {
+      "type": "header",
+      "content": "Petal Aesthetics"
+    },
+    {
+      "type": "color",
+      "id": "petal_color",
+      "label": "Base Color (Primary)",
+      "default": "#f9a8d4"
+    },
+    {
+      "type": "color",
+      "id": "petal_color_secondary",
+      "label": "Blossom Color (Secondary)",
+      "default": "#fff1f2"
+    },
+    {
+      "type": "range",
+      "id": "petal_size_min",
+      "label": "Min Size",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "petal_size_max",
+      "label": "Max Size",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Bloom / Glow"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_glow",
+      "label": "Enable Bloom/Glow",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "glow_opacity",
+      "label": "Glow Intensity",
+      "min": 0.1,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.9
+    },
+    {
+      "type": "range",
+      "id": "blur_amount",
+      "label": "Bloom Blur",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 1.5
+    },
+    {
+      "type": "header",
+      "content": "Interaction"
     },
     {
       "type": "select",
       "id": "interaction_mode",
-      "label": "Interaction Mode",
+      "label": "Default Interaction",
       "options": [
-        { "value": "manual", "label": "Manual (Touch/Click)" },
-        { "value": "autopop", "label": "Auto-Pop (Bubbles Burst)" },
-        { "value": "autotext", "label": "Auto-Pulse Text (Form Shape)" }
+        { "value": "manual", "label": "Manual" },
+        { "value": "autopop", "label": "Auto-Burst" },
+        { "value": "autotext", "label": "Auto-Form Text" }
       ],
       "default": "manual"
+    },
+    {
+      "type": "text",
+      "id": "target_text",
+      "label": "Target Text",
+      "default": "rumani dhaage"
+    },
+    {
+      "type": "color",
+      "id": "spark_color",
+      "label": "Interaction Spark Color",
+      "default": "#fff1f2"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_controls",
+      "label": "Show Debug Controls on Page",
+      "default": false
     }
   ],
   "presets": [
