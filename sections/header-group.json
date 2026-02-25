@@ -39,7 +39,7 @@
         "physics_mode": "wave",
         "float_speed": 0.1,
         "drift_speed": 0.1,
-        "sway_amount": 10,
+        "sway_amount": 0,
         "density": 200,
         "show_strings": true,
         "string_color": "#000000",
@@ -52,10 +52,10 @@
         "petal_size_max": 24,
         "enable_glow": true,
         "glow_opacity": 1,
-        "blur_amount": 0.5,
-        "interaction_mode": "autotext",
+        "blur_amount": 5,
+        "interaction_mode": "manual",
         "target_text": "rumani dhaage",
-        "spark_color": "#fff1f2",
+        "spark_color": "#B91E4C",
         "show_controls": false
       }
     }
