@@ -42,7 +42,7 @@
         "sway_amount": 0,
         "density": 200,
         "show_strings": true,
-        "string_color": "#E1306C",
+        "string_color": "#e1306c",
         "string_opacity": 0.5,
         "string_count": 7,
         "wave_intensity": 400,
@@ -58,10 +58,29 @@
         "spark_color": "#b91e4c",
         "show_controls": false
       }
+    },
+    "category_pills_Btth6P": {
+      "type": "category-pills",
+      "name": "Category Pills",
+      "settings": {
+        "heading": "",
+        "heading_size": "h1",
+        "heading_alignment": "left",
+        "menu": "main-menu",
+        "show_images": false,
+        "center_pills": false,
+        "color_scheme": "scheme-5",
+        "custom_colors": false,
+        "color_text": "#000000",
+        "color_bg": "#ffffff",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
     }
   },
   "order": [
     "header",
-    "petal_experience_qk7wTA"
+    "petal_experience_qk7wTA",
+    "category_pills_Btth6P"
   ]
 }
