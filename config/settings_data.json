@@ -21,6 +21,11 @@
     "brand_headline": "Rumani Dhaage",
     "brand_description": "<p>Curated contemporary sarees, suits, and dupattas inspired by India’s traditional weaves and crafted for today’s woman.</p>",
     "brand_image": "shopify://shop_images/image_1.svg",
+    "enable_interactive_audio": false,
+    "audio_on_scroll": false,
+    "audio_on_hover": false,
+    "audio_on_click": false,
+    "show_audio_toggle": false,
     "cart_type": "drawer",
     "content_for_index": [],
     "blocks": {
