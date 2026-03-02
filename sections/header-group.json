@@ -34,26 +34,53 @@
       "settings": {
         "position_type": "fixed",
         "z_index": -1,
-        "show_controls": false,
         "height": 100,
-        "bg_color": "#050505",
+        "bg_color": "#ebf1e7",
         "physics_mode": "wave",
-        "show_strings": true,
-        "string_count": 5,
-        "wave_intensity": 160,
-        "enable_glow": true,
-        "blur_amount": 1.5,
-        "target_text": "rumani dhaage",
-        "petal_color": "#f9a8d4",
-        "spark_color": "#fff1f2",
-        "float_speed": 0.6,
+        "float_speed": 0.1,
+        "drift_speed": 0.1,
+        "sway_amount": 0,
         "density": 200,
-        "interaction_mode": "manual"
+        "show_strings": true,
+        "string_color": "#e1306c",
+        "string_opacity": 0.5,
+        "string_count": 7,
+        "wave_intensity": 400,
+        "petal_color": "#e1306c",
+        "petal_color_secondary": "#b91e4c",
+        "petal_size_min": 2,
+        "petal_size_max": 24,
+        "enable_glow": true,
+        "glow_opacity": 0.1,
+        "blur_amount": 5,
+        "interaction_mode": "manual",
+        "target_text": "rumani dhaage",
+        "spark_color": "#b91e4c",
+        "show_controls": false
+      }
+    },
+    "category_pills_Btth6P": {
+      "type": "category-pills",
+      "name": "Category Pills",
+      "settings": {
+        "heading": "",
+        "heading_size": "h1",
+        "heading_alignment": "left",
+        "menu": "main-menu",
+        "show_images": false,
+        "center_pills": false,
+        "color_scheme": "scheme-5",
+        "custom_colors": false,
+        "color_text": "#000000",
+        "color_bg": "#ffffff",
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     }
   },
   "order": [
     "header",
-    "petal_experience_qk7wTA"
+    "petal_experience_qk7wTA",
+    "category_pills_Btth6P"
   ]
 }
