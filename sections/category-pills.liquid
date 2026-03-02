@@ -31,10 +31,41 @@
       </div>
     {%- endif -%}
 
+    {%- liquid
+      assign links_to_display = section.settings.menu.links
+
+      if section.settings.enable_dynamic_levels and section.settings.menu != blank
+        comment
+          Check for active sub-menus (Drill-down behavior)
+        endcomment
+        for link in section.settings.menu.links
+          if link.active or link.child_active
+            if link.links.size > 0
+              comment
+                If this level has children, we might want to show them.
+                But we check one level deeper in case we are already in a sub-category.
+              endcomment
+              assign links_to_display = link.links
+
+              for child_link in link.links
+                if child_link.active or child_link.child_active
+                  if child_link.links.size > 0
+                    assign links_to_display = child_link.links
+                    break
+                  endif
+                endif
+              endfor
+              break
+            endif
+          endif
+        endfor
+      endif
+    -%}
+
     <div class="category-pills {% if section.settings.center_pills %} category-pills--centered{% endif %}">
       <div class="category-pills__container">
-        {%- if section.settings.menu != blank -%}
-          {%- for link in section.settings.menu.links -%}
+        {%- if links_to_display != blank -%}
+          {%- for link in links_to_display -%}
             {%- liquid
               assign label = link.title
               assign url = link.url
@@ -123,6 +154,13 @@
       "id": "menu",
       "label": "Menu",
       "info": "Select the menu to drive categories. Best for control over ordering and visibility."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_dynamic_levels",
+      "label": "Enable dynamic drill-down",
+      "info": "If the active category has a sub-menu, display those sub-categories instead of the main menu.",
+      "default": true
     },
     {
       "type": "checkbox",
