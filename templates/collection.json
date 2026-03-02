@@ -39,6 +39,7 @@
     },
     "highlight_offers_grid_global": {
       "type": "highlight-offers-grid",
+      "disabled": true,
       "settings": {
         "color_scheme": ""
       }
