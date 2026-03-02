@@ -112,14 +112,32 @@
             endif
           -%}
           <a href="{{ back_url }}" class="category-pill category-pill--back category-pill--circle">
-            <div class="category-pill__image-wrapper">
-              <span class="category-pill__back-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </div>
-            <h2 class="category-pill__label">{{ back_label }}</h2>
+            {%- if section.settings.show_images -%}
+              <div class="category-pill__image-wrapper">
+                <span class="category-pill__back-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </div>
+            {%- endif -%}
+            <h2 class="category-pill__label">
+              {%- unless section.settings.show_images -%}
+                <span class="category-pill__back-icon--inline">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style="display:inline-block; vertical-align:middle; margin-right:4px;"
+                  >
+                    <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              {%- endunless -%}
+              {{ back_label }}
+            </h2>
           </a>
         {%- endif -%}
 
