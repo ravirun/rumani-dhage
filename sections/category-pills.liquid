@@ -14,6 +14,25 @@
     }
   }
 
+    {%- if section.settings.sticky_navigation -%}
+    .category-pills-section.is-sticky {
+      position: sticky;
+      top: 0;
+      z-index: 99;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+      padding-top: 1rem !important;
+      padding-bottom: 1rem !important;
+      transition: all 0.3s ease;
+      background-color: rgb(var(--color-background));
+    }
+
+    /* Ensure the header and sticky pills don't overlap if header is also sticky */
+    .shopify-section-header-sticky + main .category-pills-section.is-sticky {
+      top: var(--header-height, 60px);
+    }
+  {%- endif -%}
+
   {%- if section.settings.custom_colors -%}
     .section-{{ section.id }} {
       --color-foreground: {{ section.settings.color_text.red }}, {{ section.settings.color_text.green }}, {{ section.settings.color_text.blue }};
@@ -21,9 +40,21 @@
       background-color: rgb(var(--color-background));
     }
   {%- endif -%}
+
+  .category-pill--back .category-pill__image-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--color-foreground), 0.05);
+  }
+
+  .category-pill--back .category-pill__back-icon {
+    display: flex;
+    color: rgb(var(--color-foreground));
+  }
 {%- endstyle -%}
 
-<div class="category-pills-section section-{{ section.id }} color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+<div class="category-pills-section section-{{ section.id }} {% if section.settings.sticky_navigation %} is-sticky{% endif %} color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
   <div class="page-width">
     {%- if section.settings.heading != blank -%}
       <div class="section-heading-wrapper {% if section.settings.heading_alignment == 'center' %} center{% endif %}">
@@ -33,6 +64,7 @@
 
     {%- liquid
       assign links_to_display = section.settings.menu.links
+      assign parent_link = null
 
       if section.settings.enable_dynamic_levels and section.settings.menu != blank
         comment
@@ -41,20 +73,27 @@
         for link in section.settings.menu.links
           if link.active or link.child_active
             if link.links.size > 0
-              comment
-                If this level has children, we might want to show them.
-                But we check one level deeper in case we are already in a sub-category.
-              endcomment
               assign links_to_display = link.links
+              assign parent_link = section.settings.menu.links
 
               for child_link in link.links
                 if child_link.active or child_link.child_active
                   if child_link.links.size > 0
                     assign links_to_display = child_link.links
+                    assign parent_link = link
                     break
                   endif
                 endif
               endfor
+
+              comment
+                If we are at the first level of child links, the back button should go back to the top-level collection or main menu.
+              endcomment
+              if parent_link == section.settings.menu.links
+                assign parent_link = null
+                assign show_root_back = true
+              endif
+
               break
             endif
           endif
@@ -64,6 +103,26 @@
 
     <div class="category-pills {% if section.settings.center_pills %} category-pills--centered{% endif %}">
       <div class="category-pills__container">
+        {%- if parent_link != null or show_root_back -%}
+          {%- liquid
+            assign back_url = parent_link.url | default: section.settings.menu_root_url | default: routes.all_products_collection_url
+            assign back_label = section.settings.back_label | default: 'Back'
+            if parent_link != null
+              assign back_label = parent_link.title
+            endif
+          -%}
+          <a href="{{ back_url }}" class="category-pill category-pill--back category-pill--circle">
+            <div class="category-pill__image-wrapper">
+              <span class="category-pill__back-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
+            <h2 class="category-pill__label">{{ back_label }}</h2>
+          </a>
+        {%- endif -%}
+
         {%- if links_to_display != blank -%}
           {%- for link in links_to_display -%}
             {%- liquid
@@ -161,6 +220,25 @@
       "label": "Enable dynamic drill-down",
       "info": "If the active category has a sub-menu, display those sub-categories instead of the main menu.",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "back_label",
+      "label": "Back button label",
+      "default": "Back"
+    },
+    {
+      "type": "url",
+      "id": "menu_root_url",
+      "label": "Main categories link",
+      "info": "Where the 'Back' button should lead from the first level of sub-categories."
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_navigation",
+      "label": "Enable sticky navigation",
+      "info": "Pills will stick to the top of the screen as you scroll (useful for mobile).",
+      "default": false
     },
     {
       "type": "checkbox",

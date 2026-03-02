@@ -14,11 +14,30 @@ class CategoryPills {
 
   init() {
     this.updateMasks();
+    this.scrollToActive();
+
     this.scrollWrapper.addEventListener("scroll", () => this.updateMasks(), {
       passive: true,
     });
     window.addEventListener("resize", () => this.updateMasks(), {
       passive: true,
+    });
+  }
+
+  scrollToActive() {
+    const activePill = this.scrollWrapper.querySelector(".is-active");
+    if (!activePill) return;
+
+    const wrapperWidth = this.scrollWrapper.clientWidth;
+    const pillOffset = activePill.offsetLeft;
+    const pillWidth = activePill.clientWidth;
+
+    // Center the active pill
+    const scrollPosition = pillOffset - wrapperWidth / 2 + pillWidth / 2;
+
+    this.scrollWrapper.scrollTo({
+      left: scrollPosition,
+      behavior: "smooth",
     });
   }
 
