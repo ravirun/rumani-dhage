@@ -13,7 +13,7 @@
       "type": "main-collection-banner",
       "settings": {
         "show_collection_description": true,
-        "show_collection_image": false,
+        "show_collection_image": true,
         "color_scheme": "scheme-1"
       }
     },
@@ -39,7 +39,6 @@
     },
     "highlight_offers_grid_global": {
       "type": "highlight-offers-grid",
-      "disabled": true,
       "settings": {
         "color_scheme": ""
       }
