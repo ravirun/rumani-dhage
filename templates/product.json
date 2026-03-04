@@ -65,7 +65,7 @@
           "settings": {
             "heading": "Fabric & Weave Details",
             "icon": "shirt",
-            "content": "",
+            "content": "<p>{{ block.settings.page.title }}</p>",
             "page": ""
           }
         },
