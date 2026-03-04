@@ -64,8 +64,8 @@
           "type": "collapsible_tab",
           "settings": {
             "heading": "Fabric & Weave Details",
-            "icon": "shirt",
-            "content": "<p>{{ block.settings.page.title }}</p>",
+            "icon": "leaf",
+            "content": "<p>{{ product.metafields.custom.fabric_weave_details.value }}</p>",
             "page": ""
           }
         },
@@ -74,7 +74,7 @@
           "settings": {
             "heading": "Authenticity & Artisan",
             "icon": "check_mark",
-            "content": "",
+            "content": "<p>{{ product.metafields.custom.authenticity_artisan.value }}</p>",
             "page": ""
           }
         },
@@ -83,7 +83,7 @@
           "settings": {
             "heading": "Draping & Size Guide",
             "icon": "ruler",
-            "content": "",
+            "content": "<p>{{ product.metafields.custom.draping_size_guide.value }}</p>",
             "page": ""
           }
         },
@@ -92,7 +92,7 @@
           "settings": {
             "heading": "Care & Preservation",
             "icon": "heart",
-            "content": "",
+            "content": "<p>{{ product.metafields.custom.care_preservation.value }}</p>",
             "page": ""
           }
         },
@@ -101,7 +101,7 @@
           "settings": {
             "heading": "Shipping & Delivery",
             "icon": "truck",
-            "content": "",
+            "content": "<p>{{ product.metafields.custom.shipping_delivery.value }}</p>",
             "page": ""
           }
         },
