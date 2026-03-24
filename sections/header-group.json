@@ -30,6 +30,7 @@
     },
     "petal_experience_qk7wTA": {
       "type": "petal-experience",
+      "disabled": true,
       "name": "Petal Experience",
       "settings": {
         "position_type": "fixed",
