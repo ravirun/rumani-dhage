@@ -10,6 +10,7 @@
 {
   "current": {
     "logo": "shopify://shop_images/Group_43.svg",
+    "logo_width": 150,
     "favicon": "shopify://shop_images/image_1.svg",
     "type_header_font": "instrument_serif_n4",
     "type_body_font": "instrument_sans_n4",
@@ -21,6 +22,8 @@
     "brand_headline": "Rumani Dhaage",
     "brand_description": "<p>Curated contemporary sarees, suits, and dupattas inspired by India’s traditional weaves and crafted for today’s woman.</p>",
     "brand_image": "shopify://shop_images/image_1.svg",
+    "social_instagram_link": "https://instagram.com/rumani_dhaage",
+    "social_youtube_link": "https://www.youtube.com/@Rumani_Dhaage",
     "enable_interactive_audio": false,
     "audio_on_scroll": false,
     "audio_on_hover": false,

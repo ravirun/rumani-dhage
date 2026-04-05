@@ -30,6 +30,7 @@
     },
     "petal_experience_qk7wTA": {
       "type": "petal-experience",
+      "disabled": true,
       "name": "Petal Experience",
       "settings": {
         "position_type": "fixed",
@@ -68,6 +69,9 @@
         "heading_alignment": "left",
         "menu": "main-menu",
         "enable_dynamic_levels": true,
+        "back_label": "Back",
+        "menu_root_url": "",
+        "sticky_navigation": false,
         "show_images": false,
         "center_pills": false,
         "color_scheme": "scheme-5",

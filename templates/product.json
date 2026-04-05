@@ -64,8 +64,8 @@
           "type": "collapsible_tab",
           "settings": {
             "heading": "Fabric & Weave Details",
-            "icon": "shirt",
-            "content": "",
+            "icon": "leaf",
+            "content": "<p>{{ product.metafields.custom.fabric_weave_details.value }}</p>",
             "page": ""
           }
         },
@@ -74,7 +74,7 @@
           "settings": {
             "heading": "Authenticity & Artisan",
             "icon": "check_mark",
-            "content": "",
+            "content": "<p>{{ product.metafields.custom.authenticity_artisan.value }}</p>",
             "page": ""
           }
         },
@@ -83,7 +83,7 @@
           "settings": {
             "heading": "Draping & Size Guide",
             "icon": "ruler",
-            "content": "",
+            "content": "<p>{{ product.metafields.custom.draping_size_guide.value }}</p>",
             "page": ""
           }
         },
@@ -92,7 +92,7 @@
           "settings": {
             "heading": "Care & Preservation",
             "icon": "heart",
-            "content": "",
+            "content": "<p>{{ product.metafields.custom.care_preservation.value }}</p>",
             "page": ""
           }
         },
@@ -101,7 +101,7 @@
           "settings": {
             "heading": "Shipping & Delivery",
             "icon": "truck",
-            "content": "",
+            "content": "<p>{{ product.metafields.custom.shipping_delivery.value }}</p>",
             "page": ""
           }
         },
@@ -134,70 +134,31 @@
         "color_scheme": "",
         "media_size": "large",
         "constrain_to_viewport": true,
-        "media_fit": "contain",
-        "gallery_layout": "stacked",
-        "mobile_thumbnails": "hide",
+        "media_fit": "cover",
+        "gallery_layout": "thumbnail_slider",
+        "mobile_thumbnails": "show",
         "media_position": "left",
         "image_zoom": "lightbox",
         "hide_variants": true,
         "enable_video_looping": false,
-        "padding_top": 36,
-        "padding_bottom": 12
-      }
-    },
-    "rich_product_details_main": {
-      "type": "rich-product-details",
-      "settings": {
-        "color_scheme": ""
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
     "highlight_shipping_banner_global": {
       "type": "highlight-shipping-banner",
+      "disabled": true,
       "settings": {
         "color_scheme": "",
         "text_content": "Free Shipping on all domestic orders above 1,999 INR",
         "subtext": "Hand-packed with care in sustainable packaging."
       }
     },
-    "product_offer_widget_main": {
-      "type": "product-offer-widget",
-      "settings": {}
-    },
-    "image-with-text": {
-      "type": "image-with-text",
-      "blocks": {
-        "image-with-text-0": {
-          "type": "heading",
-          "settings": {
-            "heading": "Crafted Over 18 Days",
-            "heading_size": "h1"
-          }
-        },
-        "image-with-text-1": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Every warp and weft is hand-positioned by master weavers. A single saree represents 18-25 days of dedicated craftsmanship on traditional pit looms, preserving an art form passed down through generations.</p>",
-            "text_style": "body"
-          }
-        }
-      },
-      "block_order": [
-        "image-with-text-0",
-        "image-with-text-1"
-      ],
+    "rich_product_details_main": {
+      "type": "rich-product-details",
+      "disabled": true,
       "settings": {
-        "height": "small",
-        "desktop_image_width": "medium",
-        "layout": "text_first",
-        "image_behavior": "none",
-        "content_layout": "no-overlap",
-        "desktop_content_position": "top",
-        "desktop_content_alignment": "left",
-        "mobile_content_alignment": "left",
-        "section_color_scheme": "",
-        "color_scheme": "scheme-2",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "color_scheme": "scheme-1"
       }
     },
     "multicolumn": {
@@ -246,6 +207,7 @@
         "column-2",
         "column-3"
       ],
+      "disabled": true,
       "settings": {
         "title": "",
         "heading_size": "h1",
@@ -261,6 +223,67 @@
         "swipe_on_mobile": false,
         "padding_top": 36,
         "padding_bottom": 36
+      }
+    },
+    "image-with-text": {
+      "type": "image-with-text",
+      "blocks": {
+        "image-with-text-0": {
+          "type": "heading",
+          "settings": {
+            "heading": "Crafted Over 18 Days",
+            "heading_size": "h1"
+          }
+        },
+        "image-with-text-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Every warp and weft is hand-positioned by master weavers. A single saree represents 18-25 days of dedicated craftsmanship on traditional pit looms, preserving an art form passed down through generations.</p>",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "image-with-text-0",
+        "image-with-text-1"
+      ],
+      "disabled": true,
+      "settings": {
+        "height": "small",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "image_behavior": "none",
+        "content_layout": "no-overlap",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "mobile_content_alignment": "left",
+        "section_color_scheme": "",
+        "color_scheme": "scheme-2",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "highlight_bundle_grid_global": {
+      "type": "highlight-bundle-grid",
+      "disabled": true,
+      "settings": {
+        "color_scheme": ""
+      }
+    },
+    "product_offer_widget_main": {
+      "type": "product-offer-widget",
+      "disabled": true,
+      "settings": {}
+    },
+    "highlight_coupon_box_global": {
+      "type": "highlight-coupon-box",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "title": "ROYAL WEDDING SALE",
+        "description": "Use code “QUEEN25” for 25% off on Kanjivaram Collection.",
+        "link_text": "Shop The Look",
+        "link": ""
       }
     },
     "related-products": {
@@ -281,30 +304,15 @@
         "padding_bottom": 28
       }
     },
-    "highlight_offers_grid_global": {
-      "type": "highlight-offers-grid",
-      "settings": {
-        "color_scheme": ""
-      }
-    },
-    "highlight_bundle_grid_global": {
-      "type": "highlight-bundle-grid",
-      "settings": {
-        "color_scheme": ""
-      }
-    },
-    "highlight_coupon_box_global": {
-      "type": "highlight-coupon-box",
-      "settings": {
-        "color_scheme": "",
-        "title": "ROYAL WEDDING SALE",
-        "description": "Use code “QUEEN25” for 25% off on Kanjivaram Collection.",
-        "link_text": "Shop The Look",
-        "link": ""
-      }
-    },
     "sticky_atc_main": {
       "type": "sticky-atc",
+      "settings": {
+        "color_scheme": ""
+      }
+    },
+    "highlight_offers_grid_global": {
+      "type": "highlight-offers-grid",
+      "disabled": true,
       "settings": {
         "color_scheme": ""
       }
