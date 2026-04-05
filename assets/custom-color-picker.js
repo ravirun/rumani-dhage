@@ -4,12 +4,17 @@ class CustomColorPicker {
     // Handle both radio inputs and potentially other toggle types if improved later
     this.radioButtons = container.querySelectorAll('input[name="color_mode"]');
     this.dropdown = container.querySelector("[data-custom-dropdown]");
-    this.select = container.querySelector(
-      'select[name="properties[Custom Color]"]',
+    this.customInputs = container.querySelectorAll(
+      'input[name="properties[Custom Color]"]',
     );
 
     // Safety check
-    if (!this.radioButtons.length || !this.dropdown || !this.select) return;
+    if (
+      !this.radioButtons.length ||
+      !this.dropdown ||
+      !this.customInputs.length
+    )
+      return;
 
     this.init();
   }
@@ -33,12 +38,12 @@ class CustomColorPicker {
 
     if (isCustom) {
       this.dropdown.hidden = false;
-      this.dropdown.style.display = "block"; // Ensure it's visible if hidden attr is not enough for some css resets
-      this.select.disabled = false;
+      this.dropdown.style.display = "block";
+      this.customInputs.forEach((input) => (input.disabled = false));
     } else {
       this.dropdown.hidden = true;
       this.dropdown.style.display = "none";
-      this.select.disabled = true;
+      this.customInputs.forEach((input) => (input.disabled = true));
     }
   }
 }

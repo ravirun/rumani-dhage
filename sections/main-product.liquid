@@ -696,21 +696,31 @@
                     </fieldset>
 
                     <div class="custom-color-dropdown-container" data-custom-dropdown hidden style="display: none;">
-                      <label for="custom-color-select-{{ section.id }}">Select Your Preferred Color:</label>
-                      <div class="select">
-                        <select
-                          id="custom-color-select-{{ section.id }}"
-                          class="select__select"
-                          name="properties[Custom Color]"
-                          form="{{ product_form_id }}"
-                          disabled
-                        >
-                          {% assign colors = product.metafields.custom.available_colors | split: ',' %}
-                          {% for color in colors %}
-                            <option value="{{ color | strip }}">{{ color | strip }}</option>
-                          {% endfor %}
-                        </select>
-                        {% render 'icon-caret' %}
+                      <label>Select Your Preferred Color:</label>
+                      <div class="custom-color-swatches">
+                        {% assign colors = product.metafields.custom.available_colors | split: ',' %}
+                        {% for color in colors %}
+                          {% assign color_parts = color | split: ':' %}
+                          {% assign color_name = color_parts[0] | strip %}
+                          {% assign color_hex = color_parts[1] | strip | default: color_name %}
+                          <div class="custom-color-swatch">
+                            <input
+                              type="radio"
+                              id="custom-color-{{ section.id }}-{{ forloop.index0 }}"
+                              name="properties[Custom Color]"
+                              value="{{ color_name }}"
+                              form="{{ product_form_id }}"
+                              {% if forloop.first %}
+                                checked
+                              {% endif %}
+                              disabled
+                            >
+                            <label for="custom-color-{{ section.id }}-{{ forloop.index0 }}">
+                              <span class="swatch-visual" style="background-color: {{ color_hex }};"></span>
+                              {{ color_name }}
+                            </label>
+                          </div>
+                        {% endfor %}
                       </div>
 
                       <p class="confirmation-note">
