@@ -1,0 +1,82 @@
+/**
+ * Rumani Dhaage Masonry Bento Grid
+ * ------------------------------------------------------------
+ * A high-end, responsive bento layout for product collections.
+ * Leverages CSS Grid for a clean, editorial look.
+ */
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Mobile default */
+  gap: 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+/* Base Bento Item */
+.bento-grid .grid__item {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  height: 100%;
+}
+
+.bento-grid .card-wrapper {
+  height: 100%;
+  display: flex;
+}
+
+.bento-grid .card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.bento-grid .card__inner {
+  flex-grow: 1;
+}
+
+/* Feature: Bento Layout on Tablet/Desktop */
+@media screen and (min-width: 750px) {
+  .bento-grid {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns on desktop */
+    grid-auto-rows: minmax(200px, auto);
+  }
+
+  /* 2x2 Feature Block */
+  .bento-item--large {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  /* 2x1 Wide Block */
+  .bento-item--wide {
+    grid-column: span 2;
+  }
+
+  /* 1x2 Tall Block */
+  .bento-item--tall {
+    grid-row: span 2;
+  }
+}
+
+/* Mobile-Specific Bento Spans (Optional, keeping simple 2-col default) */
+@media screen and (max-width: 749px) {
+  .bento-item--large {
+    grid-column: span 2; /* Still wide on mobile */
+  }
+}
+
+/* Ensure images fill the bento blocks beautifully */
+.bento-grid .media--adapt img,
+.bento-grid .media--portrait img,
+.bento-grid .media--square img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.bento-grid .media {
+  height: 100%;
+}

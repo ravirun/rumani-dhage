@@ -85,7 +85,7 @@
         "mobile_height_ratio": 125,
         "slider_visual": "dots",
         "auto_rotate": true,
-        "change_slides_speed": 3,
+        "change_slides_speed": 7,
         "image_behavior": "ambient",
         "show_text_below": false,
         "accessibility_info": "Slideshow about our brand"
@@ -134,77 +134,7 @@
         "padding_bottom": 20
       }
     },
-    "social_proof_scroll_main": {
-      "type": "social-proof-scroll",
-      "blocks": {
-        "bubble_1": {
-          "type": "bubble",
-          "settings": {
-            "title": "Silk Anarkali",
-            "subtitle": "Sold in London",
-            "badge": "POPULAR"
-          }
-        },
-        "bubble_2": {
-          "type": "bubble",
-          "settings": {
-            "title": "@ananya_v",
-            "subtitle": "Wearing 'Noor'",
-            "badge": "INFLUENCER"
-          }
-        },
-        "bubble_3": {
-          "type": "bubble",
-          "settings": {
-            "title": "Handcrafted",
-            "subtitle": "Pure Banaras",
-            "badge": "AUTHENTIC"
-          }
-        },
-        "bubble_4": {
-          "type": "bubble",
-          "settings": {
-            "title": "Global Ship",
-            "subtitle": "To 40+ Countries",
-            "badge": "SHIPPING"
-          }
-        },
-        "bubble_5": {
-          "type": "bubble",
-          "settings": {
-            "title": "Velvet Lehnga",
-            "subtitle": "Limited Edition",
-            "badge": "HOT"
-          }
-        },
-        "bubble_6": {
-          "type": "bubble",
-          "settings": {
-            "title": "@ethnic_vibe",
-            "subtitle": "Must-have Saree",
-            "badge": "REVIEW"
-          }
-        }
-      },
-      "block_order": [
-        "bubble_1",
-        "bubble_2",
-        "bubble_3",
-        "bubble_4",
-        "bubble_5",
-        "bubble_6"
-      ],
-      "settings": {
-        "show_header": true,
-        "heading": "Loved by Thousands",
-        "subheading": "Join our community of satisfied customers worldwide",
-        "brand_name": "Rumani Dhaage",
-        "color_scheme": "",
-        "scroll_speed": 60,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
+
     "featured_collection_stack_8wxHxW": {
       "type": "featured-collection-stack",
       "name": "Featured Collection Stack",
@@ -288,11 +218,12 @@
     },
     "featured_collection_main": {
       "type": "featured-collection",
-      "disabled": true,
+      "disabled": false,
       "settings": {
         "collection": "sarees",
         "products_to_show": 4,
-        "title": "Featured Collection",
+        "title": "New Arrivals",
+        "hide_sold_out": true,
         "heading_size": "h2",
         "description": "",
         "show_description": false,
@@ -315,97 +246,7 @@
         "padding_bottom": 36
       }
     },
-    "stack_banner_main": {
-      "type": "stack-banner",
-      "blocks": {
-        "card_2": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/ultrawide-panoramic-lifestyle-saree-hero-image_f481a38f-65b4-484e-8d17-bc6c7ceeba2d.png",
-            "heading": "Card Heading",
-            "subheading": "Subheading",
-            "text": "<p>Share information about your brand with your customers.</p>",
-            "link": "",
-            "link_label": "Button"
-          }
-        },
-        "card_3": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/chanderi-suit-set-complete-set.png",
-            "heading": "Card Heading",
-            "subheading": "Subheading",
-            "text": "<p>Share information about your brand with your customers.</p>",
-            "link": "",
-            "link_label": "Button"
-          }
-        },
-        "card_4": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/lifestyle-image_dd65b307-8f61-444f-8c06-1281fa797203.png",
-            "heading": "Card Heading",
-            "subheading": "Subheading",
-            "text": "<p>Share information about your brand with your customers.</p>",
-            "link": "",
-            "link_label": "Button"
-          }
-        },
-        "card_1": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/ultrawide-panoramic-lifestyle-saree-hero-image.png",
-            "heading": "Card Heading",
-            "subheading": "Subheading",
-            "text": "<p>Share information about your brand with your customers.</p>",
-            "link": "",
-            "link_label": "Button"
-          }
-        }
-      },
-      "block_order": [
-        "card_2",
-        "card_3",
-        "card_4",
-        "card_1"
-      ],
-      "disabled": true,
-      "settings": {
-        "sticky_top_desktop": 15,
-        "sticky_top_mobile": 15,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "featured_collection_main_2": {
-      "type": "featured-collection",
-      "disabled": true,
-      "settings": {
-        "collection": "sarees",
-        "products_to_show": 4,
-        "title": "Featured Collection",
-        "heading_size": "h1",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "columns_desktop": 4,
-        "enable_desktop_slider": false,
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "color_scheme": "scheme-1",
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": false,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "swipe_on_mobile": false,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
+
     "brand_benefits_main": {
       "type": "brand-benefits",
       "blocks": {
@@ -449,7 +290,7 @@
         "benefit_4"
       ],
       "settings": {
-        "heading": "Why Choose Us",
+        "heading": "",
         "columns_desktop": 4,
         "columns_mobile": 2,
         "gap_desktop": 20,
@@ -554,49 +395,10 @@
         "padding_bottom": 60
       }
     },
-    "featured_blog_folders_ew9BQ3": {
-      "type": "featured-blog-folders",
-      "blocks": {
-        "photo_folder_4VEhiw": {
-          "type": "photo_folder",
-          "settings": {
-            "blog": "style-guide"
-          }
-        },
-        "photo_folder_KiNBXa": {
-          "type": "photo_folder",
-          "settings": {
-            "blog": "care-maintenance"
-          }
-        },
-        "photo_folder_6qiErm": {
-          "type": "photo_folder",
-          "settings": {
-            "blog": "news"
-          }
-        }
-      },
-      "block_order": [
-        "photo_folder_4VEhiw",
-        "photo_folder_KiNBXa",
-        "photo_folder_6qiErm"
-      ],
-      "disabled": true,
-      "name": "Blog Folders",
-      "settings": {
-        "title": "Blog Folders",
-        "subtitle": "<p>Explore our curated collections of stories and adventures.</p>",
-        "heading_size": "h1",
-        "bg_color": "rgba(0,0,0,0)",
-        "columns_desktop": 3,
-        "columns_mobile": "2",
-        "padding_top": 40,
-        "padding_bottom": 40
-      }
-    },
+
     "featured_blog_main": {
       "type": "featured-blog",
-      "disabled": true,
+      "disabled": false,
       "settings": {
         "blog": "news",
         "post_limit": 4,
@@ -731,23 +533,52 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "email_signup_main": {
+      "type": "newsletter",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Join the Inner Circle",
+            "heading_size": "h1"
+          }
+        },
+        "paragraph": {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Get 10% off your first order and stay updated on our latest heritage weaves.</p>"
+          }
+        },
+        "email_form": {
+          "type": "email_form"
+        }
+      },
+      "block_order": [
+        "heading",
+        "paragraph",
+        "email_form"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "full_width": true,
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
     }
   },
   "order": [
     "slideshow_main",
     "trust_badges_main",
-    "social_proof_scroll_main",
-    "featured_collection_stack_8wxHxW",
     "instagram_story_main",
     "featured_collection_main",
-    "stack_banner_main",
-    "featured_collection_main_2",
+    "featured_collection_stack_8wxHxW",
+    "testimonials_main",
     "brand_benefits_main",
     "shopable_video_reel_main",
+    "email_signup_main",
     "brand_story_main",
-    "featured_blog_folders_ew9BQ3",
     "featured_blog_main",
-    "testimonials_main",
     "collapsible_content_main"
   ]
 }

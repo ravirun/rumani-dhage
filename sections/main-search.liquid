@@ -63,6 +63,25 @@
   }
 {%- endstyle -%}
 
+{%- liquid
+  assign search_results = search.results
+  if section.settings.hide_sold_out
+    assign filtered_results = "" | split: ""
+    for item in search.results
+      if item.object_type == 'product'
+        if item.available
+          assign item_array = item | sort
+          assign filtered_results = filtered_results | concat: item_array
+        endif
+      else
+        assign item_array = item | sort
+        assign filtered_results = filtered_results | concat: item_array
+      endif
+    endfor
+    assign search_results = filtered_results
+  endif
+-%}
+
 {% paginate search.results by 24 %}
   <div class="template-search{% unless search.performed and search.results_count > 0 %} template-search--empty{% endunless %} section-{{ section.id }}-padding">
     <div class="template-search__header page-width{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
@@ -253,18 +272,29 @@
             >
               <div class="loading-overlay gradient"></div>
               <ul
-                class="grid product-grid  grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop"
+                class="grid product-grid{% if section.settings.enable_bento_grid %} bento-grid{% else %} grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop{% endif %}"
                 role="list"
               >
                 {%- assign skip_card_product_styles = false -%}
-                {%- for item in search.results -%}
+                {%- for item in search_results -%}
+                  {%- liquid
+                    assign bento_class = ""
+                    if section.settings.enable_bento_grid and item.object_type == 'product'
+                      assign bento_index = forloop.index | modulo: 10
+                      if bento_index == 1
+                        assign bento_class = "bento-item--large"
+                      elsif bento_index == 6
+                        assign bento_class = "bento-item--wide"
+                      endif
+                    endif
+                  -%}
                   {% assign lazy_load = false %}
                   {%- if forloop.index > 2 -%}
                     {%- assign lazy_load = true -%}
                   {%- endif -%}
 
                   <li
-                    class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                    class="grid__item {{ bento_class }} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
                     {% if settings.animations_reveal_on_scroll %}
                       data-cascade
                     {% endif %}
@@ -346,6 +376,18 @@
       "step": 1,
       "default": 4,
       "label": "t:sections.main-search.settings.columns_desktop.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_bento_grid",
+      "label": "Enable Masonry Bento Layout",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_sold_out",
+      "label": "Hide sold out products",
+      "default": false
     },
     {
       "type": "select",

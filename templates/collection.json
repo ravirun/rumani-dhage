@@ -21,6 +21,8 @@
       "type": "main-collection-product-grid",
       "settings": {
         "products_per_page": 16,
+        "hide_sold_out": true,
+        "enable_bento_grid": true,
         "columns_desktop": 4,
         "columns_mobile": "2",
         "color_scheme": "",
@@ -29,7 +31,7 @@
         "show_secondary_image": false,
         "show_vendor": false,
         "show_rating": false,
-        "quick_add": "none",
+        "quick_add": "standard",
         "enable_filtering": true,
         "filter_type": "horizontal",
         "enable_sorting": true,
@@ -45,7 +47,7 @@
     },
     "highlight_shipping_banner_global": {
       "type": "highlight-shipping-banner",
-      "disabled": true,
+      "disabled": false,
       "settings": {
         "color_scheme": "",
         "text_content": "Free Shipping on all domestic orders above 1,999 INR",
@@ -54,14 +56,14 @@
     },
     "highlight_bundle_grid_global": {
       "type": "highlight-bundle-grid",
-      "disabled": true,
+      "disabled": false,
       "settings": {
         "color_scheme": ""
       }
     },
     "highlight_coupon_box_global": {
       "type": "highlight-coupon-box",
-      "disabled": true,
+      "disabled": false,
       "settings": {
         "color_scheme": "",
         "title": "ROYAL WEDDING SALE",
@@ -69,14 +71,66 @@
         "link_text": "Shop The Look",
         "link": ""
       }
+    },
+    "brand_benefits": {
+      "type": "brand-benefits",
+      "settings": {
+        "heading": "",
+        "columns_desktop": 4,
+        "columns_mobile": 2,
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 40
+      },
+      "blocks": {
+        "benefit_1": {
+          "type": "benefit",
+          "settings": {
+            "icon": "❁",
+            "title": "Handcrafted",
+            "description": "Woven by master artisans from Varanasi."
+          }
+        },
+        "benefit_2": {
+          "type": "benefit",
+          "settings": {
+            "icon": "✦",
+            "title": "Global Delivery",
+            "description": "Free domestic shipping over 1,999 INR."
+          }
+        },
+        "benefit_3": {
+          "type": "benefit",
+          "settings": {
+            "icon": "⚱",
+            "title": "Pure Zari",
+            "description": "Authentic gold zari threads used exclusively."
+          }
+        },
+        "benefit_4": {
+          "type": "benefit",
+          "settings": {
+            "icon": "✂",
+            "title": "Bespoke",
+            "description": "Custom tailoring and fall-pico services."
+          }
+        }
+      },
+      "block_order": [
+        "benefit_1",
+        "benefit_2",
+        "benefit_3",
+        "benefit_4"
+      ]
     }
   },
   "order": [
     "banner",
-    "product-grid",
-    "highlight_offers_grid_global",
     "highlight_shipping_banner_global",
+    "brand_benefits",
+    "product-grid",
+    "highlight_coupon_box_global",
     "highlight_bundle_grid_global",
-    "highlight_coupon_box_global"
+    "highlight_offers_grid_global"
   ]
 }

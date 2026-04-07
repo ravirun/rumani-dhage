@@ -56,6 +56,17 @@
     <a class="skip-to-content-link button visually-hidden quick-add-hidden" href="#ProductInfo-{{ section.id }}">
       {{ 'accessibility.skip_to_product_info' | t }}
     </a>
+    {%- liquid
+      assign show_urgency = false
+      if product.available and product.selected_or_first_available_variant.inventory_management == 'shopify' and product.selected_or_first_available_variant.inventory_quantity > 0 and product.selected_or_first_available_variant.inventory_quantity <= 5
+        assign show_urgency = true
+      endif
+    -%}
+    {%- if show_urgency -%}
+      <div class="badge-wrapper" style="position: absolute; top: 2rem; left: 2rem; z-index: 10;">
+        <span class="badge badge--urgency">Almost Gone</span>
+      </div>
+    {%- endif -%}
     <ul
       id="Slider-Gallery-{{ section.id }}"
       class="product__media-list contains-media grid grid--peek list-unstyled slider slider--mobile"

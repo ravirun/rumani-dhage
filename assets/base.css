@@ -3596,3 +3596,24 @@ details-disclosure > details {
     transform: translateX(100%) scaleX(0);
   }
 }
+
+/* Urgency Badges */
+.badge--urgency {
+  background-color: #D4AF37 !important; /* Premium Gold */
+  color: #FFFFFF !important;
+  border: none !important;
+  font-weight: 700 !important;
+  padding: 0.6rem 1.2rem !important;
+  border-radius: 50px !important;
+  text-transform: uppercase !important;
+  font-size: 1.1rem !important;
+  letter-spacing: 0.05rem !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card__badge .badge--urgency {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 3;
+}

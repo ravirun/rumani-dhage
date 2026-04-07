@@ -39,6 +39,15 @@
     if ratio == 0 or ratio == null
       assign ratio = 1
     endif
+
+    assign show_urgency = false
+    if card_product.available and card_product.selected_or_first_available_variant.inventory_management == 'shopify' and card_product.selected_or_first_available_variant.inventory_quantity > 0 and card_product.selected_or_first_available_variant.inventory_quantity <= 5
+      assign show_urgency = true
+    endif
+
+    if section_id contains 'slideshow' or section_id contains 'instagram'
+      assign show_urgency = false
+    endif
   -%}
   <div class="card-wrapper product-card-wrapper underline-links-hover">
     <div
@@ -125,6 +134,9 @@
             </h3>
           </div>
           <div class="card__badge {{ settings.badge_position }}">
+            {%- if show_urgency -%}
+              <span class="badge badge--urgency">Almost Gone</span>
+            {%- endif -%}
             {%- if card_product.available == false -%}
               <span
                 id="NoMediaStandardBadge-{{ section_id }}-{{ card_product.id }}"
@@ -549,6 +561,9 @@
           {% endif %}
         {% endif %}
         <div class="card__badge {{ settings.badge_position }}">
+          {%- if show_urgency -%}
+            <span class="badge badge--urgency">Almost Gone</span>
+          {%- endif -%}
           {%- if card_product.available == false -%}
             <span
               id="Badge-{{ section_id }}-{{ card_product.id }}"
