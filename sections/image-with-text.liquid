@@ -12,6 +12,21 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  .rumani-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    background-color: #fdfbf7;
+  }
+
+  .rumani-placeholder svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 {%- endstyle -%}
 
 {%- liquid
@@ -55,7 +70,21 @@
                 | image_tag: sizes: sizes, widths: widths, fetchpriority: fetch_priority
               }}
             {%- else -%}
-              {{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              <div class="rumani-placeholder">
+                <svg viewBox="0 0 800 1000" xmlns="http://www.w3.org/2000/svg" class="placeholder-svg">
+                  <rect width="100%" height="100%" fill="#fdfbf7"/>
+                  <g fill="none" stroke="#d4af37" stroke-width="0.5" opacity="0.1">
+                    {% for i in (0..40) %}
+                      <line x1="0" y1="{{ i | times: 25 }}" x2="800" y2="{{ i | times: 25 }}" />
+                      <line x1="{{ i | times: 20 }}" y1="0" x2="{{ i | times: 20 }}" y2="1000" />
+                    {% endfor %}
+                  </g>
+                  <circle cx="400" cy="500" r="150" fill="none" stroke="#8b6e4b" stroke-width="1" stroke-dasharray="5 5"/>
+                  <text x="50%" y="490" dominant-baseline="middle" text-anchor="middle" font-family="serif" font-size="48" fill="#8b6e4b" style="font-style: italic; letter-spacing: 4px;">Rumani Dhaage</text>
+                  <text x="50%" y="530" dominant-baseline="middle" text-anchor="middle" font-family="serif" font-size="14" fill="#8b6e4b" style="letter-spacing: 6px; text-transform: uppercase;">Heritage Craftsmanship</text>
+                  <path d="M350 560 L450 560" stroke="#8b6e4b" stroke-width="1"/>
+                </svg>
+              </div>
             {%- endif -%}
           </div>
         </div>

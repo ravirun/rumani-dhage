@@ -85,6 +85,7 @@
           class="cart__contents cart-drawer__form"
           method="post"
         >
+          {% render 'cart-progress-bar' %}
           <div id="CartDrawer-CartItems" class="drawer__contents js-contents">
             {%- if cart != empty -%}
               <div class="drawer__cart-items-wrapper">
@@ -471,6 +472,7 @@
               {{ 'accessibility.loading' | t }}
             </p>
           </div>
+          {% render 'cart-upsells' %}
           <div id="CartDrawer-CartErrors" role="alert"></div>
         </form>
       </cart-drawer-items>
@@ -574,6 +576,19 @@
           >
             {{ 'sections.cart.checkout' | t }}
           </button>
+        </div>
+
+        <div class="cart-trust-badges">
+          <div class="cart-trust-badges__row">
+            <span>🔒 Secure Payment</span>
+            <span class="cart-trust-badges__divider">•</span>
+            <span>🚚 Shipping Included</span>
+          </div>
+          <div class="cart-trust-badges__row">
+            <span>✦ Authentic Handloom</span>
+            <span class="cart-trust-badges__divider">•</span>
+            <span>↩ Easy Returns</span>
+          </div>
         </div>
       </div>
     </div>

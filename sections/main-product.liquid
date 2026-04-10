@@ -115,6 +115,19 @@
                     price_class: 'price--large'
                   -%}
 
+                  {%- liquid
+                    assign show_urgency = false
+                    if product.available and product.selected_or_first_available_variant.inventory_management == 'shopify' and product.selected_or_first_available_variant.inventory_quantity > 0 and product.selected_or_first_available_variant.inventory_quantity <= 5
+                      assign show_urgency = true
+                    endif
+                  -%}
+                  {%- if show_urgency -%}
+                    <div class="urgency-text-line" style="margin-top: 1.5rem; color: #D4AF37; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; letter-spacing: 0.02rem;">
+                      <span>⚡</span>
+                      <span>Almost Gone — only a few pieces remaining</span>
+                    </div>
+                  {%- endif -%}
+
                   {%- comment -%} TRUST BADGES & SCARCITY {%- endcomment -%}
                   {%- assign mf = product.metafields.custom -%}
                   <div class="product-trust" style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.8rem;">

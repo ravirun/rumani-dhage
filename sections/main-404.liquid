@@ -1,23 +1,108 @@
 <style type="text/css">
-  .template-404 .title + * {
-    margin-top: 1rem;
+  .template-404 {
+    padding-top: 10rem;
+    padding-bottom: 10rem;
+  }
+  
+  .template-404 .error-tone {
+    font-size: 1.8rem;
+    color: rgba(var(--color-foreground), 0.7);
+    margin-bottom: 1rem;
+    font-family: var(--font-body-family);
   }
 
-  @media screen and (min-width: 750px) {
-    .template-404 .title + * {
-      margin-top: 2rem;
+  .template-404 .title {
+    margin-top: 0;
+    margin-bottom: 3rem;
+    font-size: 4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+  }
+
+  .template-404 .search-recovery {
+    max-width: 50rem;
+    margin: 4rem auto;
+  }
+
+  .template-404 .recovery-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .template-404 .search-input-wrapper {
+    position: relative;
+    display: flex;
+    border: 1px solid rgba(var(--color-foreground), 0.2);
+    border-radius: var(--inputs-radius);
+    overflow: hidden;
+  }
+
+  .template-404 .search-field__input {
+    flex-grow: 1;
+    padding: 1.5rem;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 1.4rem;
+  }
+
+  .template-404 .search-submit {
+    background: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
+    border: none;
+    padding: 0 2rem;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .template-404 {
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+    }
+    .template-404 .title {
+      font-size: 3rem;
     }
   }
 </style>
 
 <div class="template-404 page-width page-margin center">
-  <p>
-    {{ 'templates.404.subtext' | t }}
+  <p class="error-tone">
+    Even our threads don't break this easily...
   </p>
   <h1 class="title">
-    {{ 'templates.404.title' | t }}
+    This Page is Out of Stock
   </h1>
-  <a href="{{ routes.all_products_collection_url }}" class="button">
-    {{ 'general.continue_shopping' | t }}
-  </a>
+  
+  <p>We couldn't find what you were looking for. Perhaps a search might help?</p>
+
+  <div class="search-recovery">
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+      <div class="search-input-wrapper">
+        <input 
+          type="search" 
+          name="q" 
+          id="Search-404" 
+          class="search-field__input" 
+          placeholder="Find your perfect drape..."
+          aria-label="Search site"
+        >
+        <button type="submit" class="search-submit">Search</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="recovery-actions">
+    <a href="{{ routes.all_products_collection_url }}" class="button">
+      Shop All Sarees
+    </a>
+    <a href="{{ routes.collections_url }}/sarees" class="button button--secondary">
+      New Arrivals
+    </a>
+  </div>
 </div>

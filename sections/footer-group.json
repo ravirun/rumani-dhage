@@ -44,7 +44,6 @@
         "paragraph_DACjq7",
         "email_form_Kt8qcj"
       ],
-      "disabled": true,
       "name": "t:sections.newsletter.presets.name",
       "settings": {
         "color_scheme": "",
@@ -106,11 +105,20 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "whatsapp_widget_Ft8K6r": {
+      "type": "whatsapp-widget",
+      "settings": {
+        "phone_number": "910000000000",
+        "initial_message": "Hello Rumani Dhaage! I'm interested in your handloom collection.",
+        "color_scheme": "scheme-1"
+      }
     }
   },
   "order": [
     "floating_cart_Ft8K6r",
     "newsletter_MhtDJQ",
-    "footer"
+    "footer",
+    "whatsapp_widget_Ft8K6r"
   ]
 }

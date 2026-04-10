@@ -1,0 +1,36 @@
+{%- liquid
+  assign seed_product = cart.items.first.product_id
+-%}
+
+{%- if seed_product != blank -%}
+  <div
+    id="cart-recommendations"
+    class="cart-recovery__upsells"
+    data-url="{{ routes.product_recommendations_url }}"
+    data-product-id="{{ seed_product }}"
+    data-section-id="related-products"
+    data-limit="4"
+    data-intent="complementary"
+  >
+    {%- comment -%} Skeleton Loading State {%- endcomment -%}
+    <div class="cart-recommendations-skeleton" style="padding: 2rem 0;">
+      <div class="skeleton-title" style="height: 2rem; width: 60%; background: rgba(var(--color-foreground), 0.05); margin-bottom: 2rem; border-radius: 0.4rem;"></div>
+      <div class="skeleton-grid" style="display: flex; gap: 1.5rem;">
+        <div class="skeleton-card" style="flex: 1; aspect-ratio: 2/3; background: rgba(var(--color-foreground), 0.05); border-radius: 0.4rem;"></div>
+        <div class="skeleton-card" style="flex: 1; aspect-ratio: 2/3; background: rgba(var(--color-foreground), 0.05); border-radius: 0.4rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Self-initializing script for the recommendations
+    document.addEventListener('DOMContentLoaded', () => {
+      // Small delay to ensure cart UI is ready if needed
+      setTimeout(() => {
+        if (typeof window.loadCartRecommendations === 'function') {
+          window.loadCartRecommendations();
+        }
+      }, 100);
+    });
+  </script>
+{%- endif -%}

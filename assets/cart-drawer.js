@@ -46,6 +46,9 @@ class CartDrawer extends HTMLElement {
       { once: true }
     );
 
+    if (typeof window.loadCartRecommendations === 'function') {
+      window.loadCartRecommendations();
+    }
     document.body.classList.add('overflow-hidden');
   }
 
@@ -71,20 +74,30 @@ class CartDrawer extends HTMLElement {
   }
 
   renderContents(parsedState) {
-    this.querySelector('.drawer__inner').classList.contains('is-empty') &&
-      this.querySelector('.drawer__inner').classList.remove('is-empty');
     this.productId = parsedState.id;
     this.getSectionsToRender().forEach((section) => {
       const sectionElement = section.selector
         ? document.querySelector(section.selector)
         : document.getElementById(section.id);
 
-      if (!sectionElement) return;
-      sectionElement.innerHTML = this.getSectionInnerHTML(parsedState.sections[section.id], section.selector);
+      if (!sectionElement || !parsedState.sections || !parsedState.sections[section.id || section.section]) return;
+      
+      sectionElement.innerHTML = this.getSectionInnerHTML(
+        parsedState.sections[section.id || section.section],
+        section.selector
+      );
     });
 
     setTimeout(() => {
       this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
+      
+      // Remove empty states
+      this.classList.remove('is-empty');
+      const inner = this.querySelector('.drawer__inner');
+      if (inner) inner.classList.remove('is-empty');
+      const items = this.querySelector('cart-drawer-items');
+      if (items) items.classList.remove('is-empty');
+      
       this.open();
     });
   }
@@ -97,10 +110,12 @@ class CartDrawer extends HTMLElement {
     return [
       {
         id: 'cart-drawer',
+        section: 'cart-drawer',
         selector: '#CartDrawer',
       },
       {
         id: 'cart-icon-bubble',
+        section: 'cart-icon-bubble',
       },
     ];
   }

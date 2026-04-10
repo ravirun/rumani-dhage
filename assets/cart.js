@@ -139,7 +139,6 @@ class CartItems extends HTMLElement {
       {
         id: 'main-cart-footer',
         section: document.getElementById('main-cart-footer').dataset.id,
-        selector: '.js-contents',
       },
     ];
   }
@@ -214,6 +213,10 @@ class CartItems extends HTMLElement {
             trapFocus(cartDrawerWrapper, document.querySelector('.cart-item__name'));
           }
         });
+
+        if (typeof window.loadCartRecommendations === 'function') {
+          window.loadCartRecommendations();
+        }
 
         publish(PUB_SUB_EVENTS.cartUpdate, { source: 'cart-items', cartData: parsedState, variantId: variantId });
       })
@@ -295,3 +298,34 @@ if (!customElements.get('cart-note')) {
     }
   );
 }
+
+async function loadCartRecommendations() {
+  const section = document.getElementById('cart-recommendations');
+  if (!section) return;
+
+  const { url, productId, sectionId, limit, intent } = section.dataset;
+  if (!productId) return;
+
+  try {
+    const response = await fetch(
+      `${url}?product_id=${productId}&limit=${limit}&intent=${intent}&section_id=${sectionId}`
+    );
+    
+    if (!response.ok) return;
+    
+    const text = await response.text();
+    const html = new DOMParser().parseFromString(text, 'text/html');
+    
+    const recommendations = html.querySelector('.related-products');
+    if (recommendations && recommendations.innerHTML.trim()) {
+      section.innerHTML = recommendations.innerHTML;
+    } else {
+      section.style.display = 'none';
+    }
+  } catch (e) {
+    console.error('Failed to load recommendations:', e);
+    section.style.display = 'none';
+  }
+}
+
+window.loadCartRecommendations = loadCartRecommendations;
