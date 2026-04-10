@@ -16,6 +16,10 @@
   }
 {%- endstyle -%}
 
+{{ 'quick-add.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+
 <div class="recently-viewed__wrapper hidden section-{{ section.id }}-padding color-{{ section.settings.color_scheme }}" id="RecentlyViewed-{{ section.id }}" data-handle="{{ product.handle }}">
   <div class="page-width">
     {%- if section.settings.heading != blank -%}

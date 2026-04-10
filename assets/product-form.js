@@ -35,7 +35,7 @@ if (!customElements.get('product-form')) {
         if (this.cart) {
           formData.append(
             'sections',
-            this.cart.getSectionsToRender().map((section) => section.id)
+            this.cart.getSectionsToRender().map((section) => section.id).join(',')
           );
           formData.append('sections_url', window.location.pathname);
           this.cart.setActiveElement(document.activeElement);
