@@ -504,6 +504,26 @@
         "label": "t:settings_schema.cards.settings.style.label"
       },
       {
+        "type": "select",
+        "id": "image_aspect_ratio",
+        "label": "Global Image Aspect Ratio",
+        "options": [
+          {
+            "value": "adapt",
+            "label": "Adapt to Image"
+          },
+          {
+            "value": "square",
+            "label": "Square (1:1)"
+          },
+          {
+            "value": "portrait",
+            "label": "Portrait (2:3)"
+          }
+        ],
+        "default": "portrait"
+      },
+      {
         "type": "range",
         "id": "card_image_padding",
         "min": 0,

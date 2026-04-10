@@ -119,6 +119,21 @@
                 </button>
               </div>
 
+              <div class="cart-trust-badges">
+                <div class="cart-trust-badges__row">
+                  <span>🔒 Secure Payment</span>
+                  <span class="cart-trust-badges__divider">•</span>
+                  <span>🚚 Shipping Included</span>
+                </div>
+                <div class="cart-trust-badges__row">
+                  <span>✦ Authentic Handloom</span>
+                  <span class="cart-trust-badges__divider">•</span>
+                  <span>↩ Easy Returns</span>
+                </div>
+              </div>
+
+              {% render 'cart-upsells' %}
+
               {%- if additional_checkout_buttons -%}
                 <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
                   {{ content_for_additional_checkout_buttons }}

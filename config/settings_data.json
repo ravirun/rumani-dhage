@@ -30,6 +30,7 @@
     "audio_on_click": false,
     "show_audio_toggle": false,
     "cart_type": "drawer",
+    "show_cart_note": true,
     "content_for_index": [],
     "blocks": {
       "15683396631634586217": {

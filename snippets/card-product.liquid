@@ -31,9 +31,13 @@
 {%- if card_product and card_product != empty -%}
   {%- liquid
     assign ratio = 1
-    if card_product.featured_media and media_aspect_ratio == 'portrait'
-      assign ratio = 0.8
-    elsif card_product.featured_media and media_aspect_ratio == 'adapt'
+    assign target_ratio = media_aspect_ratio | default: settings.image_aspect_ratio
+
+    if card_product.featured_media and target_ratio == 'portrait'
+      assign ratio = 0.66666
+    elsif card_product.featured_media and target_ratio == 'square'
+      assign ratio = 1
+    elsif card_product.featured_media and target_ratio == 'adapt'
       assign ratio = card_product.featured_media.aspect_ratio
     endif
     if ratio == 0 or ratio == null

@@ -6,7 +6,7 @@
         "columns_desktop": 4,
         "enable_bento_grid": true,
         "hide_sold_out": true,
-        "image_ratio": "adapt",
+        "image_ratio": "portrait",
         "show_secondary_image": false,
         "show_vendor": false,
         "show_rating": false,
@@ -22,7 +22,7 @@
     "highlight_shipping_banner_search": {
       "type": "highlight-shipping-banner",
       "settings": {
-        "text_content": "Free Shipping on all domestic orders above 1,999 INR"
+        "text_content": "Shipping Included"
       }
     },
     "brand_benefits_search": {
