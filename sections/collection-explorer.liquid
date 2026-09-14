@@ -115,7 +115,7 @@
 
         <ul id="explorer-grid-list" class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
           {%- for collection in collections -%}
-            {% render 'collection-card-explorer', collection: collection, animation_delay: forloop.index0 | times: 0.1 %}
+            {% render 'collection-card-explorer', collection: collection, animation_delay: forloop.index0, times: 0.1 %}
           {%- endfor -%}
         </ul>
       </div>
@@ -216,3 +216,15 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'collection-card-explorer', collection: collection, animation_delay:
+    forloop.index0 | times: 0.1 %}"
+  to: "{% render 'collection-card-explorer', collection: collection, animation_delay:
+    forloop.index0, times: 0.1 %}"
+  position: 5524..5632
+{% endcomment %}
